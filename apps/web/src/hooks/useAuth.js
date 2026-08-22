@@ -92,13 +92,31 @@ export function useAuth() {
     setLoading(true);
     setError(null);
     try {
+      if (isSupabaseConfigured()) {
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        if (data?.user) {
+          const userObj = {
+            id: data.user.id,
+            email: data.user.email,
+            name: data.user.user_metadata?.full_name || data.user.user_metadata?.name || data.user.email?.split('@')[0],
+            avatar_url: data.user.user_metadata?.avatar_url || null,
+            provider: 'supabase'
+          };
+          setUser(userObj);
+          try { localStorage.setItem('aps_auth_user', JSON.stringify(userObj)); } catch (e) {}
+          pullUserDataFromCloud().catch(() => {});
+        }
+        return { success: true };
+      }
+
       const data = await api.signIn(email, password);
       if (data && data.user) {
         setUser(data.user);
       }
       return { success: true };
     } catch (err) {
-      const message = err instanceof ApiError ? err.message : 'Login gagal.';
+      const message = err.message || (err instanceof ApiError ? err.message : 'Login gagal.');
       setError(message);
       return { success: false, error: message };
     } finally {
@@ -110,13 +128,36 @@ export function useAuth() {
     setLoading(true);
     setError(null);
     try {
+      if (isSupabaseConfigured()) {
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: { full_name: name }
+          }
+        });
+        if (error) throw error;
+        if (data?.user) {
+          const userObj = {
+            id: data.user.id,
+            email: data.user.email,
+            name: name || data.user.email?.split('@')[0],
+            avatar_url: null,
+            provider: 'supabase'
+          };
+          setUser(userObj);
+          try { localStorage.setItem('aps_auth_user', JSON.stringify(userObj)); } catch (e) {}
+        }
+        return { success: true };
+      }
+
       const data = await api.signUp(name, email, password);
       if (data && data.user) {
         setUser(data.user);
       }
       return { success: true };
     } catch (err) {
-      const message = err instanceof ApiError ? err.message : 'Registrasi gagal.';
+      const message = err.message || (err instanceof ApiError ? err.message : 'Registrasi gagal.');
       setError(message);
       return { success: false, error: message };
     } finally {
