@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLanguage } from '../../hooks/useLanguage.js';
 
-const SideNavBar = ({ activeTab, onNavigate }) => {
+const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
   const { lang, toggle } = useLanguage();
 
   const primaryGroup = [
@@ -28,15 +28,20 @@ const SideNavBar = ({ activeTab, onNavigate }) => {
       <div className="px-5 mb-5 space-y-3">
         <div 
           onClick={() => onNavigate('wizard')}
-          className="flex items-center justify-between cursor-pointer hover:opacity-90 transition-opacity p-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700"
+          className="flex items-center justify-between cursor-pointer hover:opacity-90 transition-opacity p-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-2xs"
         >
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-[#E63946] text-white font-black flex items-center justify-center text-xs shadow-xs tracking-wider">
-              APS
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E63946] to-red-600 text-white font-black flex items-center justify-center text-sm shadow-md shadow-red-500/20 shrink-0 tracking-wider">
+              {user?.name ? user.name.charAt(0).toUpperCase() : 'APS'}
             </div>
-            <div>
-              <h2 className="font-bold text-xs text-slate-900 dark:text-white tracking-tight leading-tight">Profil Atlet</h2>
-              <p className="text-[10px] font-normal text-slate-500 dark:text-slate-400">A-PlanSport Engine</p>
+            <div className="min-w-0 pr-1">
+              <h2 className="font-extrabold text-xs text-slate-900 dark:text-white tracking-tight truncate">
+                {user?.name || (lang === 'en' ? 'Athlete Profile' : 'Profil Atlet')}
+              </h2>
+              <p className="text-[10px] font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1 mt-0.5 truncate">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>{user ? (lang === 'en' ? 'Cloud Synced' : 'Cloud Aktif') : 'A-PlanSport Engine'}</span>
+              </p>
             </div>
           </div>
 
@@ -46,9 +51,9 @@ const SideNavBar = ({ activeTab, onNavigate }) => {
               toggle();
             }}
             title="Switch Language"
-            className="px-2 py-0.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-[10px] font-extrabold text-slate-700 dark:text-slate-200 transition-all cursor-pointer shadow-2xs"
+            className="px-2 py-1 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-[10px] font-extrabold text-slate-700 dark:text-slate-200 transition-all cursor-pointer shadow-2xs shrink-0"
           >
-            {lang === 'en' ? '🇬🇧 EN' : '🇮🇩 ID'}
+            {lang === 'en' ? '🇬🇧' : '🇮🇩'}
           </button>
         </div>
         

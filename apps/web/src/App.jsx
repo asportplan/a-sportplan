@@ -67,13 +67,18 @@ function App() {
       
       {/* Main Content Canvas */}
       <main className="flex-grow flex flex-col md:flex-row overflow-hidden relative">
-        <SideNavBar activeTab={activeTab} onNavigate={setActiveTab} />
+        <SideNavBar 
+          activeTab={activeTab} 
+          onNavigate={setActiveTab} 
+          user={auth.user} 
+          onLogout={auth.signOut} 
+        />
         
         {/* Scrollable Content Area */}
         <div className="flex-grow overflow-y-auto pb-24 md:pb-6 bg-surface p-md md:p-lg w-full min-w-0">
           {activeTab === 'home' && (
             <>
-              <HeroSection onStart={startWizard} />
+              <HeroSection onStart={startWizard} user={auth.user} />
               <FeaturesGrid />
             </>
           )}

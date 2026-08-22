@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLanguage } from '../../hooks/useLanguage';
 
-const HeroSection = ({ onStart }) => {
+const HeroSection = ({ onStart, user }) => {
   const { lang } = useLanguage();
 
   return (
@@ -16,9 +16,14 @@ const HeroSection = ({ onStart }) => {
         <div className="relative z-10 max-w-3xl mx-auto space-y-6">
           {/* Floating Pill Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-semibold border border-white/30 shadow-xs">
-            <span className="material-symbols-outlined text-sm">auto_awesome</span>
+            <span className="material-symbols-outlined text-sm">
+              {user ? 'verified_user' : 'auto_awesome'}
+            </span>
             <span>
-              {lang === 'en' ? 'Smart & Safe Workout Generator' : 'Program Latihan Beban Cerdas & Aman'}
+              {user 
+                ? (lang === 'en' ? `Welcome, ${user.name || user.email}! • Cloud Synced 🟢` : `Selamat Datang, ${user.name || user.email}! • Cloud Aktif 🟢`)
+                : (lang === 'en' ? 'Smart & Safe Workout Generator' : 'Program Latihan Beban Cerdas & Aman')
+              }
             </span>
           </div>
 
