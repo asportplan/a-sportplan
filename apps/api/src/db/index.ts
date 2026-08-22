@@ -3,7 +3,7 @@ import { PGlite } from "@electric-sql/pglite";
 import dotenv from "dotenv";
 import * as schema from "./schema/index.js";
 
-dotenv.config({ path: '../../.env' });
+try { dotenv.config(); } catch (e) {}
 
 const isVercel = process.env.VERCEL === '1' || process.env.VERCEL === 'true' || Boolean(process.env.VERCEL_ENV);
 const dataDir = process.env.DB_DATA_DIR || "./precisetrain-db-data";

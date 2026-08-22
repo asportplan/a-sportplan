@@ -7,7 +7,7 @@ import apiRouter from "./routes/index.js";
 import { errorHandler } from "./middleware/error.middleware.js";
 import { initDb } from "./db/index.js";
 
-dotenv.config({ path: '../../.env' });
+try { dotenv.config(); } catch (e) {}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
