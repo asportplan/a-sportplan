@@ -33,7 +33,11 @@ app.use(errorHandler);
 
 // Initialize DB tables on startup
 initDb().then(() => {
-  app.listen(PORT, () => {
-    console.log(`[Server] Aplikasi Beban Latihan API running on http://localhost:${PORT}`);
-  });
+  if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+    app.listen(PORT, () => {
+      console.log(`[Server] Aplikasi Beban Latihan API running on http://localhost:${PORT}`);
+    });
+  }
 });
+
+export default app;
