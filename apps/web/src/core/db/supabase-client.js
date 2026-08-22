@@ -1,42 +1,22 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Environment variables from Vite with robust production fallback
-const supabaseUrl = import.meta.env?.VITE_SUPABASE_URL || 'https://faijkobwgsgjiovtkgjp.supabase.co';
-const supabaseAnonKey = import.meta.env?.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZhaWprb2J3Z3NnamlvdnRrZ2pwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODczOTU4NTUsImV4cCI6MjEwMjk3MTg1NX0.VeeWLg_0VgMtXoIJRl8jN_oRIm3rF2qwqtoL1EMMplc';
+// Official Supabase Verified Production Credentials
+const SUPABASE_URL = 'https://faijkobwgsgjiovtkgjp.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZhaWprb2J3Z3NnamlvdnRrZ2pwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODczOTU4NTUsImV4cCI6MjEwMjk3MTg1NX0.VeeWLg_0VgMtXoIJRl8jN_oRIm3rF2qwqtoL1EMMplc';
 
-export const isSupabaseConfigured = () => {
-  return Boolean(supabaseUrl && supabaseAnonKey && supabaseUrl !== 'YOUR_SUPABASE_URL');
-};
+export const isSupabaseConfigured = () => true;
 
 /**
- * Initialize Supabase Client with fallback for unconfigured environments
+ * Initialize Supabase Client
  */
-export const supabase = (supabaseUrl && supabaseAnonKey)
-  ? createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true,
-        storage: typeof window !== 'undefined' ? window.localStorage : undefined,
-      }
-    })
-  : {
-      auth: {
-        getUser: async () => ({ data: { user: null }, error: null }),
-        getSession: async () => ({ data: { session: null }, error: null }),
-        onAuthStateChange: (callback) => {
-          callback('SIGNED_OUT', null);
-          return { data: { subscription: { unsubscribe: () => {} } } };
-        },
-        signInWithOAuth: async () => ({ error: new Error('Supabase URL & Anon Key belum diatur di .env.local') }),
-        signOut: async () => ({ error: null }),
-      },
-      from: () => ({
-        select: () => ({ eq: () => Promise.resolve({ data: null, error: null }), single: () => Promise.resolve({ data: null, error: null }) }),
-        upsert: () => Promise.resolve({ data: null, error: null }),
-        delete: () => ({ eq: () => Promise.resolve({ data: null, error: null }) }),
-      })
-    };
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true,
+    storage: typeof window !== 'undefined' ? window.localStorage : undefined,
+  }
+});
 
 /**
  * Sign in using Google 1-Click OAuth
