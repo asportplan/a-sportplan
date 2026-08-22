@@ -25,9 +25,9 @@ export function AuthModal({ isOpen, onClose, lang = 'id', onAuthSuccess, authHoo
         if (authHook?.signIn) {
           await authHook.signIn('demo@afitform.com', 'demo123');
         }
+        if (onAuthSuccess) onAuthSuccess();
+        onClose();
       }
-      if (onAuthSuccess) onAuthSuccess();
-      onClose();
     } catch (err) {
       console.error('Google Auth Error:', err);
       setErrorMsg(err.message || (isEn ? 'Failed to sign in' : 'Gagal masuk. Tambahkan kredensial Supabase pada file .env.local untuk Google Auth.'));
