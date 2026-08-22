@@ -4,7 +4,14 @@ import { supabase, isSupabaseConfigured, onAuthStateChange, signOutUser } from '
 import { pullUserDataFromCloud } from '../core/db/user-store.js';
 
 export function useAuth() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('aps_auth_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -26,7 +33,8 @@ export function useAuth() {
               provider: 'supabase'
             };
             setUser(userObj);
-            pullUserDataFromCloud();
+            try { localStorage.setItem('aps_auth_user', JSON.stringify(userObj)); } catch (e) {}
+            pullUserDataFromCloud().catch(() => {});
           } else {
             checkLocalApiSession();
           }
@@ -44,9 +52,11 @@ export function useAuth() {
               provider: 'supabase'
             };
             setUser(userObj);
-            await pullUserDataFromCloud();
+            try { localStorage.setItem('aps_auth_user', JSON.stringify(userObj)); } catch (e) {}
+            pullUserDataFromCloud().catch(() => {});
           } else if (event === 'SIGNED_OUT') {
             setUser(null);
+            try { localStorage.removeItem('aps_auth_user'); } catch (e) {}
           }
           setLoading(false);
         });

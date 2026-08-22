@@ -1,18 +1,25 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Environment variables from Vite
-const supabaseUrl = import.meta.env?.VITE_SUPABASE_URL || '';
+// Environment variables from Vite with robust production fallback
+const supabaseUrl = import.meta.env?.VITE_SUPABASE_URL || 'https://faijkobwgsgjiovtkgjp.supabase.co';
 const supabaseAnonKey = import.meta.env?.VITE_SUPABASE_ANON_KEY || '';
 
 export const isSupabaseConfigured = () => {
-  return Boolean(supabaseUrl && supabaseAnonKey && supabaseUrl !== 'YOUR_SUPABASE_URL');
+  return Boolean(supabaseUrl && (supabaseAnonKey || import.meta.env?.VITE_SUPABASE_ANON_KEY) && supabaseUrl !== 'YOUR_SUPABASE_URL');
 };
 
 /**
  * Initialize Supabase Client with fallback for unconfigured environments
  */
-export const supabase = isSupabaseConfigured()
-  ? createClient(supabaseUrl, supabaseAnonKey)
+export const supabase = (supabaseUrl && (supabaseAnonKey || import.meta.env?.VITE_SUPABASE_ANON_KEY))
+  ? createClient(supabaseUrl, supabaseAnonKey || import.meta.env?.VITE_SUPABASE_ANON_KEY, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+        storage: typeof window !== 'undefined' ? window.localStorage : undefined,
+      }
+    })
   : {
       auth: {
         getUser: async () => ({ data: { user: null }, error: null }),

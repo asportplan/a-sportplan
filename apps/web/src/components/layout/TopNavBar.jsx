@@ -84,19 +84,19 @@ const TopNavBar = ({ activeTab, onNavigate, user, onOpenLogin, onLogout }) => {
 
         {/* User Auth Section */}
         {user ? (
-          <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700">
-            <div className="w-6 h-6 rounded-lg bg-[#E63946] text-white font-bold flex items-center justify-center text-xs">
+          <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-2xs">
+            <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-[#E63946] to-red-600 text-white font-bold flex items-center justify-center text-xs shrink-0">
               {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
             </div>
-            <span className="text-xs font-bold text-slate-800 dark:text-slate-200 hidden sm:inline max-w-[100px] truncate">
-              {user.name || user.email}
+            <span className="text-xs font-bold text-slate-800 dark:text-slate-200 max-w-[90px] sm:max-w-[140px] truncate">
+              {user.name || user.email?.split('@')[0]}
             </span>
             <button 
               onClick={onLogout}
               title="Keluar / Logout"
-              className="text-slate-400 hover:text-[#E63946] transition-colors p-1 rounded-full cursor-pointer bg-transparent border-0 flex items-center"
+              className="text-slate-400 hover:text-[#E63946] transition-colors p-0.5 rounded-full cursor-pointer bg-transparent border-0 flex items-center shrink-0"
             >
-              <span className="material-symbols-outlined text-sm">logout</span>
+              <span className="material-symbols-outlined text-base">logout</span>
             </button>
           </div>
         ) : (
