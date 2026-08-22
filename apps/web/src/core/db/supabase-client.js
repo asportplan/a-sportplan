@@ -2,17 +2,17 @@ import { createClient } from '@supabase/supabase-js';
 
 // Environment variables from Vite with robust production fallback
 const supabaseUrl = import.meta.env?.VITE_SUPABASE_URL || 'https://faijkobwgsgjiovtkgjp.supabase.co';
-const supabaseAnonKey = import.meta.env?.VITE_SUPABASE_ANON_KEY || '';
+const supabaseAnonKey = import.meta.env?.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZhaWprb2J3Z3NnamlvdnRrZ2pwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODczOTU4NTUsImV4cCI6MjEwMjk3MTg1NX0.VeeWLg_0VgMtXoIJRl8jN_oRIm3rF2qwqtoL1EMMplc';
 
 export const isSupabaseConfigured = () => {
-  return Boolean(supabaseUrl && (supabaseAnonKey || import.meta.env?.VITE_SUPABASE_ANON_KEY) && supabaseUrl !== 'YOUR_SUPABASE_URL');
+  return Boolean(supabaseUrl && supabaseAnonKey && supabaseUrl !== 'YOUR_SUPABASE_URL');
 };
 
 /**
  * Initialize Supabase Client with fallback for unconfigured environments
  */
-export const supabase = (supabaseUrl && (supabaseAnonKey || import.meta.env?.VITE_SUPABASE_ANON_KEY))
-  ? createClient(supabaseUrl, supabaseAnonKey || import.meta.env?.VITE_SUPABASE_ANON_KEY, {
+export const supabase = (supabaseUrl && supabaseAnonKey)
+  ? createClient(supabaseUrl, supabaseAnonKey, {
       auth: {
         persistSession: true,
         autoRefreshToken: true,
