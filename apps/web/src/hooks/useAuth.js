@@ -12,27 +12,51 @@ export function useAuth() {
   useEffect(() => {
     let unsubscribe = () => {};
 
-    if (isSupabaseConfigured()) {
-      unsubscribe = onAuthStateChange(async (event, supabaseUser) => {
-        if (supabaseUser) {
-          const userObj = {
-            id: supabaseUser.id,
-            email: supabaseUser.email,
-            name: supabaseUser.user_metadata?.full_name || supabaseUser.user_metadata?.name || supabaseUser.email?.split('@')[0],
-            avatar_url: supabaseUser.user_metadata?.avatar_url || null,
-            provider: 'supabase'
-          };
-          setUser(userObj);
-          // Auto pull cloud data into localStorage
-          await pullUserDataFromCloud();
-        } else {
+    const initAuth = async () => {
+      if (isSupabaseConfigured()) {
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session?.user) {
+            const supabaseUser = session.user;
+            const userObj = {
+              id: supabaseUser.id,
+              email: supabaseUser.email,
+              name: supabaseUser.user_metadata?.full_name || supabaseUser.user_metadata?.name || supabaseUser.email?.split('@')[0],
+              avatar_url: supabaseUser.user_metadata?.avatar_url || null,
+              provider: 'supabase'
+            };
+            setUser(userObj);
+            pullUserDataFromCloud();
+          } else {
+            checkLocalApiSession();
+          }
+        } catch (e) {
           checkLocalApiSession();
         }
-        setLoading(false);
-      });
-    } else {
-      checkLocalApiSession();
-    }
+
+        unsubscribe = onAuthStateChange(async (event, supabaseUser) => {
+          if (supabaseUser) {
+            const userObj = {
+              id: supabaseUser.id,
+              email: supabaseUser.email,
+              name: supabaseUser.user_metadata?.full_name || supabaseUser.user_metadata?.name || supabaseUser.email?.split('@')[0],
+              avatar_url: supabaseUser.user_metadata?.avatar_url || null,
+              provider: 'supabase'
+            };
+            setUser(userObj);
+            await pullUserDataFromCloud();
+          } else if (event === 'SIGNED_OUT') {
+            setUser(null);
+          }
+          setLoading(false);
+        });
+      } else {
+        checkLocalApiSession();
+      }
+      setLoading(false);
+    };
+
+    initAuth();
 
     return () => unsubscribe();
   }, []);
