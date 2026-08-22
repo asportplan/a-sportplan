@@ -4,3 +4,6 @@ dist
 .env.local
 .DS_Store
 *.log
+precisetrain-db-data/
+apps/api/precisetrain-db-data/
+*.py
