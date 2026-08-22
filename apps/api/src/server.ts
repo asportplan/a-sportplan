@@ -19,6 +19,16 @@ app.use(cors({
 
 app.use(express.json());
 
+// Root Health Check Endpoint
+app.get("/", (req, res) => {
+  res.json({
+    status: "ok",
+    app: "A-PlanSport API",
+    version: "1.0.0",
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Better Auth Route Handler
 app.all("/api/auth/*", toNodeHandler(auth));
 
@@ -33,11 +43,13 @@ app.use(errorHandler);
 
 // Initialize DB tables on startup
 initDb().then(() => {
-  if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  if (!process.env.VERCEL) {
     app.listen(PORT, () => {
       console.log(`[Server] Aplikasi Beban Latihan API running on http://localhost:${PORT}`);
     });
   }
+}).catch((err) => {
+  console.error('[Server] DB Init Error:', err);
 });
 
 export default app;

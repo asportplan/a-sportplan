@@ -5,9 +5,10 @@ import * as schema from "./schema/index.js";
 
 dotenv.config({ path: '../../.env' });
 
+const isVercel = process.env.VERCEL === '1' || process.env.VERCEL === 'true' || Boolean(process.env.VERCEL_ENV);
 const dataDir = process.env.DB_DATA_DIR || "./precisetrain-db-data";
 
-export const pglite = new PGlite(dataDir);
+export const pglite = isVercel ? new PGlite() : new PGlite(dataDir);
 export const db = drizzle(pglite, { schema });
 
 /**
