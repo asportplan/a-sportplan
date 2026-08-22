@@ -6,7 +6,7 @@ import {
   getPatternBySlug,
   getExerciseBySlug
 } from '../db/master-data.js';
-import { tMessage, tPattern } from '../utils/i18n.js';
+import { tMessage, tPattern, getCurrentLanguage } from '../utils/i18n.js';
 
 /**
  * Identifies the required pattern from the master data.
@@ -126,8 +126,6 @@ export function findBestExercise(patternSlug, availableEquipmentSlugs, blockedCa
     }
   };
 }
-
-import { getCurrentLanguage } from '../utils/i18n.js';
 
 export function validateMVW(availableEquipmentSlugs) {
   const missing = [];

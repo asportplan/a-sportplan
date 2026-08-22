@@ -24,7 +24,7 @@ export class EquipmentController {
   static async syncUserEquipments(req: Request, res: Response, next: NextFunction) {
     try {
       const userId = (req as any).user?.id || req.body.userId || "test-user-id";
-      const items = req.body.equipments || [];
+      const items = req.body.equipments || (Array.isArray(req.body) ? req.body : []);
       const updated = await EquipmentService.syncUserEquipments(userId, items);
       res.json({ success: true, equipments: updated });
     } catch (err) {

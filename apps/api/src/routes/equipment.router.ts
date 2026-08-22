@@ -7,6 +7,7 @@ const router = Router();
 router.get("/master", requireAuth, EquipmentController.getMasterEquipments);
 router.get("/user", requireAuth, EquipmentController.getUserEquipments);
 router.put("/user", requireAuth, EquipmentController.syncUserEquipments);
+router.post("/user", requireAuth, EquipmentController.syncUserEquipments);
 router.get("/mvw-check", requireAuth, EquipmentController.checkMVW);
 
 export default router;
