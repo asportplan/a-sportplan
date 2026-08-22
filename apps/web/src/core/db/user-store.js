@@ -411,6 +411,9 @@ export function saveProgramToLibrary(programData, customTitle) {
   // Also set as active cached program
   saveGeneratedProgram(programData);
 
+  // Sync to Supabase Cloud
+  syncProgramToCloud(newItem);
+
   return library;
 }
 
@@ -612,6 +615,29 @@ export async function pullUserDataFromCloud() {
   } catch (err) {
     console.warn('[CloudSync] Failed to pull user data from cloud:', err);
     return false;
+  }
+}
+
+/**
+ * Sync saved program to Supabase database if logged in
+ */
+export async function syncProgramToCloud(programItem) {
+  if (!isSupabaseConfigured() || !programItem) return;
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    await supabase.from('saved_programs').upsert({
+      user_id: user.id,
+      title: programItem.title || 'Program Latihan Beban',
+      duration_weeks: programItem.duration_weeks || 8,
+      goals: programItem.goals || [],
+      program_data: programItem.programData || programItem,
+      is_active: programItem.isActive !== false,
+      updated_at: new Date().toISOString()
+    });
+  } catch (err) {
+    console.warn('[CloudSync] Failed to sync program:', err);
   }
 }
 
