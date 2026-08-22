@@ -1,0 +1,41 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+@layer base {
+  body { 
+    font-family: 'Poppins', sans-serif; 
+    background-color: #FAF8F7; 
+    color: #2B2B2B;
+    min-height: 100vh;
+  }
+}
+
+@layer utilities {
+  .hero-gradient {
+    background: linear-gradient(135deg, #E63946 0%, #F3722C 50%, #F9A826 100%);
+  }
+  
+  .docked {
+    @apply transition-all duration-300;
+  }
+  
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .max-w-container-max {
+    max-width: 1200px;
+    width: 100%;
+  }
+}
+
+/* Hide Chrome, Safari, Edge, Opera number input spinners */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+/* Hide Firefox number input spinners */
+input[type=number] {
+  -moz-appearance: textfield;
+}
