@@ -5,14 +5,7 @@ import { useLanguage } from '../../hooks/useLanguage.js';
 const ProfileStep = ({ onNext }) => {
   const { lang } = useLanguage();
   const existingProfile = getUserProfile() || {};
-  const existingScreening = getScreeningResults() || {
-    has_heart_condition: false,
-    has_asthma: false,
-    has_chest_pain: false,
-    has_injury: false,
-    injury_area: null,
-    takes_medication: false,
-  };
+  const savedScreening = getScreeningResults();
 
   const [profile, setProfile] = useState({
     athlete_name: '',
@@ -23,48 +16,113 @@ const ProfileStep = ({ onNext }) => {
     ...existingProfile
   });
 
-  const [screening, setScreening] = useState(existingScreening);
+  // Screening questions start as null (unanswered) unless user already selected booleans
+  const [screening, setScreening] = useState({
+    has_heart_condition: savedScreening && typeof savedScreening.has_heart_condition === 'boolean' ? savedScreening.has_heart_condition : null,
+    has_chest_pain: savedScreening && typeof savedScreening.has_chest_pain === 'boolean' ? savedScreening.has_chest_pain : null,
+    has_asthma: savedScreening && typeof savedScreening.has_asthma === 'boolean' ? savedScreening.has_asthma : null,
+    has_injury: savedScreening && typeof savedScreening.has_injury === 'boolean' ? savedScreening.has_injury : null,
+    injury_area: savedScreening ? savedScreening.injury_area || 'Upper' : 'Upper',
+    takes_medication: savedScreening && typeof savedScreening.takes_medication === 'boolean' ? savedScreening.takes_medication : null,
+  });
+
+  const [validationError, setValidationError] = useState(null);
 
   const handleProfileChange = (e) => {
     const { name, value } = e.target;
     setProfile(prev => ({ ...prev, [name]: value }));
   };
 
-  // Auto-sync profile and screening changes immediately to store
+  // Auto-sync profile changes immediately
   React.useEffect(() => {
     saveUserProfile(profile);
   }, [profile]);
 
-  React.useEffect(() => {
-    saveScreeningResults(screening);
-  }, [screening]);
-
   const handleScreeningChange = (name, checked) => {
-    setScreening(prev => ({ ...prev, [name]: checked }));
+    const updated = { ...screening, [name]: checked };
+    setScreening(updated);
+    saveScreeningResults(updated);
+
+    // If validation error was displayed, clear or update missing keys
+    if (validationError && validationError.unansweredKeys) {
+      const remaining = validationError.unansweredKeys.filter(k => k !== name);
+      if (remaining.length === 0) {
+        setValidationError(null);
+      } else {
+        setValidationError(prev => ({
+          ...prev,
+          unansweredKeys: remaining,
+          message: lang === 'en'
+            ? `Please answer all health screening questions (${remaining.length} remaining)!`
+            : `Perhatian: Masih ada ${remaining.length} pertanyaan skrining kesehatan yang belum dipilih!`
+        }));
+      }
+    }
   };
 
   const setAllHealthy = () => {
-    setScreening({
+    const healthy = {
       has_heart_condition: false,
       has_asthma: false,
       has_chest_pain: false,
       has_injury: false,
       injury_area: null,
       takes_medication: false,
-    });
+    };
+    setScreening(healthy);
+    saveScreeningResults(healthy);
+    setValidationError(null);
   };
 
-  const isAllHealthy = !screening.has_heart_condition && 
+  const answeredCount = [
+    screening.has_heart_condition,
+    screening.has_chest_pain,
+    screening.has_asthma,
+    screening.has_injury,
+    screening.takes_medication
+  ].filter(v => typeof v === 'boolean').length;
+
+  const isAllAnswered = answeredCount === 5;
+
+  const isAllHealthy = isAllAnswered &&
+                       !screening.has_heart_condition && 
                        !screening.has_asthma && 
                        !screening.has_chest_pain && 
                        !screening.has_injury && 
                        !screening.takes_medication;
 
   const handleNext = () => {
+    const unanswered = questions.filter(q => typeof screening[q.name] !== 'boolean');
+    if (unanswered.length > 0) {
+      const count = unanswered.length;
+      setValidationError({
+        message: lang === 'en'
+          ? `Please answer all health screening questions (${count} question${count > 1 ? 's' : ''} unselected) before proceeding to ensure workout safety!`
+          : `Perhatian: Mohon jawab semua pertanyaan skrining kesehatan terlebih dahulu! Masih ada ${count} pertanyaan yang belum Anda pilih.`,
+        unansweredKeys: unanswered.map(q => q.name)
+      });
+
+      const section = document.getElementById('medical-screening-section');
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      return;
+    }
+
     saveUserProfile(profile);
     saveScreeningResults(screening);
+    setValidationError(null);
     onNext();
   };
+
+  // Listen to top navigation "next" attempt from WizardContainer
+  React.useEffect(() => {
+    const handleExternalValidate = () => {
+      handleNext();
+    };
+    window.addEventListener('aps-validate-screening', handleExternalValidate);
+    return () => window.removeEventListener('aps-validate-screening', handleExternalValidate);
+  });
 
   const questionsID = [
     { 
@@ -273,46 +331,111 @@ const ProfileStep = ({ onNext }) => {
       </div>
 
       {/* SECTION 2: SKRINING KEAMANAN MEDIS */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 shadow-sm border border-[#EBE5E2] dark:border-slate-800 space-y-6">
+      <div id="medical-screening-section" className="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 shadow-sm border border-[#EBE5E2] dark:border-slate-800 space-y-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-[#EBE5E2] dark:border-slate-800 pb-3">
-          <h3 className="text-base font-black text-[#2B2B2B] dark:text-white flex items-center gap-2">
-            <span className="material-symbols-outlined text-emerald-600">verified_user</span>
-            {lang === 'en' ? '2. PAR-Q+ Medical Clearance Triage' : '2. Skrining Keamanan Medis (PAR-Q+)'}
-          </h3>
+          <div>
+            <h3 className="text-base font-black text-[#2B2B2B] dark:text-white flex items-center gap-2">
+              <span className="material-symbols-outlined text-emerald-600">verified_user</span>
+              {lang === 'en' ? '2. PAR-Q+ Medical Clearance Triage' : '2. Skrining Keamanan Medis (PAR-Q+)'}
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+              {lang === 'en' 
+                ? 'All 5 questions must be verified to ensure safe exercise loads.' 
+                : 'Wajib menjawab 5 pertanyaan di bawah untuk memastikan kondisi fisik aman berlatih.'}
+            </p>
+          </div>
 
-          <button
-            type="button"
-            onClick={setAllHealthy}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 border ${
-              isAllHealthy 
-                ? 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border-emerald-300'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-300 hover:bg-emerald-50'
-            }`}
-          >
-            <span className="material-symbols-outlined text-base">check_circle</span>
-            <span>{lang === 'en' ? 'Set All Fit / Clear' : 'Saya Sehat & Fit Total'}</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <span className={`text-xs font-bold px-2.5 py-1 rounded-lg border ${
+              isAllAnswered 
+                ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-300 dark:border-emerald-800'
+                : 'bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700'
+            }`}>
+              {answeredCount}/5 {lang === 'en' ? 'Answered' : 'Terjawab'}
+            </span>
+
+            <button
+              type="button"
+              onClick={setAllHealthy}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 border active:scale-95 ${
+                isAllHealthy 
+                  ? 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border-emerald-300'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-300 hover:bg-emerald-50 hover:text-emerald-700'
+              }`}
+            >
+              <span className="material-symbols-outlined text-base">check_circle</span>
+              <span>{lang === 'en' ? 'Set All Fit / Clear' : 'Saya Sehat & Fit Total'}</span>
+            </button>
+          </div>
         </div>
+
+        {/* Validation Error Alert Banner */}
+        {validationError && (
+          <div className="p-4 sm:p-5 rounded-2xl bg-rose-50 dark:bg-rose-950/60 border-2 border-rose-500 text-rose-900 dark:text-rose-200 flex items-start sm:items-center justify-between gap-3 shadow-lg shadow-rose-500/15 animate-pulse">
+            <div className="flex items-start sm:items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-rose-500 text-white flex items-center justify-center shrink-0 shadow-sm">
+                <span className="material-symbols-outlined text-xl">error</span>
+              </div>
+              <div>
+                <h4 className="text-xs sm:text-sm font-black tracking-tight text-rose-900 dark:text-rose-100">
+                  {lang === 'en' ? '⚠️ Health Screening Incomplete!' : '⚠️ Skrining Kesehatan Belum Lengkap!'}
+                </h4>
+                <p className="text-xs font-semibold text-rose-700 dark:text-rose-300 mt-0.5 leading-relaxed">
+                  {validationError.message}
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setValidationError(null)}
+              className="text-rose-500 hover:text-rose-800 dark:hover:text-white p-1 rounded-lg cursor-pointer shrink-0"
+              title="Tutup notifikasi"
+            >
+              <span className="material-symbols-outlined text-lg">close</span>
+            </button>
+          </div>
+        )}
 
         {/* Questions with Explicit [YA] / [TIDAK] Buttons */}
         <div className="space-y-3">
           {questions.map((q) => {
-            const isChecked = !!screening[q.name];
+            const val = screening[q.name];
+            const isAnswered = typeof val === 'boolean';
+            const isChecked = val === true;
+            const isMissing = validationError && validationError.unansweredKeys?.includes(q.name);
+
+            // Distinct card styling for 3 states: Unanswered (or missing), Answered NO, Answered YES
+            let cardClasses = 'bg-slate-50/60 dark:bg-slate-800/40 border-slate-200 dark:border-slate-700';
+            if (isMissing) {
+              cardClasses = 'bg-rose-50/70 dark:bg-rose-950/40 border-rose-400 dark:border-rose-600 ring-2 ring-rose-400/60 shadow-sm';
+            } else if (isAnswered) {
+              cardClasses = isChecked
+                ? 'bg-amber-50/70 dark:bg-amber-950/30 border-amber-300 dark:border-amber-800 shadow-xs'
+                : 'bg-emerald-50/40 dark:bg-emerald-950/20 border-emerald-300 dark:border-emerald-800';
+            }
+
             return (
               <div 
                 key={q.name}
-                className={`p-4 rounded-xl border transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-4 w-full min-w-0 ${
-                  isChecked 
-                    ? 'bg-amber-50/70 dark:bg-amber-950/30 border-amber-300 dark:border-amber-800 shadow-xs'
-                    : 'bg-emerald-50/30 dark:bg-emerald-950/20 border-emerald-200/80 dark:border-emerald-900/60'
-                }`}
+                id={`screening-card-${q.name}`}
+                className={`p-4 rounded-xl border transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-4 w-full min-w-0 ${cardClasses}`}
               >
                 <div className="space-y-1 flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
                     <h4 className="font-extrabold text-sm text-slate-900 dark:text-white">
                       {q.title}
                     </h4>
-                    {isChecked ? (
+
+                    {/* Status Badge */}
+                    {isMissing ? (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-rose-500 text-white animate-pulse shrink-0">
+                        {lang === 'en' ? '⚠️ Must Select' : '⚠️ Wajib Dipilih'}
+                      </span>
+                    ) : !isAnswered ? (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300 shrink-0">
+                        {lang === 'en' ? 'Not Selected' : 'Belum Dipilih'}
+                      </span>
+                    ) : isChecked ? (
                       <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-amber-200 text-amber-900 dark:bg-amber-900 dark:text-amber-200 shrink-0">
                         {lang === 'en' ? 'Yes (Adjustment Active)' : 'Ya (Ada Penyesuaian)'}
                       </span>
@@ -351,9 +474,9 @@ const ProfileStep = ({ onNext }) => {
                     type="button"
                     onClick={() => handleScreeningChange(q.name, false)}
                     className={`flex-1 lg:flex-initial px-3.5 py-2 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5 border cursor-pointer ${
-                      !isChecked
+                      val === false
                         ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm scale-105'
-                        : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-300 dark:border-slate-700 hover:bg-emerald-50 dark:hover:bg-emerald-950/50'
+                        : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-300 dark:border-slate-700 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 hover:border-emerald-400'
                     }`}
                   >
                     <span className="material-symbols-outlined text-sm">check_circle</span>
@@ -364,9 +487,9 @@ const ProfileStep = ({ onNext }) => {
                     type="button"
                     onClick={() => handleScreeningChange(q.name, true)}
                     className={`flex-1 lg:flex-initial px-3.5 py-2 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5 border cursor-pointer ${
-                      isChecked
+                      val === true
                         ? 'bg-amber-600 text-white border-amber-600 shadow-sm scale-105'
-                        : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-300 dark:border-slate-700 hover:bg-amber-50 dark:hover:bg-amber-950/50'
+                        : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-300 dark:border-slate-700 hover:bg-amber-50 dark:hover:bg-amber-950/50 hover:border-amber-400'
                     }`}
                   >
                     <span className="material-symbols-outlined text-sm">warning</span>

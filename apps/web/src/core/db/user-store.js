@@ -292,11 +292,19 @@ export function saveScreeningResults(results) {
 }
 
 /**
- * Check if screening has been completed
+ * Check if screening has been completed (all 5 questions answered)
  * @returns {boolean}
  */
 export function isScreeningCompleted() {
-  return getScreeningResults() !== null;
+  const s = getScreeningResults();
+  if (!s) return false;
+  return (
+    typeof s.has_heart_condition === 'boolean' &&
+    typeof s.has_chest_pain === 'boolean' &&
+    typeof s.has_asthma === 'boolean' &&
+    typeof s.has_injury === 'boolean' &&
+    typeof s.takes_medication === 'boolean'
+  );
 }
 
 /**

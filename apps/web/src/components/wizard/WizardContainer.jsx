@@ -5,6 +5,7 @@ import OneRMStep from './OneRMStep';
 import GoalsStep from './GoalsStep';
 import ScreeningStep from './ScreeningStep';
 import { useLanguage } from '../../hooks/useLanguage';
+import { isScreeningCompleted } from '../../core/db/user-store.js';
 
 const stepLabelsID = [
   'Data Diri & Kesehatan',
@@ -25,6 +26,28 @@ const stepLabelsEN = [
 const WizardContainer = ({ currentStep, setCurrentStep, nextStep, prevStep, generate }) => {
   const { lang } = useLanguage();
   const stepLabels = lang === 'en' ? stepLabelsEN : stepLabelsID;
+
+  const handleTopNext = () => {
+    if (currentStep === 1 && !isScreeningCompleted()) {
+      window.dispatchEvent(new CustomEvent('aps-validate-screening'));
+      return;
+    }
+    if (currentStep === 5) {
+      generate();
+    } else {
+      nextStep();
+    }
+  };
+
+  const handleStepClick = (step) => {
+    if (step > 1 && !isScreeningCompleted()) {
+      window.dispatchEvent(new CustomEvent('aps-validate-screening'));
+      return;
+    }
+    if (setCurrentStep) {
+      setCurrentStep(step);
+    }
+  };
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6 font-sans">
@@ -61,7 +84,7 @@ const WizardContainer = ({ currentStep, setCurrentStep, nextStep, prevStep, gene
           {/* Next / Generate Button */}
           <button
             type="button"
-            onClick={currentStep === 5 ? generate : nextStep}
+            onClick={handleTopNext}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-extrabold transition-all shadow-sm active:scale-95 cursor-pointer text-white shrink-0 ${
               currentStep === 5
                 ? 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-500/20'
@@ -90,7 +113,7 @@ const WizardContainer = ({ currentStep, setCurrentStep, nextStep, prevStep, gene
               <React.Fragment key={step}>
                 <button
                   type="button"
-                  onClick={() => setCurrentStep && setCurrentStep(step)}
+                  onClick={() => handleStepClick(step)}
                   className={`w-7 h-7 sm:w-9 sm:h-9 shrink-0 rounded-full flex items-center justify-center font-bold text-xs sm:text-sm transition-all cursor-pointer border-0 ${
                     isActive
                       ? 'bg-[#E63946] text-white shadow-md shadow-red-500/25 scale-105 ring-2 ring-red-100 dark:ring-red-900/40'
@@ -105,7 +128,7 @@ const WizardContainer = ({ currentStep, setCurrentStep, nextStep, prevStep, gene
 
                 {step < 5 && (
                   <div 
-                    onClick={() => setCurrentStep && setCurrentStep(step + 1)}
+                    onClick={() => handleStepClick(step + 1)}
                     className={`flex-1 max-w-[48px] sm:max-w-[64px] h-1 rounded-full transition-all cursor-pointer ${
                       currentStep > step ? 'bg-[#E63946]' : 'bg-slate-200 dark:bg-slate-800'
                     }`} 
