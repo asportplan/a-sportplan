@@ -249,14 +249,28 @@ export function generatePDF(program) {
           head: eqHeaders,
           body: eqBody,
           margin: { left: margin, right: margin },
-          styles: { fontSize: 7.5, cellPadding: { top: 2, bottom: 2, left: 3, right: 3 }, overflow: 'linebreak' },
-          headStyles: { fillColor: [243, 114, 44], textColor: 255, fontStyle: 'bold', fontSize: 7.5 },
-          alternateRowStyles: { fillColor: [254, 243, 199, 0.2] },
+          styles: { 
+            fontSize: 7.5, 
+            cellPadding: { top: 2.5, bottom: 2.5, left: 3, right: 3 }, 
+            overflow: 'linebreak',
+            textColor: [51, 65, 85],
+            lineColor: [241, 245, 249],
+            lineWidth: 0.2
+          },
+          headStyles: { 
+            fillColor: [30, 41, 59], 
+            textColor: 255, 
+            fontStyle: 'bold', 
+            fontSize: 7.5 
+          },
+          alternateRowStyles: { 
+            fillColor: [248, 250, 252] 
+          },
           columnStyles: {
-            0: { cellWidth: 10, halign: 'center' },
-            1: { cellWidth: 85, fontStyle: 'bold' },
-            2: { cellWidth: 50 },
-            3: { cellWidth: 41, fontStyle: 'bold', halign: 'right' }
+            0: { cellWidth: 10, halign: 'center', textColor: [100, 116, 139] },
+            1: { cellWidth: 85, fontStyle: 'bold', textColor: [30, 41, 59] },
+            2: { cellWidth: 50, textColor: [100, 116, 139] },
+            3: { cellWidth: 41, fontStyle: 'bold', halign: 'right', textColor: [230, 57, 70] }
           }
         });
         currentY = doc.lastAutoTable.finalY + 7;
@@ -376,12 +390,19 @@ export function generatePDF(program) {
             head: equipHeaders,
             body: equipBody,
             margin: { left: margin, right: margin },
-            styles: { fontSize: 7.5, cellPadding: { top: 2, bottom: 2, left: 3, right: 3 } },
-            headStyles: { fillColor: [249, 168, 38], textColor: 43, fontStyle: 'bold', fontSize: 7.5 },
+            styles: { 
+              fontSize: 7.5, 
+              cellPadding: { top: 2.5, bottom: 2.5, left: 3, right: 3 },
+              textColor: [51, 65, 85],
+              lineColor: [241, 245, 249],
+              lineWidth: 0.2
+            },
+            headStyles: { fillColor: [30, 41, 59], textColor: 255, fontStyle: 'bold', fontSize: 7.5 },
+            alternateRowStyles: { fillColor: [248, 250, 252] },
             columnStyles: {
-              0: { cellWidth: 10, halign: 'center' },
-              1: { cellWidth: 60, fontStyle: 'bold' },
-              2: { cellWidth: 'auto' }
+              0: { cellWidth: 10, halign: 'center', textColor: [100, 116, 139] },
+              1: { cellWidth: 60, fontStyle: 'bold', textColor: [30, 41, 59] },
+              2: { cellWidth: 'auto', textColor: [100, 116, 139] }
             }
           });
           currentY = doc.lastAutoTable.finalY + 7;
