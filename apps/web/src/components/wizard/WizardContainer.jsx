@@ -55,28 +55,28 @@ const WizardContainer = ({ currentStep, setCurrentStep, nextStep, prevStep, gene
       <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 shadow-sm border border-[#EBE5E2] dark:border-slate-800 mb-6 w-full space-y-4">
         
         {/* ROW 1: Navigation Actions (Back button on Left, Dynamic Step Label in Center, Next/Generate on Right) */}
-        <div className="flex items-center justify-between gap-3 w-full">
+        <div className="flex items-center justify-between gap-2 w-full">
           {/* Back Button */}
           <button
             type="button"
             onClick={prevStep}
             disabled={currentStep === 1}
-            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all shrink-0 ${
+            className={`flex items-center gap-1 px-2.5 sm:px-3.5 py-2 rounded-xl text-xs font-bold transition-all shrink-0 ${
               currentStep === 1
                 ? 'opacity-30 cursor-not-allowed text-slate-400 bg-slate-100 dark:bg-slate-800/50'
                 : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 cursor-pointer'
             }`}
           >
-            <span className="material-symbols-outlined text-base">arrow_back</span>
-            <span>{lang === 'en' ? 'Back' : 'Kembali'}</span>
+            <span className="material-symbols-outlined text-sm sm:text-base">arrow_back</span>
+            <span className="hidden xs:inline">{lang === 'en' ? 'Back' : 'Kembali'}</span>
           </button>
 
           {/* Dynamic Step Label (Centered & Prominent) */}
-          <div className="text-xs sm:text-sm md:text-base font-extrabold text-slate-700 dark:text-slate-200 text-center px-2 min-w-0 flex-1 leading-snug">
-            <span className="text-slate-400 dark:text-slate-500 text-[11px] sm:text-xs font-bold block sm:inline mr-1 uppercase tracking-wider">
+          <div className="text-[11px] sm:text-sm font-extrabold text-slate-700 dark:text-slate-200 text-center px-1 min-w-0 flex-1 leading-snug">
+            <span className="text-slate-400 dark:text-slate-500 text-[10px] sm:text-xs font-bold block sm:inline mr-1 uppercase tracking-wider">
               {lang === 'en' ? 'Step' : 'Langkah'} {currentStep} {lang === 'en' ? 'of 5' : 'dari 5'}:
             </span>
-            <span className="text-[#E63946] dark:text-red-400 font-black tracking-tight">
+            <span className="text-[#E63946] dark:text-red-400 font-black tracking-tight block sm:inline truncate">
               {stepLabels[currentStep - 1]}
             </span>
           </div>
@@ -85,7 +85,7 @@ const WizardContainer = ({ currentStep, setCurrentStep, nextStep, prevStep, gene
           <button
             type="button"
             onClick={handleTopNext}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-extrabold transition-all shadow-sm active:scale-95 cursor-pointer text-white shrink-0 ${
+            className={`flex items-center gap-1 px-3 sm:px-4 py-2 rounded-xl text-xs font-extrabold transition-all shadow-sm active:scale-95 cursor-pointer text-white shrink-0 ${
               currentStep === 5
                 ? 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-500/20'
                 : 'bg-[#E63946] hover:bg-[#D62839] shadow-red-500/20'
@@ -93,11 +93,11 @@ const WizardContainer = ({ currentStep, setCurrentStep, nextStep, prevStep, gene
           >
             <span>
               {currentStep === 5 
-                ? (lang === 'en' ? 'Generate' : 'Buat Program')
+                ? (lang === 'en' ? 'Generate' : 'Buat')
                 : (lang === 'en' ? 'Next' : 'Lanjut')
               }
             </span>
-            <span className="material-symbols-outlined text-base">
+            <span className="material-symbols-outlined text-sm sm:text-base">
               {currentStep === 5 ? 'bolt' : 'arrow_forward'}
             </span>
           </button>

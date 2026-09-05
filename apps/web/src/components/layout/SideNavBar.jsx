@@ -144,15 +144,6 @@ const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
 
   return (
     <>
-      {/* Mobile Hamburger Toggle */}
-      <button
-        onClick={() => setMobileOpen(true)}
-        className="fixed top-[18px] left-4 z-[60] md:hidden flex items-center justify-center w-8 h-8 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm cursor-pointer"
-        title="Open Menu"
-      >
-        <span className="material-symbols-outlined text-lg text-slate-600 dark:text-slate-300">menu</span>
-      </button>
-
       {/* Mobile Overlay Backdrop */}
       {mobileOpen && (
         <div 

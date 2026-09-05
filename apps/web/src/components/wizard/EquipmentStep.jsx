@@ -143,23 +143,23 @@ const EquipmentStep = ({ onNext, onPrev }) => {
       
       {/* Step Header */}
       <div>
-        <div className="flex items-center justify-between flex-wrap gap-3 mb-2">
-          <h2 className="font-headline-md text-2xl font-bold text-[#2B2B2B] dark:text-white tracking-tight flex items-center gap-2">
+        <div className="flex items-start sm:items-center justify-between flex-col sm:flex-row gap-3 mb-2">
+          <h2 className="font-headline-md text-xl sm:text-2xl font-bold text-[#2B2B2B] dark:text-white tracking-tight flex items-center gap-2">
             <span className="material-symbols-outlined text-[#E63946]">fitness_center</span>
             <span>{lang === 'en' ? 'Step 2: Available Gym Equipment' : 'Langkah 2: Ketersediaan Alat Gym'}</span>
           </h2>
-          <div className="flex gap-2">
+          <div className="flex gap-2 w-full sm:w-auto">
             <button 
               type="button" 
               onClick={selectAll} 
-              className="text-xs font-bold text-[#E63946] border border-[#E63946] px-3 py-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors cursor-pointer"
+              className="flex-1 sm:flex-initial text-center text-xs font-bold text-[#E63946] border border-[#E63946] px-3 py-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors cursor-pointer"
             >
               {lang === 'en' ? 'Select All (43)' : 'Pilih Semua (43)'}
             </button>
             <button 
               type="button" 
               onClick={clearAll} 
-              className="text-xs font-bold text-slate-500 border border-slate-300 dark:border-slate-700 px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              className="flex-1 sm:flex-initial text-center text-xs font-bold text-slate-500 border border-slate-300 dark:border-slate-700 px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
             >
               {lang === 'en' ? 'Clear All' : 'Hapus Semua'}
             </button>
