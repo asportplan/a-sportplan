@@ -74,6 +74,65 @@ const CalculatorPage = ({ onStartWizard }) => {
           <span className="text-xs font-mono font-bold text-slate-500">{lang === 'en' ? 'Sports Science Standard' : 'Standar Fisiologi Olahraga'}</span>
         </div>
 
+        {/* 1RM Testing Rules & Standards (Placed on TOP before input fields) */}
+        <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-3">
+          <div className="flex items-center gap-2 text-xs font-black text-slate-800 dark:text-white">
+            <span className="material-symbols-outlined text-base text-[#E63946]">rule</span>
+            <span>{lang === 'en' ? 'Input Rules & Scientific 1RM Testing Protocol:' : 'Aturan Batas Input & Standar Tes 1RM:'}</span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+            {/* Reps Rule */}
+            <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="font-bold text-slate-500 text-[11px]">{lang === 'en' ? 'Repetition Range' : 'Batas Repetisi (Reps)'}</span>
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-black bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300">
+                  3 – 10 Reps
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-600 dark:text-slate-300 font-medium leading-tight">
+                {lang === 'en' 
+                  ? 'Gold standard: 3–10 reps (accuracy >95%). Max recommendation: 12 reps. Above 12 reps tests endurance instead of pure 1RM.'
+                  : 'Rentang Emas: 3–10 reps (akurasi >95%). Batas rekomendasi: maks 12 reps. Di atas 12 reps menguji endurance/laktat, bukan 1RM murni.'
+                }
+              </p>
+            </div>
+
+            {/* Weight Rule */}
+            <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="font-bold text-slate-500 text-[11px]">{lang === 'en' ? 'Load Selection' : 'Batas Beban (Weight)'}</span>
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-black bg-red-100 dark:bg-red-950/80 text-red-800 dark:text-red-300 font-mono">
+                  1 – 500 kg
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-600 dark:text-slate-300 font-medium leading-tight">
+                {lang === 'en'
+                  ? 'Select a weight where you reach technical failure within 3–10 reps. Do not use warm-up or light loads.'
+                  : 'Pilih beban berat yang membuat otot Anda mentok/gagal teknis di repetisi ke 3–10. Jangan gunakan beban pemanasan ringan.'
+                }
+              </p>
+            </div>
+
+            {/* Steps Rule */}
+            <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="font-bold text-slate-500 text-[11px]">{lang === 'en' ? 'Testing Protocol' : '4 Langkah Tes di Gym'}</span>
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-black bg-blue-100 dark:bg-blue-950/80 text-blue-800 dark:text-blue-300">
+                  4 Langkah
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-600 dark:text-slate-300 font-medium leading-tight">
+                {lang === 'en'
+                  ? '1. Warm up → 2. Set heavy test load → 3. Lift until technical failure → 4. Enter weight & reps below.'
+                  : '1. Pemanasan → 2. Pasang beban uji berat → 3. Angkat sampai repetisi mentok → 4. Masukkan berat & reps di bawah.'
+                }
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Interactive Inputs */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
           
           <div className="space-y-1.5">
@@ -127,109 +186,51 @@ const CalculatorPage = ({ onStartWizard }) => {
 
         </div>
 
-        {/* Real-time Guidance / Validation Feedback & Testing Rules */}
-        <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-3">
-          <div className="flex items-center gap-2 text-xs font-black text-slate-800 dark:text-white">
-            <span className="material-symbols-outlined text-base text-[#E63946]">rule</span>
-            <span>{lang === 'en' ? 'Input Rules & Scientific 1RM Testing Protocol:' : 'Aturan Batas Input & Standar Tes 1RM:'}</span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-            {/* Reps Rule */}
-            <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-slate-500 text-[11px]">{lang === 'en' ? 'Repetition Range' : 'Batas Repetisi (Reps)'}</span>
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-black bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300">
-                  3 – 10 Reps
+        {/* Dynamic Warning / Congratulation based on current input */}
+        {(() => {
+          const r = parseInt(reps);
+          if (isNaN(r) || r <= 0) return null;
+          if (r > 12) {
+            return (
+              <div className="p-3 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 text-amber-900 dark:text-amber-200 text-xs font-medium flex items-center gap-2.5">
+                <span className="material-symbols-outlined text-lg text-amber-600 shrink-0">warning</span>
+                <span>
+                  {lang === 'en'
+                    ? `Notice: ${r} reps tests muscular endurance / lactic threshold more than raw 1RM strength. For optimal accuracy, choose a heavier weight that limits you to 3–10 reps.`
+                    : `Perhatian: ${r} repetisi lebih menguji daya tahan kardiorespirasi/asam laktat daripada kekuatan 1RM murni. Untuk akurasi tertinggi, pasang beban lebih berat yang membuat Anda berhenti di 3–10 repetisi.`
+                  }
                 </span>
               </div>
-              <p className="text-[11px] text-slate-600 dark:text-slate-300 font-medium leading-tight">
-                {lang === 'en' 
-                  ? 'Gold standard: 3–10 reps (accuracy >95%). Max recommendation: 12 reps. Above 12 reps tests endurance instead of pure 1RM.'
-                  : 'Rentang Emas: 3–10 reps (akurasi >95%). Batas rekomendasi: maks 12 reps. Di atas 12 reps menguji endurance/laktat, bukan 1RM murni.'
-                }
-              </p>
-            </div>
-
-            {/* Weight Rule */}
-            <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-slate-500 text-[11px]">{lang === 'en' ? 'Load Selection' : 'Batas Beban (Weight)'}</span>
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-black bg-red-100 dark:bg-red-950/80 text-red-800 dark:text-red-300 font-mono">
-                  1 – 500 kg
+            );
+          }
+          if (r >= 3 && r <= 10) {
+            return (
+              <div className="p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-700 text-emerald-900 dark:text-emerald-200 text-xs font-medium flex items-center gap-2.5">
+                <span className="material-symbols-outlined text-lg text-emerald-600 shrink-0">verified</span>
+                <span>
+                  {lang === 'en'
+                    ? `Excellent! ${r} reps is within the scientific golden standard (3–10 reps) for maximum 1RM calculation accuracy (>95%).`
+                    : `Sempurna! ${r} repetisi berada di dalam Rentang Emas Ilmiah (3–10 reps) dengan akurasi perhitungan 1RM di atas 95%.`
+                  }
                 </span>
               </div>
-              <p className="text-[11px] text-slate-600 dark:text-slate-300 font-medium leading-tight">
-                {lang === 'en'
-                  ? 'Select a weight where you reach technical failure within 3–10 reps. Do not use warm-up or light loads.'
-                  : 'Pilih beban berat yang membuat otot Anda mentok/gagal teknis di repetisi ke 3–10. Jangan gunakan beban pemanasan ringan.'
-                }
-              </p>
-            </div>
-
-            {/* Steps Rule */}
-            <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-slate-500 text-[11px]">{lang === 'en' ? 'Testing Protocol' : '4 Langkah Tes di Gym'}</span>
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-black bg-blue-100 dark:bg-blue-950/80 text-blue-800 dark:text-blue-300">
-                  4 Langkah
+            );
+          }
+          if (r === 1) {
+            return (
+              <div className="p-3 rounded-2xl bg-blue-50 dark:bg-blue-950/40 border border-blue-300 dark:border-blue-700 text-blue-900 dark:text-blue-200 text-xs font-medium flex items-center gap-2.5">
+                <span className="material-symbols-outlined text-lg text-blue-600 shrink-0">check_circle</span>
+                <span>
+                  {lang === 'en'
+                    ? '1 Repetition: The lifted weight is your exact, actual 100% 1RM.'
+                    : '1 Repetisi: Beban yang Anda angkat adalah 100% beban 1RM nyata Anda.'
+                  }
                 </span>
               </div>
-              <p className="text-[11px] text-slate-600 dark:text-slate-300 font-medium leading-tight">
-                {lang === 'en'
-                  ? '1. Warm up → 2. Set heavy test load → 3. Lift until technical failure → 4. Enter weight & reps here.'
-                  : '1. Pemanasan → 2. Pasang beban uji berat → 3. Angkat sampai repetisi mentok → 4. Masukkan berat & reps ke sini.'
-                }
-              </p>
-            </div>
-          </div>
-
-          {/* Dynamic Warning / Congratulation based on current input */}
-          {(() => {
-            const r = parseInt(reps);
-            if (isNaN(r) || r <= 0) return null;
-            if (r > 12) {
-              return (
-                <div className="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 text-amber-900 dark:text-amber-200 text-[11px] font-medium flex items-center gap-2">
-                  <span className="material-symbols-outlined text-base text-amber-600 shrink-0">warning</span>
-                  <span>
-                    {lang === 'en'
-                      ? `Notice: ${r} reps tests muscular endurance / lactic threshold more than raw 1RM strength. For optimal accuracy, choose a heavier weight that limits you to 3–10 reps.`
-                      : `Perhatian: ${r} repetisi lebih menguji daya tahan kardiorespirasi/asam laktat daripada kekuatan 1RM murni. Untuk akurasi tertinggi, pasang beban lebih berat yang membuat Anda berhenti di 3–10 repetisi.`
-                    }
-                  </span>
-                </div>
-              );
-            }
-            if (r >= 3 && r <= 10) {
-              return (
-                <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-700 text-emerald-900 dark:text-emerald-200 text-[11px] font-medium flex items-center gap-2">
-                  <span className="material-symbols-outlined text-base text-emerald-600 shrink-0">verified</span>
-                  <span>
-                    {lang === 'en'
-                      ? `Excellent! ${r} reps is within the scientific golden standard (3–10 reps) for maximum 1RM calculation accuracy (>95%).`
-                      : `Sempurna! ${r} repetisi berada di dalam Rentang Emas Ilmiah (3–10 reps) dengan akurasi perhitungan 1RM di atas 95%.`
-                    }
-                  </span>
-                </div>
-              );
-            }
-            if (r === 1) {
-              return (
-                <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-300 dark:border-blue-700 text-blue-900 dark:text-blue-200 text-[11px] font-medium flex items-center gap-2">
-                  <span className="material-symbols-outlined text-base text-blue-600 shrink-0">check_circle</span>
-                  <span>
-                    {lang === 'en'
-                      ? '1 Repetition: The lifted weight is your exact, actual 100% 1RM.'
-                      : '1 Repetisi: Beban yang Anda angkat adalah 100% beban 1RM nyata Anda.'
-                    }
-                  </span>
-                </div>
-              );
-            }
-            return null;
-          })()}
-        </div>
+            );
+          }
+          return null;
+        })()}
 
         {/* Highlight Result Card */}
         <div 
