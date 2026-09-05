@@ -20,17 +20,12 @@ const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const primaryGroup = [
+  const navItems = [
     { id: 'home', label: lang === 'en' ? 'Home' : 'Beranda', icon: 'home' },
     { id: 'program', label: lang === 'en' ? 'Workout Program' : 'Program Latihan', icon: 'fitness_center' },
     { id: 'calculator', label: lang === 'en' ? '1RM Calculator' : 'Kalkulator 1RM', icon: 'calculate' },
     { id: 'saved_programs', label: lang === 'en' ? 'My Library' : 'Koleksi Tersimpan', icon: 'collections_bookmark' },
     { id: 'guide', label: lang === 'en' ? 'Training Guide' : 'Panduan Latihan', icon: 'menu_book' },
-  ];
-
-  const secondaryGroup = [
-    { id: 'analytics', label: lang === 'en' ? 'Load Analytics' : 'Analitik Beban', icon: 'monitoring' },
-    { id: 'screening', label: lang === 'en' ? 'Safety Clearance' : 'Pusat Keamanan', icon: 'security' },
     { id: 'settings', label: lang === 'en' ? 'Settings' : 'Pengaturan', icon: 'settings' },
   ];
 
@@ -116,28 +111,8 @@ const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
       </div>
 
       {/* Navigation Links */}
-      <div className={`flex-1 ${isCompact ? 'px-1.5' : 'px-3'} space-y-4 overflow-y-auto`}>
-        {/* Group 1 */}
-        <div className="space-y-0.5">
-          {!isCompact && (
-            <div className="px-3 text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-1">
-              {lang === 'en' ? 'Main' : 'Utama'}
-            </div>
-          )}
-          {isCompact && <div className="border-b border-slate-200 dark:border-slate-700 mx-1 mb-1"></div>}
-          {primaryGroup.map(item => renderNavItem(item, isCompact))}
-        </div>
-
-        {/* Group 2: Kontrol & Analitik */}
-        <div className="space-y-0.5">
-          {!isCompact && (
-            <div className="px-3 text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-1">
-              {lang === 'en' ? 'Insights & System' : 'Analitik & Sistem'}
-            </div>
-          )}
-          {isCompact && <div className="border-b border-slate-200 dark:border-slate-700 mx-1 mb-1"></div>}
-          {secondaryGroup.map(item => renderNavItem(item, isCompact))}
-        </div>
+      <div className={`flex-1 ${isCompact ? 'px-1.5' : 'px-3'} space-y-1 overflow-y-auto`}>
+        {navItems.map(item => renderNavItem(item, isCompact))}
       </div>
 
       {/* Footer */}
