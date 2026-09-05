@@ -63,19 +63,29 @@ const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
       {/* Profile & Brand Header */}
       <div className={`${isCompact ? 'px-2' : 'px-5'} mb-4 space-y-3`}>
         {/* Profile Card */}
-        <div 
-          onClick={() => handleNav('wizard')}
-          className={`flex items-center cursor-pointer hover:opacity-90 transition-opacity p-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-2xs ${
-            isCompact ? 'justify-center' : 'justify-between'
-          }`}
-        >
-          <div className={`flex items-center ${isCompact ? '' : 'gap-2.5'} min-w-0`}>
+        {isCompact ? (
+          <div 
+            onClick={() => handleNav('wizard')}
+            title={user?.name || 'Athlete Profile'}
+            className="flex items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-all py-1"
+          >
             <img 
               src="/logo.png" 
               alt="APW" 
-              className={`${isCompact ? 'w-9 h-9' : 'w-10 h-10'} rounded-xl object-contain shadow-md shadow-red-500/20 shrink-0`} 
+              className="w-10 h-10 rounded-xl object-contain shadow-md shadow-red-500/25 shrink-0 hover:ring-2 hover:ring-[#E63946]/30 transition-all" 
             />
-            {!isCompact && (
+          </div>
+        ) : (
+          <div 
+            onClick={() => handleNav('wizard')}
+            className="flex items-center justify-between cursor-pointer hover:opacity-90 transition-opacity p-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-2xs"
+          >
+            <div className="flex items-center gap-2.5 min-w-0">
+              <img 
+                src="/logo.png" 
+                alt="APW" 
+                className="w-10 h-10 rounded-xl object-contain shadow-md shadow-red-500/20 shrink-0" 
+              />
               <div className="min-w-0 pr-1">
                 <h2 className="font-extrabold text-xs text-slate-900 dark:text-white tracking-tight truncate">
                   {user?.name || (lang === 'en' ? 'Athlete Profile' : 'Profil Atlet')}
@@ -85,10 +95,8 @@ const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
                   <span>{user ? (lang === 'en' ? 'Cloud Synced' : 'Cloud Aktif') : 'aplanworkout Engine'}</span>
                 </p>
               </div>
-            )}
-          </div>
+            </div>
 
-          {!isCompact && (
             <button
               onClick={(e) => { e.stopPropagation(); toggle(); }}
               title="Switch Language"
@@ -96,15 +104,15 @@ const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
             >
               {lang === 'en' ? '🇬🇧' : '🇮🇩'}
             </button>
-          )}
-        </div>
+          </div>
+        )}
         
         {/* Primary Action Button */}
         <button 
           onClick={() => handleNav('wizard')}
           title={lang === 'en' ? 'Create New Program' : 'Buat Program Baru'}
           className={`w-full bg-[#E63946] hover:bg-[#D62839] text-white rounded-xl font-black text-xs transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-red-500/20 active:scale-95 ${
-            isCompact ? 'py-2.5 px-2' : 'py-2.5 px-4'
+            isCompact ? 'py-2.5 px-0' : 'py-2.5 px-4'
           }`}
         >
           <span className="material-symbols-outlined text-base">auto_awesome</span>
