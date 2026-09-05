@@ -22,18 +22,15 @@ const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
 
   const primaryGroup = [
     { id: 'home', label: lang === 'en' ? 'Home' : 'Beranda', icon: 'home' },
-    { id: 'calculator', label: lang === 'en' ? '1RM Calc' : 'Kalkulator 1RM', icon: 'calculate' },
-    { id: 'guide', label: lang === 'en' ? 'Guide' : 'Panduan', icon: 'menu_book' },
-    { id: 'program', label: lang === 'en' ? 'Dashboard' : 'Dashboard', icon: 'dashboard' },
-    { id: 'saved_programs', label: lang === 'en' ? 'My Library' : 'Koleksi Saya', icon: 'collections_bookmark' },
-    { id: 'wizard', label: lang === 'en' ? 'Generator' : 'Generator', icon: 'auto_awesome' },
+    { id: 'program', label: lang === 'en' ? 'Workout Program' : 'Program Latihan', icon: 'fitness_center' },
+    { id: 'calculator', label: lang === 'en' ? '1RM Calculator' : 'Kalkulator 1RM', icon: 'calculate' },
+    { id: 'saved_programs', label: lang === 'en' ? 'My Library' : 'Koleksi Tersimpan', icon: 'collections_bookmark' },
+    { id: 'guide', label: lang === 'en' ? 'Training Guide' : 'Panduan Latihan', icon: 'menu_book' },
   ];
 
-  const parametersGroup = [
-    { id: 'equipment', label: lang === 'en' ? 'Equipment' : 'Alat Gym', icon: 'fitness_center' },
-    { id: 'goals', label: lang === 'en' ? 'Focus' : 'Fokus', icon: 'flag' },
-    { id: 'analytics', label: lang === 'en' ? 'Analytics' : 'Analitik', icon: 'monitoring' },
-    { id: 'screening', label: lang === 'en' ? 'Safety' : 'Keamanan', icon: 'security' },
+  const secondaryGroup = [
+    { id: 'analytics', label: lang === 'en' ? 'Load Analytics' : 'Analitik Beban', icon: 'monitoring' },
+    { id: 'screening', label: lang === 'en' ? 'Safety Clearance' : 'Pusat Keamanan', icon: 'security' },
     { id: 'settings', label: lang === 'en' ? 'Settings' : 'Pengaturan', icon: 'settings' },
   ];
 
@@ -131,15 +128,15 @@ const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
           {primaryGroup.map(item => renderNavItem(item, isCompact))}
         </div>
 
-        {/* Group 2 */}
+        {/* Group 2: Kontrol & Analitik */}
         <div className="space-y-0.5">
           {!isCompact && (
             <div className="px-3 text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-1">
-              {lang === 'en' ? 'Parameters' : 'Parameter'}
+              {lang === 'en' ? 'Insights & System' : 'Analitik & Sistem'}
             </div>
           )}
           {isCompact && <div className="border-b border-slate-200 dark:border-slate-700 mx-1 mb-1"></div>}
-          {parametersGroup.map(item => renderNavItem(item, isCompact))}
+          {secondaryGroup.map(item => renderNavItem(item, isCompact))}
         </div>
       </div>
 
