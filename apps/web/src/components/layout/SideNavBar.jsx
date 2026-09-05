@@ -41,7 +41,8 @@ const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
     onNavigate(id);
   };
 
-  const renderNavItem = (item) => {
+  // isCompact: true = icon-only mode (desktop collapsed), false = full labels
+  const renderNavItem = (item, isCompact) => {
     const isActive = activeTab === item.id;
     return (
       <button
@@ -49,7 +50,7 @@ const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
         onClick={() => handleNav(item.id)}
         title={item.label}
         className={`w-full flex items-center gap-3 rounded-xl transition-all text-left cursor-pointer border-0 ${
-          collapsed ? 'justify-center px-2 py-2.5' : 'px-3.5 py-2.5'
+          isCompact ? 'justify-center px-2 py-2.5' : 'px-3.5 py-2.5'
         } text-xs ${
           isActive 
             ? 'bg-[#E63946] text-white font-bold shadow-sm shadow-red-500/20' 
@@ -59,28 +60,28 @@ const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
         <span className={`material-symbols-outlined text-lg shrink-0 ${isActive ? 'text-white' : 'text-slate-400 dark:text-slate-500'}`}>
           {item.icon}
         </span>
-        {!collapsed && <span className="tracking-wide truncate">{item.label}</span>}
+        {!isCompact && <span className="tracking-wide truncate">{item.label}</span>}
       </button>
     );
   };
 
-  // Sidebar content (shared between desktop and mobile drawer)
-  const sidebarContent = (
+  // isCompact: controls icon-only vs full-label rendering
+  const renderContent = (isCompact) => (
     <>
       {/* Profile & Brand Header */}
-      <div className={`${collapsed ? 'px-2' : 'px-5'} mb-4 space-y-3`}>
+      <div className={`${isCompact ? 'px-2' : 'px-5'} mb-4 space-y-3`}>
         {/* Profile Card */}
         <div 
           onClick={() => handleNav('wizard')}
           className={`flex items-center cursor-pointer hover:opacity-90 transition-opacity p-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-2xs ${
-            collapsed ? 'justify-center' : 'justify-between'
+            isCompact ? 'justify-center' : 'justify-between'
           }`}
         >
-          <div className={`flex items-center ${collapsed ? '' : 'gap-2.5'} min-w-0`}>
-            <div className={`${collapsed ? 'w-9 h-9 text-xs' : 'w-10 h-10 text-sm'} rounded-xl bg-gradient-to-br from-[#E63946] to-red-600 text-white font-black flex items-center justify-center shadow-md shadow-red-500/20 shrink-0 tracking-wider`}>
+          <div className={`flex items-center ${isCompact ? '' : 'gap-2.5'} min-w-0`}>
+            <div className={`${isCompact ? 'w-9 h-9 text-xs' : 'w-10 h-10 text-sm'} rounded-xl bg-gradient-to-br from-[#E63946] to-red-600 text-white font-black flex items-center justify-center shadow-md shadow-red-500/20 shrink-0 tracking-wider`}>
               {user?.name ? user.name.charAt(0).toUpperCase() : 'APW'}
             </div>
-            {!collapsed && (
+            {!isCompact && (
               <div className="min-w-0 pr-1">
                 <h2 className="font-extrabold text-xs text-slate-900 dark:text-white tracking-tight truncate">
                   {user?.name || (lang === 'en' ? 'Athlete Profile' : 'Profil Atlet')}
@@ -93,7 +94,7 @@ const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
             )}
           </div>
 
-          {!collapsed && (
+          {!isCompact && (
             <button
               onClick={(e) => { e.stopPropagation(); toggle(); }}
               title="Switch Language"
@@ -109,42 +110,42 @@ const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
           onClick={() => handleNav('wizard')}
           title={lang === 'en' ? 'Create New Program' : 'Buat Program Baru'}
           className={`w-full bg-[#E63946] hover:bg-[#D62839] text-white rounded-xl font-black text-xs transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-red-500/20 active:scale-95 ${
-            collapsed ? 'py-2.5 px-2' : 'py-2.5 px-4'
+            isCompact ? 'py-2.5 px-2' : 'py-2.5 px-4'
           }`}
         >
           <span className="material-symbols-outlined text-base">auto_awesome</span>
-          {!collapsed && <span>{lang === 'en' ? 'Create Program' : 'Buat Program'}</span>}
+          {!isCompact && <span>{lang === 'en' ? 'Create Program' : 'Buat Program'}</span>}
         </button>
       </div>
 
       {/* Navigation Links */}
-      <div className={`flex-1 ${collapsed ? 'px-1.5' : 'px-3'} space-y-4 overflow-y-auto`}>
+      <div className={`flex-1 ${isCompact ? 'px-1.5' : 'px-3'} space-y-4 overflow-y-auto`}>
         {/* Group 1 */}
         <div className="space-y-0.5">
-          {!collapsed && (
+          {!isCompact && (
             <div className="px-3 text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-1">
               {lang === 'en' ? 'Main' : 'Utama'}
             </div>
           )}
-          {collapsed && <div className="border-b border-slate-200 dark:border-slate-700 mx-1 mb-1"></div>}
-          {primaryGroup.map(renderNavItem)}
+          {isCompact && <div className="border-b border-slate-200 dark:border-slate-700 mx-1 mb-1"></div>}
+          {primaryGroup.map(item => renderNavItem(item, isCompact))}
         </div>
 
         {/* Group 2 */}
         <div className="space-y-0.5">
-          {!collapsed && (
+          {!isCompact && (
             <div className="px-3 text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-1">
               {lang === 'en' ? 'Parameters' : 'Parameter'}
             </div>
           )}
-          {collapsed && <div className="border-b border-slate-200 dark:border-slate-700 mx-1 mb-1"></div>}
-          {parametersGroup.map(renderNavItem)}
+          {isCompact && <div className="border-b border-slate-200 dark:border-slate-700 mx-1 mb-1"></div>}
+          {parametersGroup.map(item => renderNavItem(item, isCompact))}
         </div>
       </div>
 
       {/* Footer */}
-      <div className={`${collapsed ? 'px-2 flex-col items-center' : 'px-5'} pt-3 border-t border-[#EBE5E2] dark:border-slate-800 text-[11px] text-slate-400 flex ${collapsed ? 'justify-center' : 'items-center justify-between'} font-medium gap-1`}>
-        {collapsed ? (
+      <div className={`${isCompact ? 'px-2 flex-col items-center' : 'px-5'} pt-3 border-t border-[#EBE5E2] dark:border-slate-800 text-[11px] text-slate-400 flex ${isCompact ? 'justify-center' : 'items-center justify-between'} font-medium gap-1`}>
+        {isCompact ? (
           <span className="text-[9px]">APW</span>
         ) : (
           <>
@@ -161,7 +162,7 @@ const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
 
   return (
     <>
-      {/* Mobile Hamburger Toggle (shown in TopNavBar area on small screens) */}
+      {/* Mobile Hamburger Toggle */}
       <button
         onClick={() => setMobileOpen(true)}
         className="fixed top-[18px] left-4 z-[60] md:hidden flex items-center justify-center w-8 h-8 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm cursor-pointer"
@@ -178,7 +179,7 @@ const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
         />
       )}
 
-      {/* Mobile Drawer */}
+      {/* Mobile Drawer — ALWAYS shows full labels (isCompact = false) */}
       <aside 
         className={`fixed top-0 left-0 h-full w-72 bg-white dark:bg-slate-900 shadow-2xl z-[80] md:hidden flex flex-col py-5 border-r border-[#EBE5E2] dark:border-slate-800 transition-transform duration-300 ease-in-out ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
@@ -193,7 +194,7 @@ const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
             <span className="material-symbols-outlined text-lg text-slate-500">close</span>
           </button>
         </div>
-        {sidebarContent}
+        {renderContent(false)}
       </aside>
 
       {/* Desktop Sidebar (collapsible) */}
@@ -213,7 +214,7 @@ const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
           </span>
         </button>
         
-        {sidebarContent}
+        {renderContent(collapsed)}
       </aside>
     </>
   );
