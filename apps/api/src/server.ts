@@ -23,7 +23,7 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.json({
     status: "ok",
-    app: "A-PlanSport API",
+    app: "aplanworkout API",
     version: "1.0.0",
     timestamp: new Date().toISOString()
   });

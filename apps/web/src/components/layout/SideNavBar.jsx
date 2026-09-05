@@ -32,7 +32,7 @@ const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
         >
           <div className="flex items-center gap-2.5 min-w-0">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E63946] to-red-600 text-white font-black flex items-center justify-center text-sm shadow-md shadow-red-500/20 shrink-0 tracking-wider">
-              {user?.name ? user.name.charAt(0).toUpperCase() : 'APS'}
+              {user?.name ? user.name.charAt(0).toUpperCase() : 'APW'}
             </div>
             <div className="min-w-0 pr-1">
               <h2 className="font-extrabold text-xs text-slate-900 dark:text-white tracking-tight truncate">
@@ -40,7 +40,7 @@ const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
               </h2>
               <p className="text-[10px] font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1 mt-0.5 truncate">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>{user ? (lang === 'en' ? 'Cloud Synced' : 'Cloud Aktif') : 'A-PlanSport Engine'}</span>
+                <span>{user ? (lang === 'en' ? 'Cloud Synced' : 'Cloud Aktif') : 'aplanworkout Engine'}</span>
               </p>
             </div>
           </div>
@@ -126,7 +126,7 @@ const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
 
       {/* Footer System Info */}
       <div className="px-5 pt-4 border-t border-[#EBE5E2] dark:border-slate-800 text-[11px] text-slate-400 flex items-center justify-between font-medium">
-        <span>A-PlanSport v1.0</span>
+        <span>aplanworkout v1.0</span>
         <div className="flex items-center gap-1.5 text-[10px] text-emerald-600 font-bold">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           <span>Online Engine</span>

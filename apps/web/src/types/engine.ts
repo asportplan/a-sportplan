@@ -1,5 +1,5 @@
 /**
- * A-PlanSport Scientific Exercise Prescription Engine
+ * aplanworkout Scientific Exercise Prescription Engine
  * Central TypeScript Type Definitions
  */
 

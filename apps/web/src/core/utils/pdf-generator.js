@@ -48,7 +48,7 @@ export function generatePDF(program) {
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(16);
     doc.setTextColor(230, 57, 70); // Crimson Red
-    doc.text('A-PlanSport', margin, currentY);
+    doc.text('aplanworkout', margin, currentY);
     
     doc.setFontSize(8.5);
     doc.setFont('helvetica', 'bold');
@@ -515,8 +515,8 @@ export function generatePDF(program) {
       doc.line(margin, pageHeight - 10, pageWidth - margin, pageHeight - 10);
 
       const footerText = isEn
-        ? `A-PlanSport Engine   |   Weight Training Program Report   |   Page ${i} of ${totalPages}`
-        : `A-PlanSport Engine   |   Hasil Program Latihan Beban Presisi   |   Halaman ${i} dari ${totalPages}`;
+        ? `aplanworkout Engine   |   Weight Training Program Report   |   Page ${i} of ${totalPages}`
+        : `aplanworkout Engine   |   Hasil Program Latihan Beban Presisi   |   Halaman ${i} dari ${totalPages}`;
       doc.text(
         footerText,
         pageWidth / 2,
@@ -527,8 +527,8 @@ export function generatePDF(program) {
 
     const dateStr = new Date().toISOString().slice(0, 10);
     const filename = isEn
-      ? `A_PlanSport_Training_Program_${meta.duration_weeks || weeks.length}Weeks_${dateStr}.pdf`
-      : `Program_Latihan_APlanSport_${meta.duration_weeks || weeks.length}Minggu_${dateStr}.pdf`;
+      ? `aplanworkout_Training_Program_${meta.duration_weeks || weeks.length}Weeks_${dateStr}.pdf`
+      : `Program_Latihan_aplanworkout_${meta.duration_weeks || weeks.length}Minggu_${dateStr}.pdf`;
     doc.save(filename);
   } catch (err) {
     console.error('[PDFGenerator] Export error:', err);
@@ -554,7 +554,7 @@ function drawRunningHeader(doc, pageWidth, margin, isEn) {
   doc.setFontSize(7.5);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(148, 163, 184); // Slate-400
-  doc.text('A-PlanSport', margin, 10);
+  doc.text('aplanworkout', margin, 10);
   doc.setFont('helvetica', 'normal');
   doc.text(
     isEn ? 'Weight Training Program Report' : 'Laporan Program Latihan Beban Presisi', 

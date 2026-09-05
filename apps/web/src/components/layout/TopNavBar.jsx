@@ -22,10 +22,10 @@ const TopNavBar = ({ activeTab, onNavigate, user, onOpenLogin, onLogout }) => {
         className="flex items-center gap-2.5 cursor-pointer bg-transparent border-0 group"
       >
         <div className="w-9 h-9 rounded-xl bg-[#E63946] text-white font-black flex items-center justify-center text-xs shadow-md shadow-red-500/20 group-hover:scale-105 transition-transform tracking-wider">
-          APS
+          APW
         </div>
         <div className="flex flex-col text-left">
-          <span className="text-base font-black text-[#E63946] dark:text-red-400 tracking-tight leading-none">A-PlanSport</span>
+          <span className="text-base font-black text-[#E63946] dark:text-red-400 tracking-tight leading-none">aplanworkout</span>
           <span className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 leading-none mt-0.5">
             {lang === 'en' ? 'Scientific Training Plan' : 'Preskripsi Latihan Sains'}
           </span>

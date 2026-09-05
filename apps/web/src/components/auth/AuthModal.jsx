@@ -124,7 +124,7 @@ export function AuthModal({ isOpen, onClose, lang = 'id', onAuthSuccess, authHoo
           
           <h2 className="text-xl sm:text-2xl font-black tracking-tight leading-normal my-1">
             {mode === 'login' 
-              ? (isEn ? 'Sign In to A-PlanSport' : 'Masuk ke A-PlanSport') 
+              ? (isEn ? 'Sign In to aplanworkout' : 'Masuk ke aplanworkout') 
               : (isEn ? 'Daftar Akun Baru' : 'Daftar Akun Baru')}
           </h2>
           <p className="text-xs text-red-100 font-medium mt-1 leading-relaxed w-full px-2">

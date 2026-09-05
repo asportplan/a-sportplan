@@ -10,16 +10,16 @@ const Footer = () => {
         
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-xl bg-[#E63946] text-white font-black flex items-center justify-center text-xs shadow-xs tracking-wider">
-            APS
+            APW
           </div>
           <div>
-            <span className="font-extrabold text-[#E63946] dark:text-red-400 tracking-tight">A-PlanSport</span>
+            <span className="font-extrabold text-[#E63946] dark:text-red-400 tracking-tight">aplanworkout</span>
             <span className="ml-2 text-slate-400 text-[11px]">v1.0 • {lang === 'en' ? 'Evidence-Based Weight Training System' : 'Sistem Preskripsi Latihan Beban Berbasis Sains'}</span>
           </div>
         </div>
 
         <div className="text-center md:text-right text-[11px] font-medium text-slate-400">
-          <span>A-PlanSport • {lang === 'en' ? 'Evidence-Based Weight Training System' : 'Sistem Preskripsi Latihan Beban Berbasis Sains'}</span>
+          <span>aplanworkout • {lang === 'en' ? 'Evidence-Based Weight Training System' : 'Sistem Preskripsi Latihan Beban Berbasis Sains'}</span>
         </div>
 
       </div>
