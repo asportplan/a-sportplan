@@ -508,7 +508,7 @@ const GuidePage = ({ onStartWizard, onNavigate }) => {
             { id: '1rm', label: lang === 'en' ? '1RM & Intensity Basics' : 'Dasar 1RM & Intensitas', icon: 'trending_up' },
             { id: 'periodization', label: lang === 'en' ? 'Periodization & Deload' : 'Periodisasi & Deload', icon: 'auto_awesome' },
             { id: 'ampk_mtor', label: lang === 'en' ? 'AMPK-mTOR Molecular' : 'Molekuler AMPK-mTOR', icon: 'bolt' },
-            { id: 'safety', label: lang === 'en' ? 'PAR-Q+ Medical Screening' : 'Skrining Medis PAR-Q+', icon: 'verified_user' },
+            { id: 'safety', label: lang === 'en' ? 'Medical Safety Screening' : 'Skrining Keamanan Medis', icon: 'verified_user' },
             { id: 'glossary', label: lang === 'en' ? 'A-Z Sports Glossary' : 'Glosarium Istilah A-Z', icon: 'search' },
           ].map(tab => {
             const isActive = activeSection === tab.id;
@@ -1192,10 +1192,10 @@ const GuidePage = ({ onStartWizard, onNavigate }) => {
               <span className="material-symbols-outlined text-2xl text-[#E63946]">verified_user</span>
               <div>
                 <h2 className="text-xl font-extrabold text-[#2B2B2B] dark:text-white">
-                  {lang === 'en' ? 'PAR-Q+ Medical Screening' : 'Skrining Medis PAR-Q+'}
+                  {lang === 'en' ? 'Medical Safety Screening' : 'Skrining Keamanan Medis'}
                 </h2>
                 <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                  {lang === 'en' ? 'Physical Activity Readiness Questionnaire for Everyone.' : 'Kuesioner Kesiapan Aktivitas Fisik untuk mengutamakan keamanan.'}
+                  {lang === 'en' ? 'Physical Activity Readiness Protocol to ensure athlete safety.' : 'Protokol kesiapan aktivitas fisik untuk mengutamakan keamanan atlet.'}
                 </p>
               </div>
             </div>
@@ -1203,12 +1203,12 @@ const GuidePage = ({ onStartWizard, onNavigate }) => {
             <div className="space-y-4">
               <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
                 <h4 className="font-extrabold text-sm text-[#E63946] mb-2">
-                  {lang === 'en' ? 'What is PAR-Q+?' : 'Apa itu PAR-Q+?'}
+                  {lang === 'en' ? 'What is Medical Safety Screening?' : 'Apa itu Skrining Keamanan Medis?'}
                 </h4>
                 <p className="text-sm text-slate-700 dark:text-slate-300 mb-3">
                   {lang === 'en'
-                    ? 'The PAR-Q+ is a standard medical screening tool used to determine if an individual is physically ready to begin a new exercise program. It helps identify underlying health conditions that might require medical clearance or program modifications before training.'
-                    : 'PAR-Q+ adalah alat skrining medis standar yang digunakan untuk menentukan apakah seseorang secara fisik siap memulai program latihan baru. Ini membantu mengidentifikasi kondisi kesehatan yang mungkin memerlukan persetujuan dokter atau penyesuaian program sebelum berlatih.'}
+                    ? 'Medical safety screening is used to determine if an individual is physically ready to begin a new exercise program. It helps identify underlying health conditions that might require medical clearance or program modifications before training.'
+                    : 'Skrining keamanan medis digunakan untuk menentukan apakah seseorang secara fisik siap memulai program latihan baru. Ini membantu mengidentifikasi kondisi kesehatan yang mungkin memerlukan persetujuan dokter atau penyesuaian program sebelum berlatih.'}
                 </p>
               </div>
 

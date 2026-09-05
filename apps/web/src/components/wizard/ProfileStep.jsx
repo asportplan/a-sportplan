@@ -336,7 +336,7 @@ const ProfileStep = ({ onNext }) => {
           <div>
             <h3 className="text-base font-black text-[#2B2B2B] dark:text-white flex items-center gap-2">
               <span className="material-symbols-outlined text-emerald-600">verified_user</span>
-              {lang === 'en' ? '2. PAR-Q+ Medical Clearance Triage' : '2. Skrining Keamanan Medis (PAR-Q+)'}
+              {lang === 'en' ? '2. Medical Safety Screening' : '2. Skrining Keamanan Medis'}
             </h3>
             <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
               {lang === 'en' 

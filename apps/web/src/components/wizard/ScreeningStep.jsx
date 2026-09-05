@@ -273,12 +273,12 @@ const ScreeningStep = ({ onNext, onPrev, onGoToStep }) => {
           </div>
         </div>
 
-        {/* Card 2: Keamanan Medis (PAR-Q+) */}
+        {/* Card 2: Keamanan Medis & Status Kesehatan */}
         <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-[#EBE5E2] dark:border-slate-800 space-y-3 shadow-xs flex flex-col justify-between">
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
               <span className="material-symbols-outlined text-lg">verified_user</span>
-              <span>{lang === 'en' ? '2. Health Status (PAR-Q+)' : '2. Status Kesehatan (PAR-Q+)'}</span>
+              <span>{lang === 'en' ? '2. Health Status' : '2. Status Kesehatan'}</span>
             </div>
 
             <div className="flex items-center gap-2">

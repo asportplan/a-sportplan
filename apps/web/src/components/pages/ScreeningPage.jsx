@@ -85,7 +85,7 @@ const ScreeningPage = () => {
       {/* Questionnaire List */}
       <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-[#EBE5E2] dark:border-slate-800 space-y-4">
         <h3 className="text-sm font-extrabold text-slate-900 dark:text-white border-b border-slate-100 dark:border-slate-800 pb-3">
-          {lang === 'en' ? 'PAR-Q+ Health Questionnaire Checklist' : 'Kuesioner Kesehatan PAR-Q+'}
+          {lang === 'en' ? 'Medical Safety Questionnaire Checklist' : 'Kuesioner Keamanan Medis'}
         </h3>
 
         {[
