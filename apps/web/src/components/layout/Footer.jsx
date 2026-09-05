@@ -9,9 +9,11 @@ const Footer = () => {
       <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
         
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-xl bg-[#E63946] text-white font-black flex items-center justify-center text-xs shadow-xs tracking-wider">
-            APW
-          </div>
+          <img 
+            src="/logo.png" 
+            alt="aplanworkout logo" 
+            className="w-8 h-8 rounded-xl object-contain shadow-xs" 
+          />
           <div>
             <span className="font-extrabold text-[#E63946] dark:text-red-400 tracking-tight">aplanworkout</span>
             <span className="ml-2 text-slate-400 text-[11px]">v1.0 • {lang === 'en' ? 'Evidence-Based Weight Training System' : 'Sistem Preskripsi Latihan Beban Berbasis Sains'}</span>
