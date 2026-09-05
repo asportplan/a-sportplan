@@ -69,6 +69,9 @@ const OneRMCalculatorModal = ({ isOpen, onClose, onApply1RM, initialExerciseTitl
               min="1"
               max="500"
             />
+            <span className="text-[10px] text-slate-400 font-medium block">
+              {lang === 'en' ? '*Range: 1 – 500 kg' : '*Batas: 1 – 500 kg'}
+            </span>
           </div>
 
           <div className="space-y-1.5" style={{ width: '100%' }}>
@@ -84,8 +87,44 @@ const OneRMCalculatorModal = ({ isOpen, onClose, onApply1RM, initialExerciseTitl
               min="1"
               max="30"
             />
+            <span className="text-[10px] text-slate-400 font-medium block">
+              {lang === 'en' ? '*Golden range: 3 – 10 reps (Max: 12)' : '*Rentang Emas: 3 – 10 reps (Maks: 12)'}
+            </span>
           </div>
         </div>
+
+        {/* Dynamic Warning or Golden Range Feedback */}
+        {(() => {
+          const r = parseInt(reps);
+          if (isNaN(r) || r <= 0) return null;
+          if (r > 12) {
+            return (
+              <div className="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 text-amber-900 dark:text-amber-200 text-[11px] font-medium flex items-center gap-2">
+                <span className="material-symbols-outlined text-base text-amber-600 shrink-0">warning</span>
+                <span>
+                  {lang === 'en'
+                    ? `Notice: ${r} reps tests endurance more than raw 1RM. For best accuracy, use a weight limiting you to 3–10 reps.`
+                    : `Perhatian: ${r} reps lebih menguji daya tahan kardio daripada 1RM. Disarankan beban lebih berat yang mentok di 3–10 reps.`
+                  }
+                </span>
+              </div>
+            );
+          }
+          if (r >= 3 && r <= 10) {
+            return (
+              <div className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-700 text-emerald-900 dark:text-emerald-200 text-[11px] font-medium flex items-center gap-1.5">
+                <span className="material-symbols-outlined text-sm text-emerald-600 shrink-0">verified</span>
+                <span>
+                  {lang === 'en'
+                    ? `✓ Golden range (3–10 reps): 1RM accuracy >95% (NSCA standard).`
+                    : `✓ Rentang Emas (3–10 reps): Akurasi perhitungan 1RM >95% (Standar NSCA).`
+                  }
+                </span>
+              </div>
+            );
+          }
+          return null;
+        })()}
 
         {/* Calculation Results Highlight Card */}
         <div className="bg-gradient-to-r from-red-600 to-orange-500 rounded-2xl p-5 text-white text-center space-y-2 shadow-lg shadow-red-500/20">
