@@ -1,0 +1,574 @@
+%PDF-1.3
+%ºß¬à
+3 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 4 0 R
+>>
+endobj
+4 0 obj
+<<
+/Length 9426
+>>
+stream
+0.5670000000000001 w
+0 G
+BT
+/F2 15 Tf
+17.25 TL
+0.118 0.161 0.231 rg
+121.0127952755905625 785.1970866141732586 Td
+(DOKUMENTASI SISTEM & STANDAR FISIOLOGIS) Tj
+ET
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+0.902 0.224 0.275 rg
+216.9377952755905881 766.7718897637795408 Td
+(Aplikasi aplanworkout \(v1.0\)) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.392 0.455 0.545 rg
+157.6852952755905903 752.5986614173227736 Td
+(Arsitektur Rule Engine, Protokol Medis, Standar Uji 1RM, & Rujukan Ilmiah) Tj
+ET
+0.89 0.91 0.94 RG
+1.1338582677165356 w
+51.0236220472441033 741.2600787401574962 m
+544.2519685039370643 741.2600787401574962 l
+S
+BT
+/F2 10.5 Tf
+12.0749999999999993 TL
+0.118 0.161 0.231 rg
+51.0236220472441033 721.4175590551180903 Td
+(1. PENDAHULUAN & ARSITEKTUR FISIOLOGIS) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 707.8112598425196893 Td
+(Aplikasi aplanworkout adalah platform perancangan preskripsi beban latihan resistensi berbasis bukti \(Evidence-Based Resistance) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 695.9057480314960458 Td
+(Training Prescription\). Berbeda dengan aplikasi kebugaran biasa yang mengandalkan template acak, aplanworkout didukung oleh) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 684.0002362204724022 Td
+(Algoritma Rule Engine deterministik yang secara ketat memadukan prinsip Periodisasi Latihan \(Periodization\), Beban Bertahap) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 672.0947244094487587 Td
+(\(Progressive Overload\), Pemulihan Terjadwal \(Deload\), Triase Medis Keamanan \(PAR-Q+\), serta Konversi Kapasitas Maksimal 1RM.) Tj
+ET
+BT
+/F2 10.5 Tf
+12.0749999999999993 TL
+0.118 0.161 0.231 rg
+51.0236220472441033 651.6852755905511003 Td
+(2. ALUR SISTEM END-TO-END \(5 LANGKAH WIZARD\)) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 638.0789763779526993 Td
+(• Langkah 1 \(Data Diri & Skrining PAR-Q+\): Mengumpulkan data fisiologis atlet \(usia, berat badan, tinggi badan, cabang olahraga,) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 626.1734645669290558 Td
+(pengalaman latihan\) dan verifikasi 5 poin kesehatan. Jika ada keluhan jantung/nyeri dada, sistem otomatis memblokir pembuatan) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 614.2679527559054122 Td
+(program \(Hard Stop\) demi keselamatan atlet.) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 602.3624409448817687 Td
+(• Langkah 2 \(Inventaris Alat Gym\): Atlet memilih alat yang tersedia dari katalog 43+ latihan terverifikasi. Sistem memvalidasi kelayakan) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 590.4569291338582389 Td
+(cakupan 4 pola gerak dasar \(Push, Pull, Legs, Core\).) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 578.5514173228345953 Td
+(• Langkah 3 \(Input Beban 1RM & Kalkulator\): Memasukkan batas beban maksimal 1RM per alat atau menggunakan Kalkulator 1RM) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 566.6459055118109518 Td
+(terintegrasi berbasis rentang uji 3–10 repetisi.) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 554.7403937007873083 Td
+(• Langkah 4 \(Target, Durasi & Frekuensi\): Menentukan durasi makrosiklus \(4-16 minggu\), target kenaikan beban 1RM \(% target) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 542.8348818897636647 Td
+(peningkatan\), frekuensi latihan mingguan \(2-6 sesi\), dan fokus fase adaptasi.) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 530.9293700787400212 Td
+(• Langkah 5 \(Ringkasan Eksekutif & Generasi Jadwal\): Menyusun jadwal harian presisi mencakup set, repetisi, beban target \(kg\), tempo) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 519.0238582677163777 Td
+(gerakan, jeda istirahat pemulihan, dan ekspor dokumen PDF.) Tj
+ET
+BT
+/F2 10.5 Tf
+12.0749999999999993 TL
+0.118 0.161 0.231 rg
+51.0236220472441033 498.6144094488187193 Td
+(3. ATURAN INPUT & BATASAN PENGUJIAN 1RM) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 485.0081102362203183 Td
+(• Batas Repetisi \(Reps\): Rentang Emas Ilmiah adalah 3–10 repetisi \(akurasi formula >95%\). Batas rekomendasi maksimal adalah 12) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 473.1025984251967316 Td
+(repetisi. Pengujian >12 repetisi ditandai sebagai indikator daya tahan asam laktat/kardiovaskular, bukan kekuatan murni 1RM.) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 461.1970866141731449 Td
+(• Batas Beban \(Weight\): Rentang validasi sistem 1–500 kg. Pilihan beban harus menuntut kegagalan teknis \(technical failure\) pada) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 449.2915748031495582 Td
+(repetisi ke 3–10.) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 437.3860629921259715 Td
+(• Protokol 4 Langkah Pengujian di Gym: 1. Pemanasan umum dan persendian; 2. Pasang beban uji yang diperkirakan mentok di 6–10) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 425.4805511811023848 Td
+(repetisi; 3. Lakukan angkatan sampai repetisi maksimal dengan postur sempurna; 4. Masukkan berat dan repetisi ke aplikasi.) Tj
+ET
+BT
+/F2 10.5 Tf
+12.0749999999999993 TL
+0.118 0.161 0.231 rg
+51.0236220472441033 405.0711023622047833 Td
+(4. MODIFIKASI KEAMANAN MEDIS \(MEDICAL TRIAGE ENGINE\)) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 391.4648031496063254 Td
+(• Kondisi Jantung & Nyeri Dada \(Q1 & Q3\): Memicu HARD_STOP mutlak. Program latihan tidak akan dibuat sebelum ada surat klirens) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 379.5592913385827387 Td
+(dokter spesialis jantung.) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 367.6537795275590952 Td
+(• Asma Aktif \(Q2\): Algoritma menambahkan jeda istirahat antar-set sebesar +50% \(misal: 60 detik menjadi 90 detik\) guna pemulihan) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 355.7482677165355085 Td
+(pertukaran oksigen alveolar.) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 343.8427559055119218 Td
+(• Cedera Sendi/Otot Aktif \(Q4\): Memblokir pola gerak pada area cedera \(Upper, Lower, Core\) dan membatasi beban intensitas \(Load) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 331.9372440944883351 Td
+(Capping\).) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 320.0317322834647484 Td
+(• Konsumsi Obat Resep Jantung \(Q5\): Mengalihkan pemantauan intensitas ke skala subjektif RPE \(Rate of Perceived Exertion Borg) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 308.1262204724412186 Td
+(CR-10\).) Tj
+ET
+BT
+/F2 10.5 Tf
+12.0749999999999993 TL
+0.118 0.161 0.231 rg
+51.0236220472441033 287.7167716535435602 Td
+(5. DAFTAR RUJUKAN ILMIAH & STANDAR INTERNASIONAL \(BIBLIOGRAPHY\)) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 274.1104724409450455 Td
+(1. American College of Sports Medicine \(ACSM\). \(2021\). ACSM's Guidelines for Exercise Testing and Prescription \(11th ed.\). Wolters) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 262.2049606299215156 Td
+(Kluwer.) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 250.2994488188978721 Td
+(2. National Strength and Conditioning Association \(NSCA\) - Haff, G. G., & Triplett, N. T. \(2016\). Essentials of Strength Training and) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 238.3939370078743423 Td
+(Conditioning \(4th ed.\). Human Kinetics.) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 226.4884251968506987 Td
+(3. Epley, B. \(1985\). Poundage Chart: Boyd Epley Workout. University of Nebraska Lincoln.) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 214.5829133858271689 Td
+(4. Brzycki, M. \(1993\). Strength Testing—Predicting a One-Rep Max from Reps-to-Fatigue. JOPERD, 64\(1\), 88-90.) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 202.6774015748035254 Td
+(5. Lander, J. \(1985\). Maximum Based on Reps. NSCA Journal, 6\(6\), 60-61.) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 190.7718897637799955 Td
+(6. Warneke, K., et al. \(2022\). Periodization and Programming in Resistance Training: A Systematic Review. Sports Medicine, 52\(4\),) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 178.866377952756352 Td
+(795-812.) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 166.9608661417328221 Td
+(7. PAR-Q+ Collaboration. \(2023\). The Physical Activity Readiness Questionnaire for Everyone \(PAR-Q+\). Health & Fitness Journal of) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.2 0.255 0.333 rg
+51.0236220472441033 155.0553543307091786 Td
+(Canada.) Tj
+ET
+endstream
+endobj
+1 0 obj
+<</Type /Pages
+/Kids [3 0 R ]
+/Count 1
+>>
+endobj
+5 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+6 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+7 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+8 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+9 0 obj
+<<
+/Type /Font
+/BaseFont /Courier
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+10 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+11 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+12 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+13 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Roman
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+14 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+15 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Italic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+16 0 obj
+<<
+/Type /Font
+/BaseFont /Times-BoldItalic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+17 0 obj
+<<
+/Type /Font
+/BaseFont /ZapfDingbats
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+18 0 obj
+<<
+/Type /Font
+/BaseFont /Symbol
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+2 0 obj
+<<
+/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
+/Font <<
+/F1 5 0 R
+/F2 6 0 R
+/F3 7 0 R
+/F4 8 0 R
+/F5 9 0 R
+/F6 10 0 R
+/F7 11 0 R
+/F8 12 0 R
+/F9 13 0 R
+/F10 14 0 R
+/F11 15 0 R
+/F12 16 0 R
+/F13 17 0 R
+/F14 18 0 R
+>>
+/XObject <<
+>>
+>>
+endobj
+19 0 obj
+<<
+/Producer (jsPDF 2.5.1)
+/CreationDate (D:20260905163606+07'00')
+>>
+endobj
+20 0 obj
+<<
+/Type /Catalog
+/Pages 1 0 R
+/OpenAction [3 0 R /FitH null]
+/PageLayout /OneColumn
+>>
+endobj
+xref
+0 21
+0000000000 65535 f 
+0000009630 00000 n 
+0000011447 00000 n 
+0000000015 00000 n 
+0000000152 00000 n 
+0000009687 00000 n 
+0000009812 00000 n 
+0000009942 00000 n 
+0000010075 00000 n 
+0000010212 00000 n 
+0000010335 00000 n 
+0000010464 00000 n 
+0000010596 00000 n 
+0000010732 00000 n 
+0000010860 00000 n 
+0000010987 00000 n 
+0000011116 00000 n 
+0000011249 00000 n 
+0000011351 00000 n 
+0000011695 00000 n 
+0000011781 00000 n 
+trailer
+<<
+/Size 21
+/Root 20 0 R
+/Info 19 0 R
+/ID [ <5D15D2D8B78C8618313075AD350F08D9> <5D15D2D8B78C8618313075AD350F08D9> ]
+>>
+startxref
+11885
+%%EOF
