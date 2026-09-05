@@ -19,7 +19,7 @@ const TopNavBar = ({ activeTab, onNavigate, user, onOpenLogin, onLogout }) => {
       {/* Brand Logo & Title */}
       <button 
         onClick={() => onNavigate('home')} 
-        className="flex items-center gap-2.5 cursor-pointer bg-transparent border-0 group"
+        className="flex items-center gap-2.5 cursor-pointer bg-transparent border-0 group ml-10 md:ml-0"
       >
         <div className="w-9 h-9 rounded-xl bg-[#E63946] text-white font-black flex items-center justify-center text-xs shadow-md shadow-red-500/20 group-hover:scale-105 transition-transform tracking-wider">
           APW

@@ -66,7 +66,7 @@ function App() {
       )}
       
       {/* Main Content Canvas */}
-      <main className="flex-grow flex flex-col md:flex-row overflow-hidden relative">
+      <main className="flex-grow flex overflow-hidden relative">
         <SideNavBar 
           activeTab={activeTab} 
           onNavigate={setActiveTab} 
