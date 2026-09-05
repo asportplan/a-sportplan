@@ -70,9 +70,11 @@ const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
           }`}
         >
           <div className={`flex items-center ${isCompact ? '' : 'gap-2.5'} min-w-0`}>
-            <div className={`${isCompact ? 'w-9 h-9 text-xs' : 'w-10 h-10 text-sm'} rounded-xl bg-gradient-to-br from-[#E63946] to-red-600 text-white font-black flex items-center justify-center shadow-md shadow-red-500/20 shrink-0 tracking-wider`}>
-              {user?.name ? user.name.charAt(0).toUpperCase() : 'APW'}
-            </div>
+            <img 
+              src="/logo.png" 
+              alt="APW" 
+              className={`${isCompact ? 'w-9 h-9' : 'w-10 h-10'} rounded-xl object-contain shadow-md shadow-red-500/20 shrink-0`} 
+            />
             {!isCompact && (
               <div className="min-w-0 pr-1">
                 <h2 className="font-extrabold text-xs text-slate-900 dark:text-white tracking-tight truncate">
