@@ -787,20 +787,20 @@ const GoalsStep = ({ onNext, onPrev }) => {
       </div>
 
       {/* Navigation Footer */}
-      <div className="flex justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+      <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
         <button
           type="button"
           onClick={onPrev}
-          className="px-6 py-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 font-bold rounded-xl text-xs transition-all cursor-pointer"
+          className="order-2 sm:order-1 px-6 py-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 font-bold rounded-xl text-xs transition-all cursor-pointer text-center"
         >
           {lang === 'en' ? 'Previous' : 'Sebelumnya'}
         </button>
         <button
           type="button"
           onClick={handleNext}
-          className="px-8 py-3.5 bg-[#E63946] hover:bg-[#D62839] text-white font-extrabold text-sm rounded-xl transition-all shadow-md shadow-red-500/20 cursor-pointer flex items-center gap-2"
+          className="order-1 sm:order-2 px-6 sm:px-8 py-3.5 bg-[#E63946] hover:bg-[#D62839] text-white font-extrabold text-xs sm:text-sm rounded-xl transition-all shadow-md shadow-red-500/20 cursor-pointer flex items-center justify-center gap-2"
         >
-          <span>{lang === 'en' ? 'Continue to Summary & Generate' : 'Lanjut ke Ringkasan & Generate'}</span>
+          <span>{lang === 'en' ? 'Continue to Summary & Generate' : 'Lanjut ke Ringkasan & Buat'}</span>
           <span className="material-symbols-outlined text-base">arrow_forward</span>
         </button>
       </div>

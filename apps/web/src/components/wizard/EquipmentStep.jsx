@@ -357,11 +357,11 @@ const EquipmentStep = ({ onNext, onPrev }) => {
       </div>
 
       {/* Navigation Footer */}
-      <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex justify-between items-center">
+      <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
         <button 
           type="button"
           onClick={onPrev}
-          className="px-6 py-2.5 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-xl font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer text-xs"
+          className="order-2 sm:order-1 px-6 py-2.5 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-xl font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer text-xs text-center"
         >
           {lang === 'en' ? 'Back' : 'Sebelumnya'}
         </button>
@@ -369,7 +369,7 @@ const EquipmentStep = ({ onNext, onPrev }) => {
           type="button"
           onClick={onNext}
           disabled={selectedCount === 0}
-          className="px-6 py-2.5 bg-[#E63946] text-white rounded-xl font-bold hover:bg-[#D62839] transition-colors disabled:opacity-50 cursor-pointer text-xs shadow-md flex items-center gap-2"
+          className="order-1 sm:order-2 px-6 py-3 sm:py-2.5 bg-[#E63946] text-white rounded-xl font-bold hover:bg-[#D62839] transition-colors disabled:opacity-50 cursor-pointer text-xs shadow-md flex items-center justify-center gap-2"
         >
           <span>{lang === 'en' ? 'Proceed to 1RM Input' : 'Lanjut ke Input 1RM'}</span>
           <span className="material-symbols-outlined text-sm">arrow_forward</span>
