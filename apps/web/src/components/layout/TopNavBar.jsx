@@ -24,7 +24,7 @@ const TopNavBar = ({ activeTab, onNavigate, user, onOpenLogin, onLogout }) => {
         <img 
           src="/logo.png" 
           alt="aplanworkout logo" 
-          className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl object-contain shadow-md shadow-red-500/20 group-hover:scale-105 transition-transform shrink-0" 
+          className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-contain shadow-md shadow-red-500/20 group-hover:scale-105 transition-transform shrink-0 ring-1 ring-white/20" 
         />
         <div className="flex flex-col text-left min-w-0">
           <span className="text-sm sm:text-base font-black text-[#E63946] dark:text-red-400 tracking-tight leading-none truncate">aplanworkout</span>

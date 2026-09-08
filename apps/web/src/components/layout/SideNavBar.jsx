@@ -72,7 +72,7 @@ const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
             <img 
               src="/logo.png" 
               alt="APW" 
-              className="w-10 h-10 rounded-xl object-contain shadow-md shadow-red-500/25 shrink-0 hover:ring-2 hover:ring-[#E63946]/30 transition-all" 
+              className="w-10 h-10 rounded-full object-contain shadow-md shadow-red-500/25 shrink-0 hover:ring-2 hover:ring-[#E63946]/30 transition-all ring-1 ring-white/20" 
             />
           </div>
         ) : (
@@ -84,7 +84,7 @@ const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
               <img 
                 src="/logo.png" 
                 alt="APW" 
-                className="w-10 h-10 rounded-xl object-contain shadow-md shadow-red-500/20 shrink-0" 
+                className="w-10 h-10 rounded-full object-contain shadow-md shadow-red-500/20 shrink-0 ring-1 ring-white/20" 
               />
               <div className="min-w-0 pr-1">
                 <h2 className="font-extrabold text-xs text-slate-900 dark:text-white tracking-tight truncate">
