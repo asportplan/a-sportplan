@@ -12,7 +12,7 @@ const Footer = () => {
           <img 
             src="/logo.png" 
             alt="aplanworkout logo" 
-            className="w-8 h-8 rounded-full object-contain shadow-xs ring-1 ring-white/20" 
+            className="w-8 h-8 rounded-2xl object-contain shadow-xs ring-1 ring-white/20" 
           />
           <div>
             <span className="font-extrabold text-[#E63946] dark:text-red-400 tracking-tight">aplanworkout</span>
