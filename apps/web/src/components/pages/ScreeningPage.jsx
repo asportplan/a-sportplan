@@ -32,12 +32,19 @@ const ScreeningPage = () => {
     saveScreeningResults(updated);
   };
 
+  const handleInjuryCondition = (condition) => {
+    const updated = { ...screening, injury_condition: condition || null };
+    setScreening(updated);
+    saveScreeningResults(updated);
+  };
+
   const triage = processScreeningResults({
     q1_heart: screening.has_heart_condition,
     q2_asthma: screening.has_asthma,
     q3_chest_pain: screening.has_chest_pain,
     q4_injury: screening.has_injury,
     q4_injury_area: screening.injury_area,
+    q4_injury_condition: screening.injury_condition,
     q5_medication: screening.takes_medication,
   });
 
@@ -112,13 +119,13 @@ const ScreeningPage = () => {
             <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block">
               {lang === 'en' ? 'Select Active Injury Area:' : 'Pilih Area Cedera Aktif:'}
             </label>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               {['Upper', 'Lower', 'Core'].map(area => (
                 <button
                   key={area}
                   type="button"
                   onClick={() => handleInjuryArea(area)}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  className={`min-h-11 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                     screening.injury_area === area
                       ? 'bg-[#E63946] text-white shadow-sm'
                       : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700'
@@ -128,6 +135,20 @@ const ScreeningPage = () => {
                 </button>
               ))}
             </div>
+            <label htmlFor="injury-condition" className="text-xs font-bold text-slate-700 dark:text-slate-300 block pt-2">
+              {lang === 'en' ? 'Specific condition (optional):' : 'Kondisi spesifik (opsional):'}
+            </label>
+            <select
+              id="injury-condition"
+              value={screening.injury_condition || ''}
+              onChange={(e) => handleInjuryCondition(e.target.value)}
+              className="w-full sm:w-auto min-h-11 px-3 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#E63946]"
+            >
+              <option value="">{lang === 'en' ? 'Other / not sure' : 'Lainnya / tidak tahu'}</option>
+              <option value="low_back_pain">{lang === 'en' ? 'Low-back pain' : 'Nyeri pinggang'}</option>
+              <option value="shoulder_impingement">{lang === 'en' ? 'Shoulder impingement (pain lifting arm overhead)' : 'Impingement bahu (nyeri saat angkat tangan ke atas)'}</option>
+              <option value="patellofemoral_knee_pain">{lang === 'en' ? 'Front-of-knee pain' : 'Nyeri lutut bagian depan'}</option>
+            </select>
           </div>
         )}
       </div>

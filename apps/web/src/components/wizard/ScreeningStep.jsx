@@ -206,10 +206,10 @@ const ScreeningStep = ({ onNext, onPrev, onGoToStep }) => {
       
       {/* Toast Alert */}
       {toastMsg && (
-        <div className="fixed top-20 right-6 z-50 bg-[#2B2B2B] text-white px-5 py-3 rounded-xl shadow-2xl font-bold text-xs flex items-center gap-3 border border-slate-700 animate-bounce">
+        <div className="fixed top-20 left-4 right-4 sm:left-auto sm:right-6 z-50 bg-[#2B2B2B] text-white px-5 py-3 rounded-xl shadow-2xl font-bold text-xs flex items-center gap-3 border border-slate-700 animate-bounce">
           <span className="material-symbols-outlined text-emerald-400">check_circle</span>
           <span>{toastMsg}</span>
-          <button onClick={() => setToastMsg('')} className="text-slate-400 hover:text-white">✕</button>
+          <button onClick={() => setToastMsg('')} aria-label="Close" className="text-slate-400 hover:text-white min-w-11 min-h-11 inline-flex items-center justify-center rounded-lg">✕</button>
         </div>
       )}
 
@@ -353,7 +353,7 @@ const ScreeningStep = ({ onNext, onPrev, onGoToStep }) => {
                 <button
                   type="button"
                   onClick={() => onGoToStep(3)}
-                  className="text-[10px] font-bold text-slate-500 hover:text-[#E63946] underline cursor-pointer"
+                  className="text-[11px] font-bold text-slate-500 hover:text-[#E63946] underline cursor-pointer"
                   title={lang === 'en' ? 'Edit 1RM in Step 3' : 'Ubah 1RM di Langkah 3'}
                 >
                   {lang === 'en' ? 'Edit 1RM' : 'Edit 1RM'}
@@ -389,7 +389,7 @@ const ScreeningStep = ({ onNext, onPrev, onGoToStep }) => {
         <div className="flex items-center justify-between flex-wrap gap-2 border-b border-[#EBE5E2] dark:border-slate-800 pb-3">
           <div className="flex items-center gap-2 text-sm font-black text-[#2B2B2B] dark:text-white">
             <span className="material-symbols-outlined text-xl text-[#E63946]">lightbulb</span>
-            <span>💡 {lang === 'en' ? 'Equipment Recommendations for a Complete Program' : 'Saran Alat Tambahan Agar Latihan Lebih Lengkap'}</span>
+            <span>{lang === 'en' ? 'Equipment Recommendations for a Complete Program' : 'Saran Alat Tambahan Agar Latihan Lebih Lengkap'}</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -443,7 +443,7 @@ const ScreeningStep = ({ onNext, onPrev, onGoToStep }) => {
                   <div className="space-y-1">
                     <div className="flex justify-between items-center">
                       <span className="font-extrabold text-[11px] text-amber-800 dark:text-amber-400">{rec.category}</span>
-                      <span className="text-[10px] font-mono font-bold text-amber-700 bg-amber-100 dark:bg-amber-900/60 px-2 py-0.5 rounded-md">
+                      <span className="text-[11px] font-mono font-bold text-amber-700 bg-amber-100 dark:bg-amber-900/60 px-2 py-0.5 rounded-md">
                         {lang === 'en' ? 'Recommended' : 'Disarankan'}
                       </span>
                     </div>
@@ -487,7 +487,7 @@ const ScreeningStep = ({ onNext, onPrev, onGoToStep }) => {
       {activeModalRec && (
         <div 
           className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs"
-          style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, width: '100vw', height: '100vh', zIndex: 99999 }}
+          style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 99999 }}
         >
           <div 
             className="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-5"
@@ -496,7 +496,7 @@ const ScreeningStep = ({ onNext, onPrev, onGoToStep }) => {
             
             <div className="flex justify-between items-start border-b border-slate-100 dark:border-slate-800 pb-3" style={{ width: '100%' }}>
               <div style={{ width: '100%' }}>
-                <span className="text-[10px] font-extrabold uppercase text-[#E63946] dark:text-red-400 block" style={{ width: '100%' }}>
+                <span className="text-[11px] font-extrabold uppercase text-[#E63946] dark:text-red-400 block" style={{ width: '100%' }}>
                   {lang === 'en' ? 'Recommended Equipment' : 'Rekomendasi Alat Tambahan'}
                 </span>
                 <h3 className="text-lg font-black text-slate-900 dark:text-white capitalize" style={{ width: '100%' }}>
@@ -506,7 +506,7 @@ const ScreeningStep = ({ onNext, onPrev, onGoToStep }) => {
               <button 
                 type="button"
                 onClick={() => setActiveModalRec(null)} 
-                className="text-slate-400 hover:text-slate-700 dark:hover:text-white p-1 rounded-lg shrink-0 cursor-pointer"
+                aria-label="Close" className="text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-lg shrink-0 cursor-pointer min-w-11 min-h-11 inline-flex items-center justify-center rounded-lg"
               >
                 ✕
               </button>
@@ -596,7 +596,7 @@ const ScreeningStep = ({ onNext, onPrev, onGoToStep }) => {
             className="px-8 py-3.5 sm:px-10 sm:py-4 bg-white text-[#E63946] hover:bg-slate-50 font-black text-sm sm:text-base rounded-full shadow-lg hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center gap-2"
           >
             <span className="material-symbols-outlined text-xl">rocket_launch</span>
-            <span>🚀 {lang === 'en' ? 'Generate Workout Plan Now' : 'Buat Program Latihan Sekarang'}</span>
+            <span>{lang === 'en' ? 'Generate Workout Plan Now' : 'Buat Program Latihan Sekarang'}</span>
           </button>
         </div>
       </div>

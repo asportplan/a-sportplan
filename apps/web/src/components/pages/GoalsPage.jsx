@@ -245,9 +245,9 @@ const GoalsPage = () => {
           <div className="p-4 bg-white dark:bg-slate-900 border border-[#EBE5E2] dark:border-slate-800 rounded-2xl text-xs text-slate-600 dark:text-slate-400 font-medium leading-relaxed flex items-center justify-between flex-wrap gap-2 shadow-2xs">
             <div>
               {lang === 'en' ? (
-                <>📦 <strong>Custom Block Sequence & Duration:</strong> Set phases and week counts per block. Total Program Duration: <strong className="text-[#E63946] font-mono text-sm">{activeDuration} Weeks</strong>.</>
+                <><strong>Custom Block Sequence & Duration:</strong> Set phases and week counts per block. Total Program Duration: <strong className="text-[#E63946] font-mono text-sm">{activeDuration} Weeks</strong>.</>
               ) : (
-                <>📦 <strong>Kustomisasi Urutan & Durasi Blok:</strong> Atur fase dan jumlah minggu tiap blok. Total Durasi Program: <strong className="text-[#E63946] font-mono text-sm">{activeDuration} Minggu</strong>.</>
+                <><strong>Kustomisasi Urutan & Durasi Blok:</strong> Atur fase dan jumlah minggu tiap blok. Total Durasi Program: <strong className="text-[#E63946] font-mono text-sm">{activeDuration} Minggu</strong>.</>
               )}
             </div>
             <button
@@ -280,14 +280,14 @@ const GoalsPage = () => {
                 if (prevPhaseSlug && prevPhaseSlug !== currentPhaseSlug) {
                   if (compatStatus === 'SYNERGISTIC') {
                     compatBadge = (
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300">
+                      <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300">
                         {lang === 'en' ? '✓ Synergistic Transition' : '✓ Transisi Serasi'}
                       </span>
                     );
                   } else if (compatStatus === 'CONFLICTING') {
                     compatBadge = (
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-300">
-                        {lang === 'en' ? '⚠ Conflicting Transition' : '⚠ Transisi Konflik'}
+                      <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-300">
+                        {lang === 'en' ? 'Conflicting Transition' : 'Transisi Konflik'}
                       </span>
                     );
                   }
@@ -382,9 +382,9 @@ const GoalsPage = () => {
         <div className="space-y-4">
           <div className="p-4 bg-white dark:bg-slate-900 border border-[#EBE5E2] dark:border-slate-800 rounded-2xl text-xs text-slate-600 dark:text-slate-400 font-medium leading-relaxed shadow-2xs">
             {lang === 'en' ? (
-              <>🎯 <strong>Custom Weekly Specifics ({activeDuration} Weeks):</strong> Define the phase focus for each week.</>
+              <><strong>Custom Weekly Specifics ({activeDuration} Weeks):</strong> Define the phase focus for each week.</>
             ) : (
-              <>🎯 <strong>Kustomisasi Spesifik per Minggu ({activeDuration} Minggu):</strong> Tentukan fokus fase untuk setiap minggu.</>
+              <><strong>Kustomisasi Spesifik per Minggu ({activeDuration} Minggu):</strong> Tentukan fokus fase untuk setiap minggu.</>
             )}
           </div>
 

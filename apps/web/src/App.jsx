@@ -15,6 +15,8 @@ import SettingsPage from './components/pages/SettingsPage';
 import SavedProgramsPage from './components/pages/SavedProgramsPage';
 import GuidePage from './components/pages/GuidePage';
 import CalculatorPage from './components/pages/CalculatorPage';
+import LogResultsPage from './components/pages/LogResultsPage';
+import FinalReportPage from './components/pages/FinalReportPage';
 import AuthModal from './components/auth/AuthModal';
 import NotificationModal from './components/common/NotificationModal';
 import ErrorBoundary from './components/common/ErrorBoundary';
@@ -27,8 +29,11 @@ function App() {
     activeTab, 
     setActiveTab, 
     startWizard, 
+    createNewProgram, 
     resetAll, 
     programData,
+    setProgramData,
+    selectProgram,
     isLoading,
     error,
     currentStep,
@@ -49,6 +54,7 @@ function App() {
       <TopNavBar 
         activeTab={activeTab} 
         onNavigate={setActiveTab} 
+        onCreateNew={createNewProgram}
         user={auth.user}
         onOpenLogin={() => setShowAuthModal(true)}
         onLogout={auth.signOut}
@@ -57,7 +63,7 @@ function App() {
       {isOfflineMode && (
         <div className="bg-warning-container text-on-warning-container px-md py-sm text-center text-body-sm font-semibold flex justify-center items-center gap-xs">
           <span className="material-symbols-outlined text-sm">wifi_off</span>
-          <span>{lang === 'en' ? 'Offline Mode Active. Programs generated locally.' : 'Modus Offline Aktif. Program dihasilkan secara lokal.'}</span>
+          <span>{lang === 'en' ? 'Offline Mode Active. Programs generated locally.' : 'Mode Offline Aktif. Program dihasilkan secara lokal.'}</span>
           {!auth.isAuthenticated && (
             <button onClick={() => setShowAuthModal(true)} className="underline ml-1">{lang === 'en' ? 'Sign in' : 'Masuk'}</button>
           )}
@@ -78,14 +84,14 @@ function App() {
         <div className="flex-grow overflow-y-auto pb-24 md:pb-6 bg-surface p-md md:p-lg w-full min-w-0">
           {activeTab === 'home' && (
             <>
-              <HeroSection onStart={startWizard} user={auth.user} />
+              <HeroSection onStart={createNewProgram} user={auth.user} />
               <FeaturesGrid />
             </>
           )}
 
           {activeTab === 'guide' && (
             <div className="max-w-container-max mx-auto">
-              <GuidePage onStartWizard={startWizard} onNavigate={(tab) => setActiveTab(tab)} />
+              <GuidePage onStartWizard={createNewProgram} onNavigate={(tab) => setActiveTab(tab)} />
             </div>
           )}
 
@@ -103,12 +109,13 @@ function App() {
 
           {activeTab === 'program' && (
             <div className="max-w-container-max mx-auto">
-              <ErrorBoundary key={programData ? programData.generated_at || 'program' : 'empty'}>
+              <ErrorBoundary key={programData?.program_id || programData?.generated_at || 'program'}>
                 <ProgramResult 
+                  key={programData?.program_id || programData?.generated_at || 'program'}
                   programData={programData} 
                   isLoading={isLoading} 
                   onEditParameters={startWizard}
-                  onCreateNew={startWizard}
+                  onCreateNew={createNewProgram}
                   onNavigate={setActiveTab}
                 />
               </ErrorBoundary>
@@ -144,9 +151,13 @@ function App() {
               <SavedProgramsPage 
                 currentProgram={programData}
                 onSelectProgram={(prog) => {
-                  setActiveTab('program');
+                  if (selectProgram) selectProgram(prog);
+                  else {
+                    setProgramData(prog);
+                    setActiveTab('program');
+                  }
                 }}
-                onCreateNew={() => startWizard()}
+                onCreateNew={createNewProgram}
               />
             </div>
           )}
@@ -159,7 +170,19 @@ function App() {
 
           {activeTab === 'calculator' && (
             <div className="max-w-container-max mx-auto">
-              <CalculatorPage onStartWizard={startWizard} />
+              <CalculatorPage onStartWizard={createNewProgram} />
+            </div>
+          )}
+
+          {activeTab === 'log_results' && (
+            <div className="max-w-container-max mx-auto">
+              <LogResultsPage onNavigate={setActiveTab} programOverride={programData} />
+            </div>
+          )}
+
+          {activeTab === 'final_report' && (
+            <div className="max-w-container-max mx-auto">
+              <FinalReportPage onNavigate={setActiveTab} programOverride={programData} />
             </div>
           )}
         </div>

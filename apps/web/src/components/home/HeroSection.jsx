@@ -21,7 +21,7 @@ const HeroSection = ({ onStart, user }) => {
             </span>
             <span>
               {user 
-                ? (lang === 'en' ? `Welcome, ${user.name || user.email}! • Cloud Synced 🟢` : `Selamat Datang, ${user.name || user.email}! • Cloud Aktif 🟢`)
+                ? (lang === 'en' ? `Welcome, ${user.name || user.email}! • Cloud Synced` : `Selamat Datang, ${user.name || user.email}! • Cloud Aktif`)
                 : (lang === 'en' ? 'Smart & Safe Workout Generator' : 'Program Latihan Beban Cerdas & Aman')
               }
             </span>
@@ -49,7 +49,7 @@ const HeroSection = ({ onStart, user }) => {
               onClick={onStart}
               className="px-8 py-3.5 bg-white text-[#E63946] font-extrabold text-sm sm:text-base rounded-full shadow-lg shadow-black/10 hover:bg-slate-50 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer inline-flex items-center gap-2"
             >
-              <span>{lang === 'en' ? 'Create My Workout Plan' : '🚀 Buat Program Latihan Sekarang'}</span>
+              <span>{lang === 'en' ? 'Create My Workout Plan' : 'Buat Program Latihan Sekarang'}</span>
               <span className="material-symbols-outlined text-lg">arrow_forward</span>
             </button>
           </div>

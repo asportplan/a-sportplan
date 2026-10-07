@@ -101,7 +101,7 @@ export function generateExcel(program) {
             tExercise(ex.exercise_slug) || ex.exercise_slug,
             tPattern(ex.movement_pattern_slug) || ex.movement_pattern_slug,
             ex.sets || 0,
-            ex.reps || 0,
+            ex.is_timed && ex.duration_sec ? `${ex.duration_sec}s` : (ex.reps || 0),
             loadStr,
             ex.tempo_code || '—',
             ex.rest_interval_seconds || 0,

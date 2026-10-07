@@ -7,9 +7,11 @@ import {
   getUserProfile, 
   saveUserProfile, 
   getUserEquipment, 
-  saveUserEquipment 
+  saveUserEquipment,
+  getSavedProgramsLibrary,
+  saveProgramToLibrary,
+  resetForNewProgram
 } from '../core/db/user-store.js';
-import { api, ApiError } from '../lib/api-client.js';
 
 export function useProgramGenerator() {
   const [programData, setProgramData] = useState(null);
@@ -49,6 +51,13 @@ export function useProgramGenerator() {
       if (initialGen.success && initialGen.program) {
         cached = initialGen.program;
         saveGeneratedProgram(cached);
+        saveProgramToLibrary(cached);
+      }
+    } else {
+      // Ensure the active cached program is also present in the library collection
+      const lib = getSavedProgramsLibrary();
+      if (lib.length === 0) {
+        saveProgramToLibrary(cached);
       }
     }
     if (cached) {
@@ -56,13 +65,31 @@ export function useProgramGenerator() {
     }
   }, []);
 
-  const startWizard = () => {
+  const startWizard = useCallback((isNew = false) => {
+    if (isNew) {
+      resetForNewProgram();
+    }
     setActiveTab('wizard');
     setCurrentStep(1);
-  };
+  }, []);
+
+  const createNewProgram = useCallback(() => {
+    resetForNewProgram();
+    setActiveTab('wizard');
+    setCurrentStep(1);
+  }, []);
 
   const nextStep = () => setCurrentStep(prev => prev + 1);
   const prevStep = () => setCurrentStep(prev => prev - 1);
+
+  // Switch active program explicitly (e.g. from SavedProgramsPage library)
+  const selectProgram = useCallback((prog) => {
+    if (prog) {
+      setProgramData(prog);
+      saveGeneratedProgram(prog);
+      setActiveTab('program');
+    }
+  }, []);
 
   const generate = useCallback(async (isAuthenticated) => {
     setIsGenerating(true);
@@ -70,30 +97,18 @@ export function useProgramGenerator() {
     setIsOfflineMode(false);
 
     try {
-      if (isAuthenticated) {
-        // Try backend API
-        try {
-          const result = await api.generateProgram();
-          const prog = result?.program || result?.data?.program || result?.data;
-          if (result && (result.success || prog) && prog) {
-            setProgramData(prog);
-            saveGeneratedProgram(prog);
-            setActiveTab('program');
-            return { success: true, program: prog };
-          }
-        } catch (apiErr) {
-          console.warn('[PreciseTrain] Backend API notice, falling back to local scientific engine:', apiErr);
-          setIsOfflineMode(true);
-        }
-      } else {
-        setIsOfflineMode(true);
-      }
+      // Always generate with the local rule engine: it reads the profile, equipment and screening the
+      // athlete just entered in this browser. The backend /programs/generate reads a separate server
+      // database the wizard never writes to, so its output could be built from stale data.
+      // Signed-in users still get their data synced to Supabase by user-store.
+      setIsOfflineMode(!isAuthenticated);
 
-      // Local scientific rule engine (offline / fallback mode)
       const result = generateLocalProgram();
       if (result && result.success && result.program) {
         setProgramData(result.program);
         saveGeneratedProgram(result.program);
+        // Automatically save every new generated program to Library collection
+        saveProgramToLibrary(result.program);
         setActiveTab('program');
         return result;
       } else {
@@ -121,6 +136,8 @@ export function useProgramGenerator() {
 
   return {
     programData,
+    setProgramData,
+    selectProgram,
     isLoading: isGenerating,
     error,
     currentStep,
@@ -130,6 +147,7 @@ export function useProgramGenerator() {
     activeTab,
     setActiveTab,
     startWizard,
+    createNewProgram,
     generate,
     resetAll,
     clearError,

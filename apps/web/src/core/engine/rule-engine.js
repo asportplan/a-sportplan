@@ -55,6 +55,7 @@ export function generateProgram() {
     q3_chest_pain: screeningData.has_chest_pain,
     q4_injury: screeningData.has_injury,
     q4_injury_area: screeningData.injury_area,
+    q4_injury_condition: screeningData.injury_condition,
     q5_medication: screeningData.takes_medication,
   });
 
@@ -248,6 +249,7 @@ export function generateProgram() {
         phase_slug: dayPhase,
         available_equipment_slugs: availableSlugs,
         user_equipment_data: equipment,
+        athlete_body_weight_kg: profile.body_weight_kg || 70,
         training_age_level: profile.training_age_level,
         week_modifiers: weekModifiers,
         medical_modifiers: medicalResults.modifiers,

@@ -487,7 +487,7 @@ export function generatePDF(program) {
             String(idx + 1),
             name,
             String(ex.sets || 0),
-            String(ex.reps || 0),
+            ex.is_timed && ex.duration_sec ? `${ex.duration_sec}s` : String(ex.reps || 0),
             loadStr,
             ex.tempo_code || '2-0-2-0',
             formatRestInterval(ex.rest_interval_seconds || 60),

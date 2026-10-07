@@ -42,14 +42,14 @@ export const MST_EXERCISES = [
   { exercise_id: 4, exercise_slug: 'pec_deck', pattern_id: 1, primary_muscle_group_slug: 'pectoralis_major', substitution_priority_rank: 5, safety_category_level: 3, max_allowed_intensity_pct: 0.70, equipment_type: 'machine', load_step_kg: 5.0 },
   { exercise_id: 5, exercise_slug: 'pull_down', pattern_id: 3, primary_muscle_group_slug: 'latissimus_dorsi', substitution_priority_rank: 1, safety_category_level: 2, max_allowed_intensity_pct: 0.80, equipment_type: 'cable', load_step_kg: 5.0 },
   { exercise_id: 6, exercise_slug: 'seated_row', pattern_id: 4, primary_muscle_group_slug: 'rhomboids', substitution_priority_rank: 1, safety_category_level: 2, max_allowed_intensity_pct: 0.80, equipment_type: 'cable', load_step_kg: 5.0 },
-  { exercise_id: 7, exercise_slug: 'pull_over', pattern_id: 3, primary_muscle_group_slug: 'latissimus_dorsi', substitution_priority_rank: 3, safety_category_level: 3, max_allowed_intensity_pct: 0.70, equipment_type: 'dumbbell', load_step_kg: 2.0 },
+  { exercise_id: 7, exercise_slug: 'pull_over', pattern_id: 3, primary_muscle_group_slug: 'latissimus_dorsi', substitution_priority_rank: 3, safety_category_level: 3, max_allowed_intensity_pct: 0.70, equipment_type: 'machine', load_step_kg: 5.0 },
   { exercise_id: 8, exercise_slug: 'assisted_pull_up', pattern_id: 3, primary_muscle_group_slug: 'latissimus_dorsi', substitution_priority_rank: 2, safety_category_level: 2, max_allowed_intensity_pct: 0.80, equipment_type: 'machine', load_step_kg: 5.0 },
   { exercise_id: 9, exercise_slug: 'tricep_extension', pattern_id: 12, primary_muscle_group_slug: 'triceps', substitution_priority_rank: 2, safety_category_level: 3, max_allowed_intensity_pct: 0.70, equipment_type: 'cable', load_step_kg: 2.5 },
-  { exercise_id: 10, exercise_slug: 'tricep_dip', pattern_id: 12, primary_muscle_group_slug: 'triceps', substitution_priority_rank: 1, safety_category_level: 2, max_allowed_intensity_pct: 0.80, equipment_type: 'bodyweight', load_step_kg: 2.5 },
-  { exercise_id: 11, exercise_slug: 'arm_curl', pattern_id: 11, primary_muscle_group_slug: 'biceps', substitution_priority_rank: 1, safety_category_level: 3, max_allowed_intensity_pct: 0.70, equipment_type: 'dumbbell', load_step_kg: 2.0 },
-  { exercise_id: 12, exercise_slug: 'preacher_curl', pattern_id: 11, primary_muscle_group_slug: 'biceps', substitution_priority_rank: 2, safety_category_level: 3, max_allowed_intensity_pct: 0.70, equipment_type: 'dumbbell', load_step_kg: 2.0 },
-  { exercise_id: 13, exercise_slug: 'shoulder_press', pattern_id: 5, primary_muscle_group_slug: 'deltoids', substitution_priority_rank: 1, safety_category_level: 2, max_allowed_intensity_pct: 0.80, equipment_type: 'dumbbell', load_step_kg: 2.0 },
-  { exercise_id: 14, exercise_slug: 'lateral_raise', pattern_id: 13, primary_muscle_group_slug: 'lateral_deltoid', substitution_priority_rank: 1, safety_category_level: 3, max_allowed_intensity_pct: 0.70, equipment_type: 'dumbbell', load_step_kg: 1.0 },
+  { exercise_id: 10, exercise_slug: 'tricep_dip', pattern_id: 12, primary_muscle_group_slug: 'triceps', substitution_priority_rank: 1, safety_category_level: 2, max_allowed_intensity_pct: 0.80, equipment_type: 'machine', load_step_kg: 5.0 },
+  { exercise_id: 11, exercise_slug: 'arm_curl', pattern_id: 11, primary_muscle_group_slug: 'biceps', substitution_priority_rank: 1, safety_category_level: 3, max_allowed_intensity_pct: 0.70, equipment_type: 'machine', load_step_kg: 5.0 },
+  { exercise_id: 12, exercise_slug: 'preacher_curl', pattern_id: 11, primary_muscle_group_slug: 'biceps', substitution_priority_rank: 2, safety_category_level: 3, max_allowed_intensity_pct: 0.70, equipment_type: 'machine', load_step_kg: 5.0 },
+  { exercise_id: 13, exercise_slug: 'shoulder_press', pattern_id: 5, primary_muscle_group_slug: 'deltoids', substitution_priority_rank: 1, safety_category_level: 2, max_allowed_intensity_pct: 0.80, equipment_type: 'machine', load_step_kg: 5.0 },
+  { exercise_id: 14, exercise_slug: 'lateral_raise', pattern_id: 13, primary_muscle_group_slug: 'lateral_deltoid', substitution_priority_rank: 1, safety_category_level: 3, max_allowed_intensity_pct: 0.70, equipment_type: 'machine', load_step_kg: 5.0 },
   { exercise_id: 15, exercise_slug: 'kinesis_fore_right', pattern_id: 17, primary_muscle_group_slug: 'kinetic_chain', substitution_priority_rank: 1, safety_category_level: 3, max_allowed_intensity_pct: 0.70, equipment_type: 'cable', load_step_kg: 2.5 },
   { exercise_id: 16, exercise_slug: 'kinesis_fore_left', pattern_id: 17, primary_muscle_group_slug: 'kinetic_chain', substitution_priority_rank: 2, safety_category_level: 3, max_allowed_intensity_pct: 0.70, equipment_type: 'cable', load_step_kg: 2.5 },
   { exercise_id: 17, exercise_slug: 'kinesis_back_right', pattern_id: 4, primary_muscle_group_slug: 'latissimus_dorsi', substitution_priority_rank: 2, safety_category_level: 3, max_allowed_intensity_pct: 0.70, equipment_type: 'cable', load_step_kg: 2.5 },
@@ -80,7 +80,46 @@ export const MST_EXERCISES = [
   { exercise_id: 40, exercise_slug: 'glute_machine', pattern_id: 8, primary_muscle_group_slug: 'gluteus_maximus', substitution_priority_rank: 1, safety_category_level: 2, max_allowed_intensity_pct: 0.80, equipment_type: 'machine', load_step_kg: 5.0 },
   { exercise_id: 41, exercise_slug: 'glute_kickback', pattern_id: 8, primary_muscle_group_slug: 'gluteus_maximus', substitution_priority_rank: 3, safety_category_level: 3, max_allowed_intensity_pct: 0.70, equipment_type: 'cable', load_step_kg: 2.5 },
   { exercise_id: 42, exercise_slug: 'abductor', pattern_id: 18, primary_muscle_group_slug: 'gluteus_medius', substitution_priority_rank: 1, safety_category_level: 3, max_allowed_intensity_pct: 0.70, equipment_type: 'machine', load_step_kg: 5.0 },
-  { exercise_id: 43, exercise_slug: 'adductor', pattern_id: 18, primary_muscle_group_slug: 'adductors', substitution_priority_rank: 2, safety_category_level: 3, max_allowed_intensity_pct: 0.70, equipment_type: 'machine', load_step_kg: 5.0 }
+  { exercise_id: 43, exercise_slug: 'adductor', pattern_id: 18, primary_muscle_group_slug: 'adductors', substitution_priority_rank: 2, safety_category_level: 3, max_allowed_intensity_pct: 0.70, equipment_type: 'machine', load_step_kg: 5.0 },
+
+  // === DUMBBELL EXERCISES (Alat Beban Bebas - Tanpa Singkatan) ===
+  { exercise_id: 44, exercise_slug: 'dumbbell_bench_press', pattern_id: 1, primary_muscle_group_slug: 'pectoralis_major', substitution_priority_rank: 2, safety_category_level: 2, max_allowed_intensity_pct: 0.90, equipment_type: 'dumbbell', load_step_kg: 2.0 },
+  { exercise_id: 45, exercise_slug: 'dumbbell_floor_press', pattern_id: 1, primary_muscle_group_slug: 'pectoralis_major', substitution_priority_rank: 3, safety_category_level: 2, max_allowed_intensity_pct: 0.85, equipment_type: 'dumbbell', load_step_kg: 2.0 },
+  { exercise_id: 46, exercise_slug: 'dumbbell_fly', pattern_id: 1, primary_muscle_group_slug: 'pectoralis_major', substitution_priority_rank: 4, safety_category_level: 3, max_allowed_intensity_pct: 0.70, equipment_type: 'dumbbell', load_step_kg: 2.0 },
+  { exercise_id: 47, exercise_slug: 'dumbbell_overhead_press', pattern_id: 5, primary_muscle_group_slug: 'deltoids', substitution_priority_rank: 2, safety_category_level: 2, max_allowed_intensity_pct: 0.85, equipment_type: 'dumbbell', load_step_kg: 2.0 },
+  { exercise_id: 48, exercise_slug: 'dumbbell_lateral_raise', pattern_id: 13, primary_muscle_group_slug: 'lateral_deltoid', substitution_priority_rank: 2, safety_category_level: 3, max_allowed_intensity_pct: 0.70, equipment_type: 'dumbbell', load_step_kg: 1.0 },
+  { exercise_id: 49, exercise_slug: 'dumbbell_bicep_curl', pattern_id: 11, primary_muscle_group_slug: 'biceps', substitution_priority_rank: 2, safety_category_level: 3, max_allowed_intensity_pct: 0.75, equipment_type: 'dumbbell', load_step_kg: 1.0 },
+  { exercise_id: 50, exercise_slug: 'dumbbell_bent_over_row', pattern_id: 4, primary_muscle_group_slug: 'latissimus_dorsi', substitution_priority_rank: 2, safety_category_level: 2, max_allowed_intensity_pct: 0.85, equipment_type: 'dumbbell', load_step_kg: 2.0 },
+  { exercise_id: 51, exercise_slug: 'dumbbell_chest_supported_row', pattern_id: 4, primary_muscle_group_slug: 'latissimus_dorsi', substitution_priority_rank: 2, safety_category_level: 2, max_allowed_intensity_pct: 0.80, equipment_type: 'dumbbell', load_step_kg: 2.0 },
+  { exercise_id: 52, exercise_slug: 'dumbbell_rear_delt_fly', pattern_id: 4, primary_muscle_group_slug: 'lateral_deltoid', substitution_priority_rank: 3, safety_category_level: 3, max_allowed_intensity_pct: 0.70, equipment_type: 'dumbbell', load_step_kg: 1.0 },
+  { exercise_id: 53, exercise_slug: 'dumbbell_goblet_squat', pattern_id: 6, primary_muscle_group_slug: 'quadriceps', substitution_priority_rank: 2, safety_category_level: 2, max_allowed_intensity_pct: 0.85, equipment_type: 'dumbbell', load_step_kg: 2.0 },
+  { exercise_id: 54, exercise_slug: 'dumbbell_walking_lunge', pattern_id: 6, primary_muscle_group_slug: 'quadriceps', substitution_priority_rank: 3, safety_category_level: 2, max_allowed_intensity_pct: 0.80, equipment_type: 'dumbbell', load_step_kg: 2.0 },
+  { exercise_id: 55, exercise_slug: 'dumbbell_bulgarian_split', pattern_id: 6, primary_muscle_group_slug: 'quadriceps', substitution_priority_rank: 2, safety_category_level: 2, max_allowed_intensity_pct: 0.85, equipment_type: 'dumbbell', load_step_kg: 2.0 },
+  { exercise_id: 56, exercise_slug: 'dumbbell_romanian_deadlift', pattern_id: 8, primary_muscle_group_slug: 'hamstrings', substitution_priority_rank: 2, safety_category_level: 2, max_allowed_intensity_pct: 0.85, equipment_type: 'dumbbell', load_step_kg: 2.0 },
+  { exercise_id: 57, exercise_slug: 'dumbbell_single_leg_rdl', pattern_id: 8, primary_muscle_group_slug: 'hamstrings', substitution_priority_rank: 3, safety_category_level: 2, max_allowed_intensity_pct: 0.80, equipment_type: 'dumbbell', load_step_kg: 2.0 },
+  { exercise_id: 58, exercise_slug: 'dumbbell_swing', pattern_id: 8, primary_muscle_group_slug: 'gluteus_maximus', substitution_priority_rank: 3, safety_category_level: 1, max_allowed_intensity_pct: 0.75, equipment_type: 'dumbbell', load_step_kg: 2.0, min_training_level: 'INTERMEDIATE' },
+  { exercise_id: 59, exercise_slug: 'dumbbell_farmers_walk', pattern_id: 16, primary_muscle_group_slug: 'obliques', substitution_priority_rank: 3, safety_category_level: 2, max_allowed_intensity_pct: 0.80, equipment_type: 'dumbbell', load_step_kg: 2.0, is_timed: true },
+
+  // === BODYWEIGHT & CALISTHENICS EXERCISES (Tanpa Alat / Beban Tubuh) ===
+  { exercise_id: 60, exercise_slug: 'push_up_standard', pattern_id: 1, primary_muscle_group_slug: 'pectoralis_major', substitution_priority_rank: 2, safety_category_level: 2, max_allowed_intensity_pct: 1.00, equipment_type: 'bodyweight', load_step_kg: null },
+  { exercise_id: 61, exercise_slug: 'push_up_knee', pattern_id: 1, primary_muscle_group_slug: 'pectoralis_major', substitution_priority_rank: 4, safety_category_level: 3, max_allowed_intensity_pct: 1.00, equipment_type: 'bodyweight', load_step_kg: null },
+  { exercise_id: 62, exercise_slug: 'push_up_parallette', pattern_id: 1, primary_muscle_group_slug: 'pectoralis_major', substitution_priority_rank: 3, safety_category_level: 2, max_allowed_intensity_pct: 1.00, equipment_type: 'bodyweight', load_step_kg: null, min_training_level: 'INTERMEDIATE' },
+  { exercise_id: 63, exercise_slug: 'diamond_push_up', pattern_id: 12, primary_muscle_group_slug: 'triceps', substitution_priority_rank: 2, safety_category_level: 2, max_allowed_intensity_pct: 0.85, equipment_type: 'bodyweight', load_step_kg: null, min_training_level: 'INTERMEDIATE' },
+  { exercise_id: 64, exercise_slug: 'pike_push_up', pattern_id: 5, primary_muscle_group_slug: 'deltoids', substitution_priority_rank: 3, safety_category_level: 2, max_allowed_intensity_pct: 0.85, equipment_type: 'bodyweight', load_step_kg: null, min_training_level: 'INTERMEDIATE' },
+  { exercise_id: 65, exercise_slug: 'handstand_push_up', pattern_id: 5, primary_muscle_group_slug: 'deltoids', substitution_priority_rank: 1, safety_category_level: 1, max_allowed_intensity_pct: 1.00, equipment_type: 'bodyweight', load_step_kg: null, min_training_level: 'ADVANCED' },
+  { exercise_id: 66, exercise_slug: 'inverted_row_horizontal', pattern_id: 4, primary_muscle_group_slug: 'rhomboids', substitution_priority_rank: 2, safety_category_level: 2, max_allowed_intensity_pct: 1.00, equipment_type: 'bodyweight', load_step_kg: null },
+  { exercise_id: 67, exercise_slug: 'inverted_row_incline', pattern_id: 4, primary_muscle_group_slug: 'rhomboids', substitution_priority_rank: 3, safety_category_level: 3, max_allowed_intensity_pct: 1.00, equipment_type: 'bodyweight', load_step_kg: null },
+  { exercise_id: 68, exercise_slug: 'pull_up_standard', pattern_id: 3, primary_muscle_group_slug: 'latissimus_dorsi', substitution_priority_rank: 1, safety_category_level: 2, max_allowed_intensity_pct: 1.00, equipment_type: 'bodyweight', load_step_kg: null, min_training_level: 'INTERMEDIATE' },
+  { exercise_id: 69, exercise_slug: 'chin_up_standard', pattern_id: 3, primary_muscle_group_slug: 'latissimus_dorsi', substitution_priority_rank: 2, safety_category_level: 2, max_allowed_intensity_pct: 1.00, equipment_type: 'bodyweight', load_step_kg: null, min_training_level: 'INTERMEDIATE' },
+  { exercise_id: 70, exercise_slug: 'negative_pull_up', pattern_id: 3, primary_muscle_group_slug: 'latissimus_dorsi', substitution_priority_rank: 3, safety_category_level: 2, max_allowed_intensity_pct: 0.80, equipment_type: 'bodyweight', load_step_kg: null },
+  { exercise_id: 71, exercise_slug: 'bodyweight_squat', pattern_id: 6, primary_muscle_group_slug: 'quadriceps', substitution_priority_rank: 2, safety_category_level: 3, max_allowed_intensity_pct: 1.00, equipment_type: 'bodyweight', load_step_kg: null },
+  { exercise_id: 72, exercise_slug: 'bodyweight_bulgarian_split', pattern_id: 6, primary_muscle_group_slug: 'quadriceps', substitution_priority_rank: 2, safety_category_level: 2, max_allowed_intensity_pct: 0.90, equipment_type: 'bodyweight', load_step_kg: null },
+  { exercise_id: 73, exercise_slug: 'bodyweight_reverse_lunge', pattern_id: 6, primary_muscle_group_slug: 'quadriceps', substitution_priority_rank: 3, safety_category_level: 3, max_allowed_intensity_pct: 0.85, equipment_type: 'bodyweight', load_step_kg: null },
+  { exercise_id: 74, exercise_slug: 'bodyweight_single_leg_rdl', pattern_id: 8, primary_muscle_group_slug: 'hamstrings', substitution_priority_rank: 3, safety_category_level: 3, max_allowed_intensity_pct: 0.80, equipment_type: 'bodyweight', load_step_kg: null },
+  { exercise_id: 75, exercise_slug: 'bodyweight_glute_bridge', pattern_id: 8, primary_muscle_group_slug: 'gluteus_maximus', substitution_priority_rank: 3, safety_category_level: 3, max_allowed_intensity_pct: 0.80, equipment_type: 'bodyweight', load_step_kg: null },
+  { exercise_id: 76, exercise_slug: 'plank_standard', pattern_id: 14, primary_muscle_group_slug: 'rectus_abdominis', substitution_priority_rank: 2, safety_category_level: 3, max_allowed_intensity_pct: 0.70, equipment_type: 'bodyweight', load_step_kg: null, is_timed: true },
+  { exercise_id: 77, exercise_slug: 'side_plank', pattern_id: 16, primary_muscle_group_slug: 'obliques', substitution_priority_rank: 3, safety_category_level: 3, max_allowed_intensity_pct: 0.70, equipment_type: 'bodyweight', load_step_kg: null, is_timed: true },
+  { exercise_id: 78, exercise_slug: 'bird_dog', pattern_id: 15, primary_muscle_group_slug: 'erector_spinae', substitution_priority_rank: 2, safety_category_level: 3, max_allowed_intensity_pct: 0.70, equipment_type: 'bodyweight', load_step_kg: null }
 ];
 
 // === TABLE 3: MST_TRAINING_PHASES ===
@@ -221,19 +260,29 @@ export const MST_METS_COMPENDIUM = [
 
 export const MST_MEDICAL_CONTRAINDICATIONS: Record<string, { blocked_exercise_slugs: string[]; substitute_exercise_slugs: string[]; reason: string }> = {
   low_back_pain: {
-    blocked_exercise_slugs: ['squat_rack', 'deadlift', 'back_extension'],
-    substitute_exercise_slugs: ['leg_press_right', 'seated_row', 'abdominal_crunch_machine'],
-    reason: 'Eliminate heavy axial spinal compression'
+    blocked_exercise_slugs: ['squat_rack', 'deadlift', 'back_extension', 'lower_back', 'dumbbell_bent_over_row', 'sit_up'],
+    substitute_exercise_slugs: [
+      'dumbbell_goblet_squat', 'bodyweight_bulgarian_split', 'dumbbell_chest_supported_row', 
+      'inverted_row_horizontal', 'inverted_row_incline', 'leg_press_right', 
+      'seated_row', 'abdominal_crunch_machine'
+    ],
+    reason: 'Eliminate heavy axial spinal compression and high moment arm shear'
   },
   shoulder_impingement: {
-    blocked_exercise_slugs: ['shoulder_press', 'lateral_raise'],
-    substitute_exercise_slugs: ['chest_press', 'seated_row'],
-    reason: 'Prevent subacromial space hyper-extension and impingement'
+    blocked_exercise_slugs: ['shoulder_press', 'lateral_raise', 'bench_press', 'incline_press', 'dumbbell_overhead_press', 'dumbbell_lateral_raise'],
+    substitute_exercise_slugs: [
+      'dumbbell_floor_press', 'push_up_knee', 'chest_press', 
+      'seated_row', 'inverted_row_horizontal'
+    ],
+    reason: 'Prevent subacromial space hyper-extension and impingement with neutral grip & restricted depth'
   },
   patellofemoral_knee_pain: {
-    blocked_exercise_slugs: ['leg_extension'],
-    substitute_exercise_slugs: ['glute_machine', 'seated_calf_raise'],
-    reason: 'Eliminate terminal knee extension patellar compression'
+    blocked_exercise_slugs: ['leg_extension', 'hack_squat', 'bodyweight_squat'],
+    substitute_exercise_slugs: [
+      'bodyweight_reverse_lunge', 'dumbbell_romanian_deadlift', 'bodyweight_glute_bridge', 
+      'glute_machine', 'seated_calf_raise'
+    ],
+    reason: 'Eliminate terminal knee extension patellar compression, favor vertical tibia & hip hinge'
   }
 };
 

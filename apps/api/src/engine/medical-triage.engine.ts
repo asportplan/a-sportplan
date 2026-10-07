@@ -1,4 +1,4 @@
-import { MST_MOVEMENT_PATTERNS } from './master-data.js';
+import { MST_MOVEMENT_PATTERNS, MST_MEDICAL_CONTRAINDICATIONS } from './master-data.js';
 
 /**
  * Gets the body area for a specific movement pattern.
@@ -42,13 +42,16 @@ export function processScreeningResults(screeningAnswers: any) {
       rest_multiplier: 1.0,
       force_rpe: false,
       blocked_patterns: [] as any[],
+      blocked_exercise_slugs: [] as string[],
       max_intensity_override_areas: { upper: null as number | null, lower: null as number | null, core: null as number | null },
       blocked_safety_categories_per_area: { upper: null as number[] | null, lower: null as number[] | null, core: null as number[] | null }
     },
     messages: [] as string[]
   };
 
-  const { q1_heart, q2_asthma, q3_chest_pain, q4_injury, q4_injury_area, q5_medication } = screeningAnswers;
+  const { q1_heart, q2_asthma, q3_chest_pain, q4_injury, q4_injury_area, q4_injury_condition, q5_medication } = screeningAnswers;
+  // The screening UI stores 'Upper' / 'Lower' / 'Core'; compare case-insensitively.
+  const injuryArea = typeof q4_injury_area === 'string' ? q4_injury_area.toLowerCase() : null;
 
   if (q1_heart === true || q3_chest_pain === true) {
     result.clearance_status = 'HARD_STOP';
@@ -65,19 +68,28 @@ export function processScreeningResults(screeningAnswers: any) {
 
   if (q4_injury === true) {
     result.clearance_status = result.clearance_status === 'CLEAR' ? 'MODIFIED_INJURY' : result.clearance_status + '_INJURY';
-    if (q4_injury_area === 'upper') {
+    if (injuryArea === 'upper') {
       result.modifiers.max_intensity_override_areas.upper = 0.65;
       result.modifiers.blocked_safety_categories_per_area.upper = [1];
       result.messages.push('msg_modified_injury_upper');
-    } else if (q4_injury_area === 'lower') {
+    } else if (injuryArea === 'lower') {
       result.modifiers.max_intensity_override_areas.lower = 0.65;
       result.modifiers.blocked_safety_categories_per_area.lower = [1];
       result.messages.push('msg_modified_injury_lower');
-    } else if (q4_injury_area === 'core') {
+    } else if (injuryArea === 'core') {
       result.modifiers.max_intensity_override_areas.core = 0.65;
       result.modifiers.blocked_safety_categories_per_area.core = [1, 2];
+      // Loaded spinal flexion aggravates most low-back / trunk injuries
+      result.modifiers.blocked_exercise_slugs.push('sit_up', 'abdominal_crunch_machine');
       result.messages.push('msg_modified_injury_core');
     }
+  }
+
+  // Condition-specific contraindications (optional screening detail)
+  const condition = q4_injury === true ? MST_MEDICAL_CONTRAINDICATIONS[q4_injury_condition] : null;
+  if (condition) {
+    result.modifiers.blocked_exercise_slugs.push(...condition.blocked_exercise_slugs);
+    result.messages.push(`msg_contraindication_${q4_injury_condition}`);
   }
 
   if (q5_medication === true) {

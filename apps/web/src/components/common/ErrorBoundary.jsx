@@ -20,7 +20,7 @@ class ErrorBoundary extends React.Component {
     const lang = getCurrentLanguage();
     if (this.state.hasError) {
       return (
-        <div className="w-full max-w-xl min-w-[320px] sm:min-w-[480px] bg-white dark:bg-slate-900 rounded-2xl p-8 border border-red-200 dark:border-red-900 mx-auto space-y-4 text-center shadow-lg my-8">
+        <div className="w-full max-w-xl bg-white dark:bg-slate-900 rounded-2xl p-8 border border-red-200 dark:border-red-900 mx-auto space-y-4 text-center shadow-lg my-8">
           <div className="w-14 h-14 rounded-2xl bg-red-100 dark:bg-red-950 text-[#E63946] flex items-center justify-center mx-auto">
             <span className="material-symbols-outlined text-3xl">warning</span>
           </div>

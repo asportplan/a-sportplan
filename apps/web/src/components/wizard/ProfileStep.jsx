@@ -8,13 +8,43 @@ const ProfileStep = ({ onNext }) => {
   const savedScreening = getScreeningResults();
 
   const [profile, setProfile] = useState({
-    athlete_name: '',
-    sport_branch: '',
+    athlete_name: existingProfile.athlete_name || '',
+    sport_branch: existingProfile.sport_branch || '',
     age: existingProfile.age !== undefined && existingProfile.age !== null ? existingProfile.age : 25,
     body_weight_kg: existingProfile.body_weight_kg !== undefined && existingProfile.body_weight_kg !== null ? existingProfile.body_weight_kg : 70,
     height_cm: existingProfile.height_cm !== undefined && existingProfile.height_cm !== null ? existingProfile.height_cm : 170,
-    ...existingProfile
+    training_age_level: existingProfile.training_age_level || 'BEGINNER',
+    active_program_duration_weeks: existingProfile.active_program_duration_weeks || 8,
+    target_1rm_increase_pct: existingProfile.target_1rm_increase_pct || 10,
+    selected_goals: existingProfile.selected_goals || ['hypertrophy']
   });
+
+  const handleResetForm = () => {
+    const freshProfile = {
+      athlete_name: '',
+      sport_branch: '',
+      age: 25,
+      body_weight_kg: 70,
+      height_cm: 170,
+      training_age_level: 'BEGINNER',
+      active_program_duration_weeks: 8,
+      target_1rm_increase_pct: 10,
+      selected_goals: ['hypertrophy']
+    };
+    const freshScreening = {
+      has_heart_condition: null,
+      has_chest_pain: null,
+      has_asthma: null,
+      has_injury: null,
+      injury_area: 'Upper',
+      takes_medication: null,
+    };
+    setProfile(freshProfile);
+    setScreening(freshScreening);
+    saveUserProfile(freshProfile);
+    saveScreeningResults(freshScreening);
+    setValidationError(null);
+  };
 
   // Screening questions start as null (unanswered) unless user already selected booleans
   const [screening, setScreening] = useState({
@@ -23,6 +53,7 @@ const ProfileStep = ({ onNext }) => {
     has_asthma: savedScreening && typeof savedScreening.has_asthma === 'boolean' ? savedScreening.has_asthma : null,
     has_injury: savedScreening && typeof savedScreening.has_injury === 'boolean' ? savedScreening.has_injury : null,
     injury_area: savedScreening ? savedScreening.injury_area || 'Upper' : 'Upper',
+    injury_condition: savedScreening?.injury_condition || null,
     takes_medication: savedScreening && typeof savedScreening.takes_medication === 'boolean' ? savedScreening.takes_medication : null,
   });
 
@@ -191,10 +222,21 @@ const ProfileStep = ({ onNext }) => {
           <div className="w-10 h-10 rounded-xl bg-red-50 dark:bg-red-950/50 text-[#E63946] dark:text-red-400 font-bold flex items-center justify-center text-xl shrink-0">
             <span className="material-symbols-outlined">person</span>
           </div>
-          <div>
-            <h2 className="text-xl sm:text-2xl font-black text-[#2B2B2B] dark:text-white tracking-tight">
-              {lang === 'en' ? 'Step 1: Athlete Profile & Medical Safety Screening' : 'Langkah 1: Profil Atlet & Skrining Keamanan Medis'}
-            </h2>
+          <div className="flex-1 min-w-0">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <h2 className="text-xl sm:text-2xl font-black text-[#2B2B2B] dark:text-white tracking-tight">
+                {lang === 'en' ? 'Step 1: Athlete Profile & Medical Safety Screening' : 'Langkah 1: Profil Atlet & Skrining Keamanan Medis'}
+              </h2>
+              <button
+                type="button"
+                onClick={handleResetForm}
+                className="self-start sm:self-auto px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs rounded-xl flex items-center gap-1.5 cursor-pointer transition-all border border-slate-200 dark:border-slate-700 active:scale-95 shadow-2xs"
+                title={lang === 'en' ? 'Clear form to input a new athlete from scratch' : 'Kosongkan form untuk input atlet baru dari awal'}
+              >
+                <span className="material-symbols-outlined text-sm text-[#E63946]">restart_alt</span>
+                <span>{lang === 'en' ? 'Reset for New Athlete' : 'Kosongkan / Atlet Baru'}</span>
+              </button>
+            </div>
             <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm font-medium mt-0.5">
               {lang === 'en' ? 'Provide physical data and verify medical clearance before initiating program prescription.' : 'Isi data fisik dasar dan verifikasi keamanan medis sebelum memulai penyusunan program.'}
             </p>
@@ -371,14 +413,14 @@ const ProfileStep = ({ onNext }) => {
 
         {/* Validation Error Alert Banner */}
         {validationError && (
-          <div className="p-4 sm:p-5 rounded-2xl bg-rose-50 dark:bg-rose-950/60 border-2 border-rose-500 text-rose-900 dark:text-rose-200 flex items-start sm:items-center justify-between gap-3 shadow-lg shadow-rose-500/15 animate-pulse">
+          <div className="p-4 sm:p-5 rounded-2xl bg-rose-50 dark:bg-rose-950/60 border-2 border-rose-500 text-rose-900 dark:text-rose-200 flex items-start sm:items-center justify-between gap-3 shadow-lg shadow-rose-500/15">
             <div className="flex items-start sm:items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-rose-500 text-white flex items-center justify-center shrink-0 shadow-sm">
                 <span className="material-symbols-outlined text-xl">error</span>
               </div>
               <div>
                 <h4 className="text-xs sm:text-sm font-black tracking-tight text-rose-900 dark:text-rose-100">
-                  {lang === 'en' ? '⚠️ Health Screening Incomplete!' : '⚠️ Skrining Kesehatan Belum Lengkap!'}
+                  {lang === 'en' ? 'Health Screening Incomplete!' : 'Skrining Kesehatan Belum Lengkap!'}
                 </h4>
                 <p className="text-xs font-semibold text-rose-700 dark:text-rose-300 mt-0.5 leading-relaxed">
                   {validationError.message}
@@ -428,19 +470,19 @@ const ProfileStep = ({ onNext }) => {
 
                     {/* Status Badge */}
                     {isMissing ? (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-rose-500 text-white animate-pulse shrink-0">
-                        {lang === 'en' ? '⚠️ Must Select' : '⚠️ Wajib Dipilih'}
+                      <span className="px-2 py-0.5 rounded text-[11px] font-black uppercase bg-rose-500 text-white shrink-0">
+                        {lang === 'en' ? 'Must Select' : 'Wajib Dipilih'}
                       </span>
                     ) : !isAnswered ? (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300 shrink-0">
+                      <span className="px-2 py-0.5 rounded text-[11px] font-black uppercase bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300 shrink-0">
                         {lang === 'en' ? 'Not Selected' : 'Belum Dipilih'}
                       </span>
                     ) : isChecked ? (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-amber-200 text-amber-900 dark:bg-amber-900 dark:text-amber-200 shrink-0">
+                      <span className="px-2 py-0.5 rounded text-[11px] font-black uppercase bg-amber-200 text-amber-900 dark:bg-amber-900 dark:text-amber-200 shrink-0">
                         {lang === 'en' ? 'Yes (Adjustment Active)' : 'Ya (Ada Penyesuaian)'}
                       </span>
                     ) : (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-emerald-200 text-emerald-900 dark:bg-emerald-900 dark:text-emerald-200 shrink-0">
+                      <span className="px-2 py-0.5 rounded text-[11px] font-black uppercase bg-emerald-200 text-emerald-900 dark:bg-emerald-900 dark:text-emerald-200 shrink-0">
                         {lang === 'en' ? 'No (Healthy)' : 'Tidak (Sehat)'}
                       </span>
                     )}
@@ -463,6 +505,19 @@ const ProfileStep = ({ onNext }) => {
                         <option value="Upper">{lang === 'en' ? 'Upper Body (Shoulder / Chest / Arm)' : 'Tubuh Atas (Bahu / Dada / Tangan)'}</option>
                         <option value="Lower">{lang === 'en' ? 'Lower Body (Knee / Hip / Leg)' : 'Tubuh Bawah (Lutut / Panggul / Kaki)'}</option>
                         <option value="Core">{lang === 'en' ? 'Core & Spine (Lower Back)' : 'Inti & Tulang Belakang (Pinggang)'}</option>
+                      </select>
+                      <span className="text-xs font-bold text-amber-800 dark:text-amber-300 shrink-0">
+                        {lang === 'en' ? 'Specific condition (optional):' : 'Kondisi spesifik (opsional):'}
+                      </span>
+                      <select
+                        value={screening.injury_condition || ''}
+                        onChange={(e) => setScreening(prev => ({ ...prev, injury_condition: e.target.value || null }))}
+                        className="min-h-11 px-3 py-1 bg-white dark:bg-slate-900 border border-amber-300 dark:border-amber-700 rounded-lg text-xs font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 max-w-full"
+                      >
+                        <option value="">{lang === 'en' ? 'Other / not sure' : 'Lainnya / tidak tahu'}</option>
+                        <option value="low_back_pain">{lang === 'en' ? 'Low-back pain' : 'Nyeri pinggang'}</option>
+                        <option value="shoulder_impingement">{lang === 'en' ? 'Shoulder impingement (pain lifting arm overhead)' : 'Impingement bahu (nyeri saat angkat tangan ke atas)'}</option>
+                        <option value="patellofemoral_knee_pain">{lang === 'en' ? 'Front-of-knee pain' : 'Nyeri lutut bagian depan'}</option>
                       </select>
                     </div>
                   )}

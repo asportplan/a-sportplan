@@ -1,16 +1,15 @@
 import React from 'react';
 import { useLanguage } from '../../hooks/useLanguage.js';
 
-const TopNavBar = ({ activeTab, onNavigate, user, onOpenLogin, onLogout }) => {
+const TopNavBar = ({ activeTab, onNavigate, onCreateNew, user, onOpenLogin, onLogout }) => {
   const { lang, toggle } = useLanguage();
 
   const navLinks = [
     { id: 'home', label: lang === 'en' ? 'Home' : 'Beranda' },
+    { id: 'program', label: lang === 'en' ? 'Program' : 'Program Latihan' },
+    { id: 'saved_programs', label: lang === 'en' ? 'My Library' : 'Koleksi Saya' },
     { id: 'calculator', label: lang === 'en' ? '1RM Calculator' : 'Kalkulator 1RM' },
     { id: 'guide', label: lang === 'en' ? 'Guide' : 'Panduan' },
-    { id: 'program', label: lang === 'en' ? 'Program' : 'Program' },
-    { id: 'saved_programs', label: lang === 'en' ? 'My Library' : 'Koleksi Saya' },
-    { id: 'wizard', label: lang === 'en' ? 'Generator' : 'Generator Wizard' },
   ];
 
   return (
@@ -28,7 +27,7 @@ const TopNavBar = ({ activeTab, onNavigate, user, onOpenLogin, onLogout }) => {
         />
         <div className="flex flex-col text-left min-w-0">
           <span className="text-sm sm:text-base font-black text-[#E63946] dark:text-red-400 tracking-tight leading-none truncate">aplanworkout</span>
-          <span className="text-[9px] sm:text-[10px] font-semibold text-slate-400 dark:text-slate-500 leading-none mt-0.5 hidden xs:block truncate">
+          <span className="text-[11px] sm:text-[11px] font-semibold text-slate-400 dark:text-slate-500 leading-none mt-0.5 hidden xs:block truncate">
             {lang === 'en' ? 'Scientific Training' : 'Preskripsi Latihan'}
           </span>
         </div>
@@ -58,7 +57,7 @@ const TopNavBar = ({ activeTab, onNavigate, user, onOpenLogin, onLogout }) => {
       <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
         {/* Quick Wizard CTA Button */}
         <button
-          onClick={() => onNavigate('wizard')}
+          onClick={() => onCreateNew ? onCreateNew() : onNavigate('wizard')}
           className="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 bg-[#E63946] hover:bg-[#D62839] text-white rounded-xl font-extrabold text-xs shadow-md shadow-red-500/20 transition-all cursor-pointer active:scale-95"
         >
           <span className="material-symbols-outlined text-base">auto_awesome</span>
@@ -87,7 +86,7 @@ const TopNavBar = ({ activeTab, onNavigate, user, onOpenLogin, onLogout }) => {
         {/* User Auth Section */}
         {user ? (
           <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 px-2 sm:px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-2xs">
-            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-gradient-to-br from-[#E63946] to-red-600 text-white font-bold flex items-center justify-center text-[10px] sm:text-xs shrink-0">
+            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-gradient-to-br from-[#E63946] to-red-600 text-white font-bold flex items-center justify-center text-[11px] sm:text-xs shrink-0">
               {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
             </div>
             <span className="text-xs font-bold text-slate-800 dark:text-slate-200 max-w-[60px] sm:max-w-[120px] truncate hidden sm:inline">
