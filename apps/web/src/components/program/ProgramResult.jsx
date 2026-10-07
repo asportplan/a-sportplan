@@ -6,6 +6,8 @@ import { MST_EXERCISES } from '../../core/db/master-data.js';
 import { useLanguage } from '../../hooks/useLanguage.js';
 import { tMessage } from '../../core/utils/i18n.js';
 import { TRANSLATIONS } from '../../core/db/translations.js';
+import ExerciseGuideModal from '../common/ExerciseGuideModal.jsx';
+import CoachChat from '../ai/CoachChat.jsx';
 
 // Format weight to clean numbers (round to nearest 0.5 kg, no ugly decimals)
 const formatWeight = (val) => {
@@ -62,6 +64,7 @@ const ProgramResult = ({ programData, isLoading, onEditParameters, onCreateNew, 
   const [actualLogs, setActualLogs] = useState({});
   const [customNotes, setCustomNotes] = useState({});
   const [toastMsg, setToastMsg] = useState('');
+  const [guideExercise, setGuideExercise] = useState(null);
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [saveTitle, setSaveTitle] = useState('');
   const [isSavedSuccess, setIsSavedSuccess] = useState(false);
@@ -145,7 +148,16 @@ const ProgramResult = ({ programData, isLoading, onEditParameters, onCreateNew, 
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 shadow-sm border border-[#EBE5E2] dark:border-slate-800 w-full space-y-8 font-sans">
-      
+
+      {guideExercise && (
+        <ExerciseGuideModal
+          slug={guideExercise.slug}
+          title={guideExercise.title}
+          lang={lang}
+          onClose={() => setGuideExercise(null)}
+        />
+      )}
+
       {/* Toast Notification */}
       {toastMsg && (
         <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-xs font-bold flex items-center justify-between shadow-sm animate-in fade-in">
@@ -1043,6 +1055,13 @@ const ProgramResult = ({ programData, isLoading, onEditParameters, onCreateNew, 
                                   <p className="font-mono text-sm text-slate-700 dark:text-slate-300 mt-0.5">
                                     {ex.sets || 0} × {ex.is_timed && ex.duration_sec ? `${ex.duration_sec}s` : `${ex.reps || 0} ${lang === 'en' ? 'reps' : 'rep'}`}
                                   </p>
+                                  <button
+                                    type="button"
+                                    onClick={() => setGuideExercise({ slug: ex.exercise_slug, title: TRANSLATIONS.exercises[ex.exercise_slug]?.[lang] || ex.exercise_slug.replace(/_/g, ' ') })}
+                                    className="mt-1 min-h-11 -ml-1 px-1 inline-flex items-center gap-1 text-xs font-bold text-[#E63946] dark:text-red-400 underline underline-offset-2 cursor-pointer"
+                                  >
+                                    {lang === 'en' ? 'See movement' : 'Lihat gerakan'}
+                                  </button>
                                 </div>
                                 <div className="text-right shrink-0">
                                   <p className="font-mono font-black text-sm text-[#E63946] dark:text-red-400">{loadMain}</p>
@@ -1096,7 +1115,14 @@ const ProgramResult = ({ programData, isLoading, onEditParameters, onCreateNew, 
                                   {/* Nama Latihan */}
                                   <td className="p-3 font-bold text-[#2B2B2B] dark:text-white capitalize">
                                     <div className="flex items-center gap-1.5 flex-wrap">
-                                      <span>{TRANSLATIONS.exercises[ex.exercise_slug]?.[lang] || (ex.exercise_slug ? ex.exercise_slug.replace(/_/g, ' ') : '—')}</span>
+                                      <button
+                                        type="button"
+                                        onClick={() => setGuideExercise({ slug: ex.exercise_slug, title: TRANSLATIONS.exercises[ex.exercise_slug]?.[lang] || ex.exercise_slug.replace(/_/g, ' ') })}
+                                        className="text-left capitalize hover:text-[#E63946] underline decoration-dotted underline-offset-2 cursor-pointer"
+                                        title={lang === 'en' ? 'See movement' : 'Lihat gerakan'}
+                                      >
+                                        {TRANSLATIONS.exercises[ex.exercise_slug]?.[lang] || (ex.exercise_slug ? ex.exercise_slug.replace(/_/g, ' ') : '—')}
+                                      </button>
                                       {ex.is_bodyweight && (
                                         <span className="px-1.5 py-0.5 text-[11px] font-black rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300">
                                           {lang === 'en' ? 'Bodyweight' : 'Beban Tubuh'}
@@ -1166,6 +1192,8 @@ const ProgramResult = ({ programData, isLoading, onEditParameters, onCreateNew, 
           );
         })}
       </div>
+
+      <CoachChat program={programData} lang={lang} />
 
       {/* Bottom Action Footer */}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#FAF8F7] dark:bg-slate-800/60 p-6 rounded-2xl border border-[#EBE5E2] dark:border-slate-700/80 shadow-2xs mt-8">

@@ -182,7 +182,7 @@ function App() {
 
           {activeTab === 'final_report' && (
             <div className="max-w-container-max mx-auto">
-              <FinalReportPage onNavigate={setActiveTab} programOverride={programData} />
+              <FinalReportPage onNavigate={setActiveTab} programOverride={programData} onProgramUpdated={selectProgram} />
             </div>
           )}
         </div>
