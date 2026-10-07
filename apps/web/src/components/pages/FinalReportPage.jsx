@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { useLanguage } from '../../hooks/useLanguage.js';
 import { 
   getGeneratedProgram, 
   getWorkoutResults, 
-  getWeeklyBodyWeights, 
-  getUserEquipment 
+  getWeeklyBodyWeights
 } from '../../core/db/user-store.js';
 import { generateFinalAnalysis } from '../../core/engine/analysis-engine.js';
+import AiReportPanel from '../ai/AiReportPanel.jsx';
 
-const FinalReportPage = ({ onNavigate, programOverride }) => {
+// Charts pull in recharts; load them only when the report is opened
+const ProgressCharts = lazy(() => import('./ProgressCharts.jsx'));
+
+const FinalReportPage = ({ onNavigate, programOverride, onProgramUpdated }) => {
   const { lang } = useLanguage();
   const [report, setReport] = useState(null);
   const [program, setProgram] = useState(null);
@@ -21,9 +24,8 @@ const FinalReportPage = ({ onNavigate, programOverride }) => {
       const progId = prog.id || prog.program_id || 'default_program';
       const results = getWorkoutResults(progId);
       const bodyWeights = getWeeklyBodyWeights(progId);
-      const equipment = getUserEquipment() || [];
 
-      const analysis = generateFinalAnalysis(prog, results, bodyWeights, equipment);
+      const analysis = generateFinalAnalysis(prog, results, bodyWeights);
       setReport(analysis);
     }
   }, [programOverride]);
@@ -207,6 +209,13 @@ const FinalReportPage = ({ onNavigate, programOverride }) => {
           </div>
         </div>
       )}
+
+      <AiReportPanel program={program} report={report} lang={lang} onProgramUpdated={onProgramUpdated} />
+
+      {/* Progress charts (tables below remain the accessible data view) */}
+      <Suspense fallback={<p className="text-sm text-slate-500 p-4">{lang === 'en' ? 'Loading charts...' : 'Memuat grafik...'}</p>}>
+        <ProgressCharts report={report} lang={lang} />
+      </Suspense>
 
       {/* Strength Progression (1RM) Table */}
       <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 sm:p-7 border border-[#EBE5E2] dark:border-slate-800 shadow-sm space-y-4">
