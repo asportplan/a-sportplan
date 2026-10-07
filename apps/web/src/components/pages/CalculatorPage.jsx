@@ -86,7 +86,7 @@ const CalculatorPage = ({ onStartWizard }) => {
             <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
               <div className="flex items-center justify-between">
                 <span className="font-bold text-slate-500 text-[11px]">{lang === 'en' ? 'Repetition Range' : 'Batas Repetisi (Reps)'}</span>
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-black bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300">
+                <span className="px-1.5 py-0.5 rounded text-[11px] font-black bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300">
                   3 – 10 Reps
                 </span>
               </div>
@@ -102,7 +102,7 @@ const CalculatorPage = ({ onStartWizard }) => {
             <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
               <div className="flex items-center justify-between">
                 <span className="font-bold text-slate-500 text-[11px]">{lang === 'en' ? 'Load Selection' : 'Batas Beban (Weight)'}</span>
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-black bg-red-100 dark:bg-red-950/80 text-red-800 dark:text-red-300 font-mono">
+                <span className="px-1.5 py-0.5 rounded text-[11px] font-black bg-red-100 dark:bg-red-950/80 text-red-800 dark:text-red-300 font-mono">
                   1 – 500 kg
                 </span>
               </div>
@@ -118,7 +118,7 @@ const CalculatorPage = ({ onStartWizard }) => {
             <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
               <div className="flex items-center justify-between">
                 <span className="font-bold text-slate-500 text-[11px]">{lang === 'en' ? 'Testing Protocol' : '4 Langkah Tes di Gym'}</span>
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-black bg-blue-100 dark:bg-blue-950/80 text-blue-800 dark:text-blue-300">
+                <span className="px-1.5 py-0.5 rounded text-[11px] font-black bg-blue-100 dark:bg-blue-950/80 text-blue-800 dark:text-blue-300">
                   4 Langkah
                 </span>
               </div>
@@ -264,33 +264,33 @@ const CalculatorPage = ({ onStartWizard }) => {
             style={{ width: '100%', boxSizing: 'border-box' }}
           >
             <div className="bg-white/10 p-3 rounded-2xl backdrop-blur-xs text-left border border-white/15 space-y-1">
-              <span className="text-[10px] text-white/70 block uppercase font-bold tracking-wider">Epley Formula</span>
+              <span className="text-[11px] text-white/70 block uppercase font-bold tracking-wider">Epley Formula</span>
               <strong className="text-base font-black text-white block">{result.epley} kg</strong>
-              <code className="text-[10px] text-white/90 font-mono block bg-black/25 px-1.5 py-0.5 rounded-md w-fit">W × (1 + R/30)</code>
+              <code className="text-[11px] text-white/90 font-mono block bg-black/25 px-1.5 py-0.5 rounded-md w-fit">W × (1 + R/30)</code>
               <span className="text-[9.5px] text-white/75 block font-sans">
                 {lang === 'en' ? 'Linear • Ideal 6–10 reps' : 'Linier • Ideal 6–10 reps'}
               </span>
             </div>
             <div className="bg-white/10 p-3 rounded-2xl backdrop-blur-xs text-left border border-white/15 space-y-1">
-              <span className="text-[10px] text-white/70 block uppercase font-bold tracking-wider">Brzycki Formula</span>
+              <span className="text-[11px] text-white/70 block uppercase font-bold tracking-wider">Brzycki Formula</span>
               <strong className="text-base font-black text-white block">{result.brzycki} kg</strong>
-              <code className="text-[10px] text-white/90 font-mono block bg-black/25 px-1.5 py-0.5 rounded-md w-fit">W × 36 / (37 - R)</code>
+              <code className="text-[11px] text-white/90 font-mono block bg-black/25 px-1.5 py-0.5 rounded-md w-fit">W × 36 / (37 - R)</code>
               <span className="text-[9.5px] text-white/75 block font-sans">
                 {lang === 'en' ? 'Conservative • Ideal 1–10 reps' : 'Konservatif • Ideal 1–10 reps'}
               </span>
             </div>
             <div className="bg-white/10 p-3 rounded-2xl backdrop-blur-xs text-left border border-white/15 space-y-1">
-              <span className="text-[10px] text-white/70 block uppercase font-bold tracking-wider">Lander Formula</span>
+              <span className="text-[11px] text-white/70 block uppercase font-bold tracking-wider">Lander Formula</span>
               <strong className="text-base font-black text-white block">{result.lander} kg</strong>
-              <code className="text-[10px] text-white/90 font-mono block bg-black/25 px-1.5 py-0.5 rounded-md w-fit">100W / (101.3 - 2.67R)</code>
+              <code className="text-[11px] text-white/90 font-mono block bg-black/25 px-1.5 py-0.5 rounded-md w-fit">100W / (101.3 - 2.67R)</code>
               <span className="text-[9.5px] text-white/75 block font-sans">
                 {lang === 'en' ? 'Fatigue Curve • Ideal 2–8 reps' : 'Kurva Lelah • Ideal 2–8 reps'}
               </span>
             </div>
             <div className="bg-white/10 p-3 rounded-2xl backdrop-blur-xs text-left border border-white/15 space-y-1">
-              <span className="text-[10px] text-white/70 block uppercase font-bold tracking-wider">Lombardi Formula</span>
+              <span className="text-[11px] text-white/70 block uppercase font-bold tracking-wider">Lombardi Formula</span>
               <strong className="text-base font-black text-white block">{result.lombardi} kg</strong>
-              <code className="text-[10px] text-white/90 font-mono block bg-black/25 px-1.5 py-0.5 rounded-md w-fit">W × R^0.10</code>
+              <code className="text-[11px] text-white/90 font-mono block bg-black/25 px-1.5 py-0.5 rounded-md w-fit">W × R^0.10</code>
               <span className="text-[9.5px] text-white/75 block font-sans">
                 {lang === 'en' ? 'Exponential • Ideal 4–12 reps' : 'Eksponensial • Ideal 4–12 reps'}
               </span>
@@ -323,7 +323,7 @@ const CalculatorPage = ({ onStartWizard }) => {
               <h4 className="font-extrabold text-sm text-[#E63946] dark:text-red-400 flex items-center gap-1.5">
                 <span>Epley Formula (1985)</span>
               </h4>
-              <span className="px-2 py-0.5 rounded-md bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-300 font-mono text-[10px] font-bold">
+              <span className="px-2 py-0.5 rounded-md bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-300 font-mono text-[11px] font-bold">
                 1RM = W × (1 + R/30)
               </span>
             </div>
@@ -333,7 +333,7 @@ const CalculatorPage = ({ onStartWizard }) => {
                 : 'Dikembangkan oleh Boyd Epley. Mengasumsikan penurunan kekuatan linier ~3,33% per repetisi. Sangat akurat dan paling populer untuk rentang 6–10 repetisi.'}
             </p>
             <div className="text-[11px] text-slate-500 dark:text-slate-400 pt-1 font-mono">
-              💡 <strong>{lang === 'en' ? 'Application:' : 'Karakteristik:'}</strong> {lang === 'en' ? 'Best for Bench Press & Barbell Lifts (6-10 reps)' : 'Paling sesuai untuk angkatan linier menengah (6-10 reps)'}
+              <strong>{lang === 'en' ? 'Application:' : 'Karakteristik:'}</strong> {lang === 'en' ? 'Best for Bench Press & Barbell Lifts (6-10 reps)' : 'Paling sesuai untuk angkatan linier menengah (6-10 reps)'}
             </div>
           </div>
 
@@ -343,7 +343,7 @@ const CalculatorPage = ({ onStartWizard }) => {
               <h4 className="font-extrabold text-sm text-[#E63946] dark:text-red-400 flex items-center gap-1.5">
                 <span>Brzycki Formula (1993)</span>
               </h4>
-              <span className="px-2 py-0.5 rounded-md bg-orange-100 dark:bg-orange-950 text-orange-700 dark:text-orange-300 font-mono text-[10px] font-bold">
+              <span className="px-2 py-0.5 rounded-md bg-orange-100 dark:bg-orange-950 text-orange-700 dark:text-orange-300 font-mono text-[11px] font-bold">
                 1RM = W / ((37 - R)/36)
               </span>
             </div>
@@ -353,7 +353,7 @@ const CalculatorPage = ({ onStartWizard }) => {
                 : 'Dikembangkan oleh Matt Brzycki. Standar emas fisiologi olahraga untuk repetisi rendah (1–10 reps). Cenderung lebih konservatif pada reps tinggi agar tidak overestimasi.'}
             </p>
             <div className="text-[11px] text-slate-500 dark:text-slate-400 pt-1 font-mono">
-              💡 <strong>{lang === 'en' ? 'Application:' : 'Karakteristik:'}</strong> {lang === 'en' ? 'Gold standard for low reps (1-10 reps)' : 'Standar emas untuk beban berat repetisi rendah (1-10 reps)'}
+              <strong>{lang === 'en' ? 'Application:' : 'Karakteristik:'}</strong> {lang === 'en' ? 'Gold standard for low reps (1-10 reps)' : 'Standar emas untuk beban berat repetisi rendah (1-10 reps)'}
             </div>
           </div>
 
@@ -363,7 +363,7 @@ const CalculatorPage = ({ onStartWizard }) => {
               <h4 className="font-extrabold text-sm text-[#E63946] dark:text-red-400 flex items-center gap-1.5">
                 <span>Lander Formula (1985)</span>
               </h4>
-              <span className="px-2 py-0.5 rounded-md bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-mono text-[10px] font-bold">
+              <span className="px-2 py-0.5 rounded-md bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-mono text-[11px] font-bold">
                 1RM = 100W / (101.3 - 2.67R)
               </span>
             </div>
@@ -373,7 +373,7 @@ const CalculatorPage = ({ onStartWizard }) => {
                 : 'Dibuat oleh J. Lander berdasarkan kurva kelelahan empiris. Sangat konsisten untuk angkatan compound berat (Squat & Deadlift) pada rentang 2–8 repetisi.'}
             </p>
             <div className="text-[11px] text-slate-500 dark:text-slate-400 pt-1 font-mono">
-              💡 <strong>{lang === 'en' ? 'Application:' : 'Karakteristik:'}</strong> {lang === 'en' ? 'Ideal for heavy compound lifts (2-8 reps)' : 'Sangat baik untuk gerakan compound berat (2-8 reps)'}
+              <strong>{lang === 'en' ? 'Application:' : 'Karakteristik:'}</strong> {lang === 'en' ? 'Ideal for heavy compound lifts (2-8 reps)' : 'Sangat baik untuk gerakan compound berat (2-8 reps)'}
             </div>
           </div>
 
@@ -383,7 +383,7 @@ const CalculatorPage = ({ onStartWizard }) => {
               <h4 className="font-extrabold text-sm text-[#E63946] dark:text-red-400 flex items-center gap-1.5">
                 <span>Lombardi Formula (1989)</span>
               </h4>
-              <span className="px-2 py-0.5 rounded-md bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 font-mono text-[10px] font-bold">
+              <span className="px-2 py-0.5 rounded-md bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 font-mono text-[11px] font-bold">
                 1RM = W × R^0.10
               </span>
             </div>
@@ -393,7 +393,7 @@ const CalculatorPage = ({ onStartWizard }) => {
                 : 'Dikembangkan oleh V. Lombardi menggunakan fungsi eksponensial (R^0.10). Sangat halus untuk mengukur ketahanan kekuatan (strength endurance) pada 4–12 reps.'}
             </p>
             <div className="text-[11px] text-slate-500 dark:text-slate-400 pt-1 font-mono">
-              💡 <strong>{lang === 'en' ? 'Application:' : 'Karakteristik:'}</strong> {lang === 'en' ? 'Best for strength endurance (4-12 reps)' : 'Cocok untuk daya tahan kekuatan (4-12 reps)'}
+              <strong>{lang === 'en' ? 'Application:' : 'Karakteristik:'}</strong> {lang === 'en' ? 'Best for strength endurance (4-12 reps)' : 'Cocok untuk daya tahan kekuatan (4-12 reps)'}
             </div>
           </div>
         </div>
@@ -457,7 +457,7 @@ const CalculatorPage = ({ onStartWizard }) => {
                     <td className="p-3.5 font-extrabold">
                       <span className="font-mono text-sm text-[#E63946] dark:text-red-400">{row.pct}%</span>
                       {isHypertrophy && (
-                        <span className="ml-2 px-2 py-0.5 rounded-md bg-red-100 dark:bg-red-900/60 text-[10px] text-red-800 dark:text-red-300 font-extrabold uppercase">
+                        <span className="ml-2 px-2 py-0.5 rounded-md bg-red-100 dark:bg-red-900/60 text-[11px] text-red-800 dark:text-red-300 font-extrabold uppercase">
                           {lang === 'en' ? 'Optimal Zone' : 'Zona Optimal'}
                         </span>
                       )}

@@ -1,4 +1,4 @@
-import { RULE_INTRA_WORKOUT_PRIORITY, getPhaseBySlug, MST_MOVEMENT_PATTERNS } from './master-data.js';
+import { getPhaseBySlug, MST_EXERCISES } from './master-data.js';
 import { generateSessionId, calculateTUT } from '../utils/helpers.js';
 import { getBodyAreaForPattern } from './medical-triage.engine.js';
 
@@ -6,6 +6,40 @@ import { findBestExercise } from './substitution.engine.js';
 import { calculateExerciseIntensity } from './intensity-calculator.js';
 import { applyLoadSafetyCap } from './load-safety.js';
 import { applyVolumeModifier, applyRestModifier } from './training-age-modifier.js';
+
+const LEVEL_RANK: Record<string, number> = { BEGINNER: 1, INTERMEDIATE: 2, ADVANCED: 3 };
+
+/** Maps a %1RM target to an RPE target for exercises that cannot be loaded in kg (bodyweight). */
+function intensityToRpe(intensityPct: number) {
+  if (intensityPct >= 0.85) return 9;
+  if (intensityPct >= 0.75) return 8;
+  if (intensityPct >= 0.65) return 7;
+  return 6;
+}
+
+/** Lowest of the exercise cap, the injured-area cap (65%) and the age-group cap. */
+function capExerciseIntensity(exercise, area, medical_modifiers, age_group_modifiers) {
+  const ceiling = Math.min(
+    exercise.max_allowed_intensity_pct || 1.0,
+    medical_modifiers?.max_intensity_override_areas?.[area] || 1.0,
+    age_group_modifiers?.max_intensity_override || 1.0
+  );
+  return { ...exercise, max_allowed_intensity_pct: ceiling };
+}
+
+/** Bodyweight exercises are prescribed by RPE (fixed load); isometric holds by seconds. */
+function bodyweightFields(exercise, finalIntensityPct, intensityResult, targetReps, athleteBodyWeightKg) {
+  const isBodyweight = exercise.equipment_type === 'bodyweight';
+  return {
+    is_bodyweight: isBodyweight,
+    relative_load_pct: exercise.relative_load_pct || null,
+    body_load_kg: isBodyweight && athleteBodyWeightKg > 0 ? Math.round(athleteBodyWeightKg * (exercise.relative_load_pct || 0.64)) : null,
+    is_timed: !!exercise.is_timed,
+    duration_sec: exercise.is_timed ? Math.min(60, Math.max(20, targetReps * 4)) : null,
+    equipment_type: exercise.equipment_type || 'barbell',
+    target_rpe: intensityResult?.target_rpe || (isBodyweight ? intensityToRpe(finalIntensityPct || 0.70) : null),
+  };
+}
 
 /**
  * Builds a single workout session by running through all rules.
@@ -17,6 +51,7 @@ export function buildSession(config) {
     day_number, week_number, phase_slug, 
     available_equipment_slugs,
     user_equipment_data,
+    athlete_body_weight_kg = 70,
     training_age_level,
     week_modifiers,
     medical_modifiers,
@@ -28,6 +63,15 @@ export function buildSession(config) {
   const phase = getPhaseBySlug(phase_slug) || getPhaseBySlug('strength_endurance_aa');
   
   const normLevel = (training_age_level || 'BEGINNER').toUpperCase();
+
+  // Rule: Skill Gate - exercises above the athlete's training level are never prescribed
+  const athleteLevelRank = LEVEL_RANK[normLevel] || 1;
+  const availSlugs = Array.from(available_equipment_slugs || []).filter((slug: string) => {
+    // Rule: Medical contraindications - exercise-level blocks from screening (e.g. sit-up with low-back injury)
+    if (medical_modifiers?.blocked_exercise_slugs?.includes(slug)) return false;
+    const meta: any = MST_EXERCISES.find(e => e.exercise_slug === slug);
+    return !meta?.min_training_level || (LEVEL_RANK[meta.min_training_level] || 1) <= athleteLevelRank;
+  });
   let splitType = 'full';
   if (normLevel === 'INTERMEDIATE') splitType = 'upper_lower';
   if (normLevel === 'ADVANCED') splitType = 'ppl';
@@ -77,7 +121,7 @@ export function buildSession(config) {
     }
 
     const blockedCategories = medical_modifiers.blocked_safety_categories_per_area?.[area] || [];
-    const exerciseInfo = findBestExercise(patternSlug, available_equipment_slugs, blockedCategories, used_exercises);
+    const exerciseInfo = findBestExercise(patternSlug, availSlugs, blockedCategories, used_exercises);
     
     if (!exerciseInfo || !exerciseInfo.exercise) {
       continue;
@@ -95,7 +139,9 @@ export function buildSession(config) {
     let baseReps = Math.round(((phase.target_reps_min || 8) + (phase.target_reps_max || 12)) / 2);
 
     // Apply Load Safety Cap
-    const safetyCapResult = applyLoadSafetyCap(exercise, baseIntensityPct, user1rm, phase_slug, baseReps);
+    const safetyCapResult = applyLoadSafetyCap(
+      capExerciseIntensity(exercise, area, medical_modifiers, age_group_modifiers), baseIntensityPct, user1rm, phase_slug, baseReps
+    );
 
     let targetSets = Math.round(((phase.target_sets_min || 3) + (phase.target_sets_max || 4)) / 2);
     targetSets = applyVolumeModifier(targetSets, week_modifiers.volume_mod_multiplier, age_group_modifiers?.volume_multiplier_override);
@@ -111,9 +157,13 @@ export function buildSession(config) {
 
     const timeUnderTension = calculateTUT(phase.tempo_code || '2-0-2-0') * targetReps;
 
-    const finalLoadKg = safetyCapResult.final_load_kg || (user1rm ? Math.round(user1rm * safetyCapResult.final_intensity_pct) : null);
+    const bwFields = bodyweightFields(exercise, safetyCapResult.final_intensity_pct, intensityResult, targetReps, athlete_body_weight_kg);
+    const usesRpe = bwFields.is_bodyweight || (intensityResult ? intensityResult.uses_rpe : false);
+    const finalLoadKg = bwFields.is_bodyweight
+      ? null
+      : (safetyCapResult.final_load_kg || (user1rm ? Math.round(user1rm * safetyCapResult.final_intensity_pct) : null));
     
-    const missing1rmFlag = (!user1rm && !(intensityResult ? intensityResult.uses_rpe : false));
+    const missing1rmFlag = (!user1rm && !usesRpe);
     if (used_exercises) used_exercises.add(exercise.exercise_slug);
 
     prescribedExercises.push({
@@ -123,11 +173,11 @@ export function buildSession(config) {
       substitution_diagnostics: (exerciseInfo.diagnostics && exerciseInfo.diagnostics.fallback_status !== 'NONE') ? exerciseInfo.diagnostics : null,
       safety_category: exercise.safety_category_level,
       max_intensity_cap: safetyCapResult.max_intensity_cap,
-      uses_rpe_flag: intensityResult ? intensityResult.uses_rpe : false,
+      uses_rpe_flag: usesRpe,
       intensity_pct: safetyCapResult.final_intensity_pct,
       load_kg: finalLoadKg,
       missing_1rm: missing1rmFlag,
-      target_rpe: intensityResult ? intensityResult.target_rpe : null,
+      ...bwFields,
       time_under_tension_sec: timeUnderTension,
       sets: targetSets,
       reps: targetReps,
@@ -142,16 +192,25 @@ export function buildSession(config) {
   if (prescribedExercises.length === 0) {
     const fallbackPatterns = ['horizontal_push', 'horizontal_pull', 'vertical_pull', 'vertical_push', 'elbow_flexion', 'elbow_extension', 'core_trunk_flexion'];
     for (const patternSlug of fallbackPatterns) {
-      const exerciseInfo = findBestExercise(patternSlug, available_equipment_slugs, [], used_exercises);
+      const area = getBodyAreaForPattern(patternSlug);
+      if (medical_modifiers.blocked_patterns && medical_modifiers.blocked_patterns.includes(patternSlug)) continue;
+      const blockedCategories = medical_modifiers.blocked_safety_categories_per_area?.[area] || [];
+      const exerciseInfo = findBestExercise(patternSlug, availSlugs, blockedCategories, used_exercises);
       if (exerciseInfo && exerciseInfo.exercise) {
         const exercise = exerciseInfo.exercise;
         const user1rm = user_equipment_data?.find(d => d.exercise_slug === exercise.exercise_slug)?.user_1rm_kg || null;
         const intensityResult = calculateExerciseIntensity(phase_slug, exercise.exercise_slug, user1rm, week_modifiers, age_group_modifiers, medical_modifiers);
         let baseIntensityPct = intensityResult ? (intensityResult.intensity_pct || 0.7) : 0.7;
         let baseReps = Math.round(((phase.target_reps_min || 8) + (phase.target_reps_max || 12)) / 2);
-        const safetyCapResult = applyLoadSafetyCap(exercise, baseIntensityPct, user1rm, phase_slug, baseReps);
+        const safetyCapResult = applyLoadSafetyCap(
+          capExerciseIntensity(exercise, area, medical_modifiers, age_group_modifiers), baseIntensityPct, user1rm, phase_slug, baseReps
+        );
         let targetSets = Math.round(((phase.target_sets_min || 3) + (phase.target_sets_max || 4)) / 2);
-        const finalLoadKg = safetyCapResult.final_load_kg || (user1rm ? Math.round((user1rm * safetyCapResult.final_intensity_pct) * 2) / 2 : null);
+        const bwFields = bodyweightFields(exercise, safetyCapResult.final_intensity_pct, intensityResult, baseReps, athlete_body_weight_kg);
+        const usesRpe = bwFields.is_bodyweight || (intensityResult ? intensityResult.uses_rpe : false);
+        const finalLoadKg = bwFields.is_bodyweight
+          ? null
+          : (safetyCapResult.final_load_kg || (user1rm ? Math.round((user1rm * safetyCapResult.final_intensity_pct) * 2) / 2 : null));
 
         prescribedExercises.push({
           execution_order: executionOrder++,
@@ -160,10 +219,11 @@ export function buildSession(config) {
           substitution_diagnostics: exerciseInfo.diagnostics,
           safety_category: exercise.safety_category_level,
           max_intensity_cap: safetyCapResult.max_intensity_cap,
-          uses_rpe_flag: false,
+          uses_rpe_flag: usesRpe,
           intensity_pct: safetyCapResult.final_intensity_pct,
           load_kg: finalLoadKg,
-          missing_1rm: !user1rm,
+          missing_1rm: !user1rm && !usesRpe,
+          ...bwFields,
           time_under_tension_sec: calculateTUT(phase.tempo_code || '2-0-2-0') * baseReps,
           sets: targetSets,
           reps: baseReps,

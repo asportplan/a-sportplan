@@ -603,7 +603,7 @@ const GuidePage = ({ onStartWizard, onNavigate }) => {
                             <h3 className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">
                               {prog.title}
                             </h3>
-                            <span className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border ${prog.badgeColor}`}>
+                            <span className={`text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border ${prog.badgeColor}`}>
                               {prog.category}
                             </span>
                           </div>
@@ -642,19 +642,19 @@ const GuidePage = ({ onStartWizard, onNavigate }) => {
                         {/* 4-Grid Scientific Specifications */}
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-700 text-xs">
                           <div>
-                            <span className="text-slate-400 font-bold block text-[10px] uppercase">{lang === 'en' ? 'Target Intensity' : 'Target Intensitas'}</span>
+                            <span className="text-slate-400 font-bold block text-[11px] uppercase">{lang === 'en' ? 'Target Intensity' : 'Target Intensitas'}</span>
                             <strong className="text-[#E63946] dark:text-red-400 font-mono font-black text-sm block mt-0.5">{prog.intensityPct}</strong>
                           </div>
                           <div>
-                            <span className="text-slate-400 font-bold block text-[10px] uppercase">{lang === 'en' ? 'Repetition Range' : 'Rentang Repetisi'}</span>
+                            <span className="text-slate-400 font-bold block text-[11px] uppercase">{lang === 'en' ? 'Repetition Range' : 'Rentang Repetisi'}</span>
                             <strong className="text-slate-900 dark:text-white font-mono font-black text-sm block mt-0.5">{prog.reps}</strong>
                           </div>
                           <div>
-                            <span className="text-slate-400 font-bold block text-[10px] uppercase">{lang === 'en' ? 'Total Sets' : 'Jumlah Set'}</span>
+                            <span className="text-slate-400 font-bold block text-[11px] uppercase">{lang === 'en' ? 'Total Sets' : 'Jumlah Set'}</span>
                             <strong className="text-slate-900 dark:text-white font-mono font-black text-sm block mt-0.5">{prog.sets}</strong>
                           </div>
                           <div>
-                            <span className="text-slate-400 font-bold block text-[10px] uppercase">{lang === 'en' ? 'Rest Interval' : 'Jeda Istirahat'}</span>
+                            <span className="text-slate-400 font-bold block text-[11px] uppercase">{lang === 'en' ? 'Rest Interval' : 'Jeda Istirahat'}</span>
                             <strong className="text-[#F3722C] font-mono font-black text-sm block mt-0.5">{prog.rest}</strong>
                           </div>
                         </div>
@@ -662,11 +662,11 @@ const GuidePage = ({ onStartWizard, onNavigate }) => {
                         {/* Target Audience & Biochemical Signal Grid */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                           <div className="p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
-                            <span className="text-slate-400 font-bold text-[10px] uppercase block">{lang === 'en' ? 'Target Audience' : 'Target Atlet / Pengguna'}</span>
+                            <span className="text-slate-400 font-bold text-[11px] uppercase block">{lang === 'en' ? 'Target Audience' : 'Target Atlet / Pengguna'}</span>
                             <p className="text-slate-800 dark:text-slate-200 font-semibold leading-relaxed">{prog.targetAudience}</p>
                           </div>
                           <div className="p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
-                            <span className="text-slate-400 font-bold text-[10px] uppercase block">{lang === 'en' ? 'Cellular Signal & Tempo' : 'Sinyal Biokimia Seluler & Tempo'}</span>
+                            <span className="text-slate-400 font-bold text-[11px] uppercase block">{lang === 'en' ? 'Cellular Signal & Tempo' : 'Sinyal Biokimia Seluler & Tempo'}</span>
                             <p className="text-emerald-700 dark:text-emerald-400 font-semibold leading-relaxed">
                               {prog.biochemicalSignal} • Tempo: <strong className="font-mono text-[#E63946]">{prog.tempo}</strong>
                             </p>
@@ -750,7 +750,7 @@ const GuidePage = ({ onStartWizard, onNavigate }) => {
                   <span className="material-symbols-outlined text-[#E63946]">tune</span>
                   <span>{lang === 'en' ? 'Quick 1RM Interactive Estimator' : 'Simulasi Kalkulator 1RM Cepat'}</span>
                 </h3>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-red-100 text-[#E63946] dark:bg-red-950 dark:text-red-300">
+                <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-red-100 text-[#E63946] dark:bg-red-950 dark:text-red-300">
                   {lang === 'en' ? 'Epley & Brzycki Model' : 'Model Epley & Brzycki'}
                 </span>
               </div>
@@ -786,7 +786,7 @@ const GuidePage = ({ onStartWizard, onNavigate }) => {
                 </div>
 
                 <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-center">
-                  <span className="text-[10px] font-extrabold text-slate-400 block uppercase">{lang === 'en' ? 'Est. 1RM Capacity' : 'Estimasi Kapasitas 1RM'}</span>
+                  <span className="text-[11px] font-extrabold text-slate-400 block uppercase">{lang === 'en' ? 'Est. 1RM Capacity' : 'Estimasi Kapasitas 1RM'}</span>
                   {(() => {
                     const wVal = parseFloat(calcWeight) || 0;
                     const rVal = parseInt(calcReps) || 0;
@@ -794,7 +794,7 @@ const GuidePage = ({ onStartWizard, onNavigate }) => {
                       return (
                         <>
                           <span className="text-2xl font-black text-slate-400 dark:text-slate-600 tracking-tight block">0 kg</span>
-                          <span className="text-[10px] text-slate-400 font-medium">Epley: 0 kg | Brzycki: 0 kg</span>
+                          <span className="text-[11px] text-slate-400 font-medium">Epley: 0 kg | Brzycki: 0 kg</span>
                         </>
                       );
                     }
@@ -804,7 +804,7 @@ const GuidePage = ({ onStartWizard, onNavigate }) => {
                     return (
                       <>
                         <span className="text-2xl font-black text-[#E63946] tracking-tight block">{avg} kg</span>
-                        <span className="text-[10px] text-slate-500 font-medium">Epley: {ep} kg | Brzycki: {brz} kg</span>
+                        <span className="text-[11px] text-slate-500 font-medium">Epley: {ep} kg | Brzycki: {brz} kg</span>
                       </>
                     );
                   })()}
@@ -861,7 +861,7 @@ const GuidePage = ({ onStartWizard, onNavigate }) => {
                         : 'Mengangkat beban sub-maksimal (3 - 10 repetisi) hingga batas kemampuan, kemudian dihitung dengan rumus Epley atau Brzycki. Sangat aman dan bebas risiko cedera sendi.'
                       }
                     </p>
-                    <div className="p-2 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-mono text-slate-700 dark:text-slate-300">
+                    <div className="p-2 rounded bg-slate-100 dark:bg-slate-800 text-[11px] font-mono text-slate-700 dark:text-slate-300">
                       Epley: W × (1 + R/30)<br/>
                       Brzycki: W / (1.0278 - 0.0278×R)
                     </div>
@@ -879,7 +879,7 @@ const GuidePage = ({ onStartWizard, onNavigate }) => {
                         : 'Mengangkat beban puncak secara bertahap hingga menemukan batas 1 repetisi penuh. Wajib didampingi spotter profesional dan pemanasan ketat.'
                       }
                     </p>
-                    <div className="p-2 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-mono text-slate-700 dark:text-slate-300">
+                    <div className="p-2 rounded bg-slate-100 dark:bg-slate-800 text-[11px] font-mono text-slate-700 dark:text-slate-300">
                       Ramp Protocol Required<br/>
                       Rest 3-5 mins per attempt
                     </div>
@@ -897,7 +897,7 @@ const GuidePage = ({ onStartWizard, onNavigate }) => {
                         : 'Menilai sisa repetisi cadangan (RPE 1-10) untuk mengestimasi 1RM tanpa harus mengangkat beban hingga batas gagal fisik.'
                       }
                     </p>
-                    <div className="p-2 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-mono text-slate-700 dark:text-slate-300">
+                    <div className="p-2 rounded bg-slate-100 dark:bg-slate-800 text-[11px] font-mono text-slate-700 dark:text-slate-300">
                       RPE 10 = 0 RIR (100% Max)<br/>
                       RPE 9 = 1 RIR (~95% Max)
                     </div>
@@ -1214,7 +1214,7 @@ const GuidePage = ({ onStartWizard, onNavigate }) => {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                 <div className="p-4 bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-800 rounded-xl">
-                  <span className="font-bold text-emerald-600 block mb-1">🟢 {lang === 'en' ? 'CLEAR' : 'AMAN'}</span>
+                  <span className="font-bold text-emerald-600 block mb-1">{lang === 'en' ? 'CLEAR' : 'AMAN'}</span>
                   <p className="text-xs text-slate-600 dark:text-slate-400">
                     {lang === 'en' 
                       ? 'No health issues reported. Fully cleared for all intensities and programs, including high-intensity 1RM testing.'
@@ -1222,7 +1222,7 @@ const GuidePage = ({ onStartWizard, onNavigate }) => {
                   </p>
                 </div>
                 <div className="p-4 bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-800 rounded-xl">
-                  <span className="font-bold text-amber-600 block mb-1">🟡 {lang === 'en' ? 'MODIFIED' : 'MODIFIKASI'}</span>
+                  <span className="font-bold text-amber-600 block mb-1">{lang === 'en' ? 'MODIFIED' : 'MODIFIKASI'}</span>
                   <p className="text-xs text-slate-600 dark:text-slate-400">
                     {lang === 'en' 
                       ? 'Minor joint or metabolic issues. Program caps intensity, avoids extreme axial loading, and extends rest periods.'
@@ -1230,7 +1230,7 @@ const GuidePage = ({ onStartWizard, onNavigate }) => {
                   </p>
                 </div>
                 <div className="p-4 bg-white dark:bg-slate-900 border border-red-200 dark:border-red-800 rounded-xl">
-                  <span className="font-bold text-red-600 block mb-1">🔴 {lang === 'en' ? 'HARD STOP' : 'TUNDA LATIHAN'}</span>
+                  <span className="font-bold text-red-600 block mb-1">{lang === 'en' ? 'HARD STOP' : 'TUNDA LATIHAN'}</span>
                   <p className="text-xs text-slate-600 dark:text-slate-400">
                     {lang === 'en' 
                       ? 'Serious cardiovascular or acute issues. Medical clearance from a physician is strictly required before proceeding.'

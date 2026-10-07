@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { MST_EXERCISES } from '../../core/db/master-data.js';
 import { getUserEquipment, toggleEquipment, saveUserEquipment } from '../../core/db/user-store.js';
 import { useLanguage } from '../../hooks/useLanguage.js';
+import { TRANSLATIONS } from '../../core/db/translations.js';
 
 export function getExerciseCategory(ex) {
   const pId = ex.pattern_id;
@@ -62,6 +63,7 @@ const EquipmentStep = ({ onNext, onPrev }) => {
   const [equipmentList, setEquipmentList] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('ALL');
+  const [eqTypeFilter, setEqTypeFilter] = useState('ALL');
 
   useEffect(() => {
     setEquipmentList(getUserEquipment());
@@ -83,6 +85,42 @@ const EquipmentStep = ({ onNext, onPrev }) => {
     });
     saveUserEquipment(all);
     setEquipmentList(all);
+  };
+
+  const selectCommercialGym = () => {
+    const gym = MST_EXERCISES.filter(e => e.equipment_type === 'machine' || e.equipment_type === 'cable' || e.equipment_type === 'barbell').map(e => ({
+      exercise_slug: e.exercise_slug,
+      user_1rm_kg: null
+    }));
+    saveUserEquipment(gym);
+    setEquipmentList(gym);
+  };
+
+  const selectDumbbellOnly = () => {
+    const db = MST_EXERCISES.filter(e => e.equipment_type === 'dumbbell').map(e => ({
+      exercise_slug: e.exercise_slug,
+      user_1rm_kg: null
+    }));
+    saveUserEquipment(db);
+    setEquipmentList(db);
+  };
+
+  const selectCalisthenicsOnly = () => {
+    const bw = MST_EXERCISES.filter(e => e.equipment_type === 'bodyweight').map(e => ({
+      exercise_slug: e.exercise_slug,
+      user_1rm_kg: null
+    }));
+    saveUserEquipment(bw);
+    setEquipmentList(bw);
+  };
+
+  const selectDumbbellAndBodyweight = () => {
+    const dbAndBw = MST_EXERCISES.filter(e => e.equipment_type === 'dumbbell' || e.equipment_type === 'bodyweight').map(e => ({
+      exercise_slug: e.exercise_slug,
+      user_1rm_kg: null
+    }));
+    saveUserEquipment(dbAndBw);
+    setEquipmentList(dbAndBw);
   };
 
   const clearAll = () => {
@@ -112,15 +150,21 @@ const EquipmentStep = ({ onNext, onPrev }) => {
 
   const selectedCount = equipmentList.length;
 
-  // Filter exercises by Search Term & Active Category Tab
+  // Filter exercises by Search Term, Active Category Tab, & Equipment Type Filter
   const filteredExercises = MST_EXERCISES.filter(ex => {
+    const transName = TRANSLATIONS.exercises[ex.exercise_slug]?.[lang] || '';
     const nameFormatted = ex.exercise_slug.replace(/_/g, ' ');
     const muscleFormatted = (ex.primary_muscle_group_slug || '').replace(/_/g, ' ');
     const matchesSearch = 
+      transName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       nameFormatted.toLowerCase().includes(searchTerm.toLowerCase()) ||
       muscleFormatted.toLowerCase().includes(searchTerm.toLowerCase());
 
     if (!matchesSearch) return false;
+
+    if (eqTypeFilter === 'bodyweight' && ex.equipment_type !== 'bodyweight') return false;
+    if (eqTypeFilter === 'dumbbell' && ex.equipment_type !== 'dumbbell') return false;
+    if (eqTypeFilter === 'gym' && (ex.equipment_type === 'bodyweight' || ex.equipment_type === 'dumbbell')) return false;
 
     if (activeTab === 'SELECTED') {
       return isSelected(ex.exercise_slug);
@@ -138,6 +182,10 @@ const EquipmentStep = ({ onNext, onPrev }) => {
     return acc;
   }, {});
 
+  const gymCount = MST_EXERCISES.filter(e => e.equipment_type === 'machine' || e.equipment_type === 'cable' || e.equipment_type === 'barbell').length;
+  const calisthenicsCount = MST_EXERCISES.filter(e => e.equipment_type === 'bodyweight').length;
+  const dumbbellCount = MST_EXERCISES.filter(e => e.equipment_type === 'dumbbell').length;
+
   return (
     <div className="bg-surface dark:bg-slate-900 rounded-2xl p-6 sm:p-8 shadow-sm border border-outline-variant dark:border-slate-800 max-w-4xl mx-auto space-y-6 font-sans">
       
@@ -146,31 +194,66 @@ const EquipmentStep = ({ onNext, onPrev }) => {
         <div className="flex items-start sm:items-center justify-between flex-col sm:flex-row gap-3 mb-2">
           <h2 className="font-headline-md text-xl sm:text-2xl font-bold text-[#2B2B2B] dark:text-white tracking-tight flex items-center gap-2">
             <span className="material-symbols-outlined text-[#E63946]">fitness_center</span>
-            <span>{lang === 'en' ? 'Step 2: Available Gym Equipment' : 'Langkah 2: Ketersediaan Alat Gym'}</span>
+            <span>{lang === 'en' ? 'Step 2: Available Equipment & Modalities' : 'Langkah 2: Ketersediaan Alat & Modalitas'}</span>
           </h2>
-          <div className="flex gap-2 w-full sm:w-auto">
-            <button 
-              type="button" 
-              onClick={selectAll} 
-              className="flex-1 sm:flex-initial text-center text-xs font-bold text-[#E63946] border border-[#E63946] px-3 py-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors cursor-pointer"
-            >
-              {lang === 'en' ? 'Select All (43)' : 'Pilih Semua (43)'}
-            </button>
-            <button 
-              type="button" 
-              onClick={clearAll} 
-              className="flex-1 sm:flex-initial text-center text-xs font-bold text-slate-500 border border-slate-300 dark:border-slate-700 px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-            >
-              {lang === 'en' ? 'Clear All' : 'Hapus Semua'}
-            </button>
-          </div>
         </div>
         <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">
           {lang === 'en'
-            ? 'Select equipment by body category (Upper Push, Upper Pull, Lower Body, Core). The rule engine will select exercises based on your active inventory.'
-            : 'Tandai alat gym per kategori tubuh (Upper Push, Upper Pull, Lower Body, Core) agar mudah ditemukan. Algoritma akan mensubstitusi latihan berdasarkan ketersediaan ini.'
+            ? 'Select available equipment. You can use one-click presets for Tanpa Alat (Calisthenics), Dumbbell Only, or Commercial Gym Machines.'
+            : 'Pilih alat latihan yang tersedia. Gunakan tombol preset sekali klik untuk Mesin Gym, Dumbbell Saja, atau Tanpa Alat (Kalistenik).'
           }
         </p>
+
+        {/* Quick Presets Bar */}
+        <div className="flex flex-wrap gap-2 pt-3">
+          <button 
+            type="button" 
+            onClick={selectAll} 
+            className="text-xs font-bold text-[#E63946] border border-[#E63946] px-3 py-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors cursor-pointer flex items-center gap-1.5"
+          >
+            <span className="material-symbols-outlined text-xs">select_all</span>
+            <span>{lang === 'en' ? `Select All (${MST_EXERCISES.length})` : `Pilih Semua (${MST_EXERCISES.length})`}</span>
+          </button>
+          <button 
+            type="button" 
+            onClick={selectCommercialGym} 
+            className="text-xs font-bold text-blue-700 dark:text-blue-300 border border-blue-400 bg-blue-50/50 dark:bg-blue-950/30 px-3 py-1.5 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors cursor-pointer flex items-center gap-1.5"
+          >
+            <span className="material-symbols-outlined text-xs">precision_manufacturing</span>
+            <span>{lang === 'en' ? `Gym Machines & Barbell (${gymCount})` : `Mesin Gym & Barbel (${gymCount})`}</span>
+          </button>
+          <button 
+            type="button" 
+            onClick={selectDumbbellOnly} 
+            className="text-xs font-bold text-purple-700 dark:text-purple-300 border border-purple-400 bg-purple-50/50 dark:bg-purple-950/30 px-3 py-1.5 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/50 transition-colors cursor-pointer flex items-center gap-1.5"
+          >
+            <span className="material-symbols-outlined text-xs">fitness_center</span>
+            <span>{lang === 'en' ? `Dumbbell Only (${dumbbellCount})` : `Dumbbell Saja (${dumbbellCount})`}</span>
+          </button>
+          <button 
+            type="button" 
+            onClick={selectCalisthenicsOnly} 
+            className="text-xs font-bold text-emerald-700 dark:text-emerald-300 border border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/30 px-3 py-1.5 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors cursor-pointer flex items-center gap-1.5"
+          >
+            <span className="material-symbols-outlined text-xs">accessibility_new</span>
+            <span>{lang === 'en' ? `Tanpa Alat / Calisthenics (${calisthenicsCount})` : `Tanpa Alat / Kalistenik (${calisthenicsCount})`}</span>
+          </button>
+          <button 
+            type="button" 
+            onClick={selectDumbbellAndBodyweight} 
+            className="text-xs font-bold text-amber-700 dark:text-amber-300 border border-amber-400 bg-amber-50/50 dark:bg-amber-950/30 px-3 py-1.5 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-colors cursor-pointer flex items-center gap-1.5"
+          >
+            <span className="material-symbols-outlined text-xs">home</span>
+            <span>{lang === 'en' ? `Dumbbell & Bodyweight (${calisthenicsCount + dumbbellCount})` : `Dumbbell & Tanpa Alat (${calisthenicsCount + dumbbellCount})`}</span>
+          </button>
+          <button 
+            type="button" 
+            onClick={clearAll} 
+            className="text-xs font-bold text-slate-500 border border-slate-300 dark:border-slate-700 px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          >
+            {lang === 'en' ? 'Clear All' : 'Hapus Semua'}
+          </button>
+        </div>
       </div>
 
       {/* Summary Banner */}
@@ -178,7 +261,7 @@ const EquipmentStep = ({ onNext, onPrev }) => {
         <div className="flex items-center gap-2">
           <span className="material-symbols-outlined text-[#E63946] text-xl">verified</span>
           <span className="font-semibold text-slate-800 dark:text-slate-200">
-            <strong className="text-[#E63946]">{selectedCount}</strong> {lang === 'en' ? `of ${MST_EXERCISES.length} equipment selected` : `dari ${MST_EXERCISES.length} alat gym terpilih`}
+            <strong className="text-[#E63946]">{selectedCount}</strong> {lang === 'en' ? `of ${MST_EXERCISES.length} equipment/exercises selected` : `dari ${MST_EXERCISES.length} alat/latihan terpilih`}
           </span>
         </div>
         {selectedCount === 0 && (
@@ -191,19 +274,44 @@ const EquipmentStep = ({ onNext, onPrev }) => {
 
       {/* Category Tab Pills & Search */}
       <div className="space-y-3">
-        {/* Search Bar */}
-        <div className="relative">
-          <span className="material-symbols-outlined absolute left-3 top-2.5 text-slate-400 text-lg">search</span>
-          <input
-            type="text"
-            placeholder={lang === 'en' ? 'Search equipment or target muscle...' : 'Cari nama alat (misal: bench press, squat, lat pull)...'}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#E63946]"
-          />
+        {/* Search Bar & Equipment Type Filter Bar */}
+        <div className="flex flex-col sm:flex-row gap-2">
+          <div className="relative flex-1">
+            <span className="material-symbols-outlined absolute left-3 top-2.5 text-slate-400 text-lg">search</span>
+            <input
+              type="text"
+              placeholder={lang === 'en' ? 'Search equipment, dumbbell, push-up...' : 'Cari alat (misal: dumbbell, push up, bench press, squat)...'}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#E63946]"
+            />
+          </div>
+
+          {/* Quick Equipment Type Filter Pills */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5">
+            {[
+              { key: 'ALL', label: lang === 'en' ? 'All Modalities' : 'Semua Alat' },
+              { key: 'gym', label: lang === 'en' ? 'Gym Machines & Barbell' : 'Mesin Gym & Barbel' },
+              { key: 'dumbbell', label: 'Dumbbell' },
+              { key: 'bodyweight', label: lang === 'en' ? 'Calisthenics / Bodyweight' : 'Tanpa Alat (Kalistenik)' },
+            ].map(pill => (
+              <button
+                key={pill.key}
+                type="button"
+                onClick={() => setEqTypeFilter(pill.key)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap border ${
+                  eqTypeFilter === pill.key
+                    ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-slate-900 dark:border-white shadow-xs'
+                    : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50'
+                }`}
+              >
+                {pill.label}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Category Pills Navigation - Flex Wrap Full Display (No Slide) */}
+        {/* Category Pills Navigation */}
         <div className="flex flex-wrap items-center gap-2" style={{ width: '100%' }}>
           <button
             type="button"
@@ -214,7 +322,7 @@ const EquipmentStep = ({ onNext, onPrev }) => {
                 : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-200'
             }`}
           >
-            {lang === 'en' ? 'All Categories (43)' : 'Semua Kategori (43)'}
+            {lang === 'en' ? `All Categories (${MST_EXERCISES.length})` : `Semua Kategori (${MST_EXERCISES.length})`}
           </button>
           
           {categoriesOrder.map(catKey => {
@@ -240,7 +348,7 @@ const EquipmentStep = ({ onNext, onPrev }) => {
               >
                 <span className="material-symbols-outlined text-sm">{meta.icon}</span>
                 <span>{catKey === 'UPPER_PUSH' ? 'Upper Push' : catKey === 'UPPER_PULL' ? 'Upper Pull' : catKey === 'LOWER' ? 'Lower Body' : (lang === 'en' ? 'Core & Trunk' : 'Core & Inti')}</span>
-                <span className={`px-1.5 py-0.2 text-[10px] font-mono rounded-full ${isActive ? 'bg-white/20 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'}`}>
+                <span className={`px-1.5 py-0.2 text-[11px] font-mono rounded-full ${isActive ? 'bg-white/20 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'}`}>
                   {catSelected}/{catTotal}
                 </span>
               </button>
@@ -334,11 +442,39 @@ const EquipmentStep = ({ onNext, onPrev }) => {
                         className="mt-0.5 w-4 h-4 text-[#E63946] rounded border-slate-300 focus:ring-[#E63946] cursor-pointer shrink-0 accent-[#E63946]"
                       />
                       <div className="flex-1 min-w-0">
-                        <div className="font-bold text-xs text-[#2B2B2B] dark:text-white capitalize break-words leading-tight" title={ex.exercise_slug.replace(/_/g, ' ')}>
-                          {ex.exercise_slug.replace(/_/g, ' ')}
+                        <div className="font-bold text-xs text-[#2B2B2B] dark:text-white capitalize break-words leading-tight" title={TRANSLATIONS.exercises[ex.exercise_slug]?.[lang] || ex.exercise_slug.replace(/_/g, ' ')}>
+                          {TRANSLATIONS.exercises[ex.exercise_slug]?.[lang] || ex.exercise_slug.replace(/_/g, ' ')}
                         </div>
                         <div className="text-[11px] text-slate-500 dark:text-slate-400 capitalize break-words mt-0.5">
                           {lang === 'en' ? 'Muscle' : 'Otot'}: {(ex.primary_muscle_group_slug || '').replace(/_/g, ' ')}
+                        </div>
+                        <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+                          {ex.equipment_type === 'bodyweight' && (
+                            <span className="px-1.5 py-0.5 text-[11px] font-black rounded bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
+                              {lang === 'en' ? 'Bodyweight' : 'Tanpa Alat'}
+                              {ex.relative_load_pct ? ` (~${Math.round(ex.relative_load_pct * 100)}% BB)` : ''}
+                            </span>
+                          )}
+                          {ex.equipment_type === 'dumbbell' && (
+                            <span className="px-1.5 py-0.5 text-[11px] font-black rounded bg-purple-100 dark:bg-purple-950/80 text-purple-800 dark:text-purple-300 border border-purple-300 dark:border-purple-800">
+                              Dumbbell
+                            </span>
+                          )}
+                          {ex.equipment_type === 'barbell' && (
+                            <span className="px-1.5 py-0.5 text-[11px] font-black rounded bg-red-100 dark:bg-red-950/80 text-red-800 dark:text-red-300 border border-red-300 dark:border-red-800">
+                              {lang === 'en' ? 'Barbell' : 'Barbel'}
+                            </span>
+                          )}
+                          {ex.equipment_type === 'machine' && (
+                            <span className="px-1.5 py-0.5 text-[11px] font-black rounded bg-blue-100 dark:bg-blue-950/80 text-blue-800 dark:text-blue-300 border border-blue-300 dark:border-blue-800">
+                              {lang === 'en' ? 'Machine' : 'Mesin'}
+                            </span>
+                          )}
+                          {ex.equipment_type === 'cable' && (
+                            <span className="px-1.5 py-0.5 text-[11px] font-black rounded bg-cyan-100 dark:bg-cyan-950/80 text-cyan-800 dark:text-cyan-300 border border-cyan-300 dark:border-cyan-800">
+                              {lang === 'en' ? 'Cable' : 'Kabel'}
+                            </span>
+                          )}
                         </div>
                       </div>
                     </label>

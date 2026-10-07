@@ -37,7 +37,7 @@ const NotificationModal = ({ isOpen, onClose, title, message, type = 'error' }) 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
       <div 
-        className={`bg-white dark:bg-slate-900 rounded-2xl w-full max-w-lg min-w-[320px] sm:min-w-[440px] p-6 shadow-2xl border ${config.borderColor} relative space-y-5 transition-all`}
+        className={`bg-white dark:bg-slate-900 rounded-2xl w-full max-w-lg p-6 shadow-2xl border ${config.borderColor} relative space-y-5 transition-all`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start gap-4">

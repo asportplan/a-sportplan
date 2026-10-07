@@ -90,9 +90,9 @@ const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
                 <h2 className="font-extrabold text-xs text-slate-900 dark:text-white tracking-tight truncate">
                   {user?.name || (lang === 'en' ? 'Athlete Profile' : 'Profil Atlet')}
                 </h2>
-                <p className="text-[10px] font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1 mt-0.5 truncate">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                  <span>{user ? (lang === 'en' ? 'Cloud Synced' : 'Cloud Aktif') : 'aplanworkout Engine'}</span>
+                <p className={`text-[11px] font-medium flex items-center gap-1 mt-0.5 truncate ${user ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-500 dark:text-slate-400'}`}>
+                  {user && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>}
+                  <span>{user ? (lang === 'en' ? 'Cloud Synced' : 'Cloud Aktif') : (lang === 'en' ? 'Saved on this device' : 'Tersimpan di perangkat ini')}</span>
                 </p>
               </div>
             </div>
@@ -100,7 +100,7 @@ const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
             <button
               onClick={(e) => { e.stopPropagation(); toggle(); }}
               title="Switch Language"
-              className="px-2 py-1 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-[10px] font-extrabold text-slate-700 dark:text-slate-200 transition-all cursor-pointer shadow-2xs shrink-0"
+              className="px-2 py-1 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-[11px] font-extrabold text-slate-700 dark:text-slate-200 transition-all cursor-pointer shadow-2xs shrink-0"
             >
               {lang === 'en' ? '🇬🇧' : '🇮🇩'}
             </button>
@@ -128,14 +128,10 @@ const SideNavBar = ({ activeTab, onNavigate, user, onLogout }) => {
       {/* Footer */}
       <div className={`${isCompact ? 'px-2 flex-col items-center' : 'px-5'} pt-3 border-t border-[#EBE5E2] dark:border-slate-800 text-[11px] text-slate-400 flex ${isCompact ? 'justify-center' : 'items-center justify-between'} font-medium gap-1`}>
         {isCompact ? (
-          <span className="text-[9px]">APW</span>
+          <span className="text-[11px]">APW</span>
         ) : (
           <>
             <span>aplanworkout v1.0</span>
-            <div className="flex items-center gap-1.5 text-[10px] text-emerald-600 font-bold">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>Online</span>
-            </div>
           </>
         )}
       </div>

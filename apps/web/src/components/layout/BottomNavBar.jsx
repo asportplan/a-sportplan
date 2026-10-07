@@ -31,7 +31,7 @@ const BottomNavBar = ({ activeTab, onNavigate }) => {
             }`}>
               <span className="material-symbols-outlined text-xl">{item.icon}</span>
             </div>
-            <span className="text-[10px] font-bold leading-tight mt-0.5">{item.label}</span>
+            <span className="text-[11px] font-bold leading-tight mt-0.5">{item.label}</span>
           </button>
         );
       })}

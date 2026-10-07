@@ -39,7 +39,7 @@ export default function SavedProgramsPage({ onSelectProgram, onCreateNew, curren
     if (window.confirm(lang === 'en' ? `Are you sure you want to delete the program "${title}"?` : `Apakah Anda yakin ingin menghapus program "${title}"?`)) {
       const updated = deleteProgramFromLibrary(id);
       setLibrary(updated);
-      showToast(lang === 'en' ? '🗑️ Program successfully deleted from collection.' : '🗑️ Program berhasil dihapus dari koleksi.');
+      showToast(lang === 'en' ? 'Program successfully deleted from collection.' : 'Program berhasil dihapus dari koleksi.');
     }
   };
 
@@ -53,9 +53,9 @@ export default function SavedProgramsPage({ onSelectProgram, onCreateNew, curren
       
       {/* Toast Notification */}
       {toastMsg && (
-        <div className="fixed top-20 right-6 z-50 bg-[#2B2B2B] text-white px-5 py-3 rounded-xl shadow-2xl font-bold text-xs flex items-center gap-3 border border-slate-700 animate-bounce">
+        <div className="fixed top-20 left-4 right-4 sm:left-auto sm:right-6 z-50 bg-[#2B2B2B] text-white px-5 py-3 rounded-xl shadow-2xl font-bold text-xs flex items-center gap-3 border border-slate-700 animate-bounce">
           <span>{toastMsg}</span>
-          <button onClick={() => setToastMsg('')} className="text-slate-400 hover:text-white">✕</button>
+          <button onClick={() => setToastMsg('')} aria-label="Close" className="text-slate-400 hover:text-white min-w-11 min-h-11 inline-flex items-center justify-center rounded-lg">✕</button>
         </div>
       )}
 
@@ -126,7 +126,7 @@ export default function SavedProgramsPage({ onSelectProgram, onCreateNew, curren
                   <div className="flex justify-between items-center gap-2 mb-3">
                     {isAct ? (
                       <span className="px-3 py-1 bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 text-[11px] font-black rounded-full border border-emerald-300 dark:border-emerald-700 flex items-center gap-1">
-                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
                         {lang === 'en' ? 'Active on Dashboard' : 'Aktif di Dashboard'}
                       </span>
                     ) : (
@@ -151,7 +151,7 @@ export default function SavedProgramsPage({ onSelectProgram, onCreateNew, curren
                       ⏱️ {weeks} {lang === 'en' ? 'Weeks' : 'Minggu'}
                     </span>
                     <span className="px-2.5 py-1 bg-[#FAF8F7] dark:bg-slate-800 rounded-lg border border-[#EBE5E2] dark:border-slate-700">
-                      🎯 {lang === 'en' ? 'Target 1RM:' : 'Target 1RM:'} +{item.programData?.metadata?.target_1rm_increase_pct || 10}%
+                      {lang === 'en' ? 'Target 1RM:' : 'Target 1RM:'} +{item.programData?.metadata?.target_1rm_increase_pct || 10}%
                     </span>
                   </div>
                 </div>

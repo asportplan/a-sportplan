@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { MST_EXERCISES } from '../../core/db/master-data.js';
-import { getUserEquipment, updateEquipment1RM } from '../../core/db/user-store.js';
+import { getUserEquipment, updateEquipment1RM, getUserProfile } from '../../core/db/user-store.js';
 import { api } from '../../lib/api-client.js';
 import OneRMCalculatorModal from '../common/OneRMCalculatorModal.jsx';
 import { useLanguage } from '../../hooks/useLanguage.js';
 import { getExerciseCategory } from './EquipmentStep.jsx';
+import { TRANSLATIONS } from '../../core/db/translations.js';
 
 const OneRMStep = ({ onNext, onPrev }) => {
   const { lang } = useLanguage();
   const [equipmentList, setEquipmentList] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('ALL');
+  const userProfile = getUserProfile() || {};
+  const athleteWeight = userProfile.body_weight_kg || 70;
   
   // Modal Calculator State
   const [isCalcOpen, setIsCalcOpen] = useState(false);
@@ -64,17 +67,22 @@ const OneRMStep = ({ onNext, onPrev }) => {
     const catKey = getExerciseCategory(ex);
     if (activeTab !== 'ALL' && catKey !== activeTab) return false;
 
+    const transName = TRANSLATIONS.exercises[ex.exercise_slug]?.[lang] || '';
     const nameFormatted = ex.exercise_slug.replace(/_/g, ' ');
     const muscleFormatted = (ex.primary_muscle_group_slug || '').replace(/_/g, ' ');
     return (
+      transName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       nameFormatted.toLowerCase().includes(searchTerm.toLowerCase()) ||
       muscleFormatted.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
 
-  const countWith1RM = equipmentList.filter(e => e.user_1rm_kg && e.user_1rm_kg > 0).length;
+  // Bodyweight exercises are prescribed by RPE (and holds by seconds), so they need no 1RM input.
+  const isIsometricExercise = (slug) => MST_EXERCISES.find(e => e.exercise_slug === slug)?.equipment_type === 'bodyweight';
+  const isTimedExercise = (slug) => !!MST_EXERCISES.find(e => e.exercise_slug === slug)?.is_timed;
+  const countWith1RM = equipmentList.filter(e => (e.user_1rm_kg && e.user_1rm_kg > 0) || isIsometricExercise(e.exercise_slug)).length;
   const targetExerciseObj = MST_EXERCISES.find(e => e.exercise_slug === targetSlugForCalc);
-  const targetExerciseTitle = targetExerciseObj ? targetExerciseObj.exercise_slug.replace(/_/g, ' ') : '';
+  const targetExerciseTitle = targetExerciseObj ? (TRANSLATIONS.exercises[targetExerciseObj.exercise_slug]?.[lang] || targetExerciseObj.exercise_slug.replace(/_/g, ' ')) : '';
 
   return (
     <div 
@@ -88,6 +96,8 @@ const OneRMStep = ({ onNext, onPrev }) => {
         onClose={() => setIsCalcOpen(false)}
         onApply1RM={handleApplyCalculated1RM}
         initialExerciseTitle={targetExerciseTitle}
+        exercise={targetExerciseObj}
+        athleteWeight={athleteWeight}
       />
 
       {/* Step Header */}
@@ -192,7 +202,7 @@ const OneRMStep = ({ onNext, onPrev }) => {
                 }`}
               >
                 <span>{tab.label}</span>
-                <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${
+                <span className={`px-1.5 py-0.2 rounded-full text-[11px] ${
                   activeTab === tab.key ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
                 }`}>
                   {tab.count}
@@ -229,8 +239,8 @@ const OneRMStep = ({ onNext, onPrev }) => {
                 >
                   {/* ROW 1: Full-Width Exercise Title (100% Width) */}
                   <div className="w-full">
-                    <h4 className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white capitalize leading-tight w-full block" title={ex.exercise_slug.replace(/_/g, ' ')}>
-                      {ex.exercise_slug.replace(/_/g, ' ')}
+                    <h4 className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white capitalize leading-tight w-full block" title={TRANSLATIONS.exercises[ex.exercise_slug]?.[lang] || ex.exercise_slug.replace(/_/g, ' ')}>
+                      {TRANSLATIONS.exercises[ex.exercise_slug]?.[lang] || ex.exercise_slug.replace(/_/g, ' ')}
                     </h4>
                   </div>
 
@@ -239,41 +249,99 @@ const OneRMStep = ({ onNext, onPrev }) => {
                     <span className="text-[11px] text-slate-500 capitalize font-medium truncate">
                       {lang === 'en' ? 'Target: ' : 'Target: '}{(ex.primary_muscle_group_slug || '').replace(/_/g, ' ')}
                     </span>
-                    <div className="flex items-center gap-1 shrink-0">
-                      <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+                    <div className="flex items-center gap-1 shrink-0 flex-wrap">
+                      {ex.equipment_type === 'bodyweight' && (
+                        <span className="text-[11px] font-black px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
+                          {lang === 'en' ? 'Bodyweight' : 'Tanpa Alat'}
+                        </span>
+                      )}
+                      {ex.equipment_type === 'dumbbell' && (
+                        <span className="text-[11px] font-black px-1.5 py-0.5 rounded bg-purple-100 dark:bg-purple-950/80 text-purple-800 dark:text-purple-300 border border-purple-300 dark:border-purple-800">
+                          Dumbbell
+                        </span>
+                      )}
+                      <span className="text-[11px] font-black px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
                         {catLabel}
                       </span>
-                      <span className={`text-[9px] font-black px-1.5 py-0.5 rounded-full ${categoryBadge}`}>
+                      <span className={`text-[11px] font-black px-1.5 py-0.5 rounded-full ${categoryBadge}`}>
                         {categoryName}
                       </span>
                     </div>
                   </div>
 
-                  {/* ROW 3: Calc Trigger & 1RM Input Row */}
-                  <div className="pt-2 border-t border-slate-100 dark:border-slate-700/60 flex flex-wrap items-center justify-between gap-2 w-full">
-                    <button
-                      type="button"
-                      onClick={() => handleOpenCalcForSlug(ex.exercise_slug)}
-                      className="px-2.5 py-1 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200 rounded-lg text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-colors shrink-0"
-                      title={lang === 'en' ? 'Calculate 1RM from weight x reps' : 'Hitung 1RM dari beban x repetisi'}
-                    >
-                      <span className="material-symbols-outlined text-xs">calculate</span>
-                      <span>{lang === 'en' ? 'Calc' : 'Hitung'}</span>
-                    </button>
-
-                    <div className="flex items-center gap-1 shrink-0">
-                      <input
-                        type="number"
-                        placeholder="0"
-                        value={currentVal}
-                        onChange={(e) => handle1RMChange(ex.exercise_slug, e.target.value)}
-                        className="w-16 sm:w-20 px-2 py-1 text-right text-xs font-bold border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#E63946] font-mono shadow-inner"
-                        min="1"
-                        max="500"
-                      />
-                      <span className="text-xs font-bold text-slate-500 font-mono">kg</span>
+                  {/* ROW 3: Calc Trigger & 1RM Input Row OR Isometric Badge */}
+                  {isIsometricExercise(ex.exercise_slug) ? (
+                    <div className="pt-2 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between gap-2 w-full">
+                      <div className="flex items-center gap-1.5 text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-900/60 px-2.5 py-1.5 rounded-lg text-[11px] font-bold flex-1">
+                        <span className="material-symbols-outlined text-sm shrink-0">{isTimedExercise(ex.exercise_slug) ? 'timer' : 'accessibility_new'}</span>
+                        <span>
+                          {isTimedExercise(ex.exercise_slug)
+                            ? (lang === 'en' ? 'Time-based (seconds) • No 1RM load' : 'Tahan Waktu (detik) • Tanpa 1RM beban')
+                            : (lang === 'en' ? 'Bodyweight • Prescribed by RPE, no 1RM needed' : 'Beban Tubuh • Diatur lewat RPE, tanpa 1RM')}
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleOpenCalcForSlug(ex.exercise_slug)}
+                        className="px-2 py-1.5 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-600 dark:text-slate-300 rounded-lg text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shrink-0"
+                        title={lang === 'en' ? 'Click for sports science info' : 'Penjelasan fisiologi latihan'}
+                      >
+                        <span className="material-symbols-outlined text-xs">info</span>
+                        <span>Info</span>
+                      </button>
                     </div>
-                  </div>
+                  ) : (
+                    <>
+                      <div className="pt-2 border-t border-slate-100 dark:border-slate-700/60 flex flex-wrap items-center justify-between gap-2 w-full">
+                        <button
+                          type="button"
+                          onClick={() => handleOpenCalcForSlug(ex.exercise_slug)}
+                          className={`px-2.5 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shrink-0 ${
+                            ex.equipment_type === 'bodyweight'
+                              ? 'bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
+                              : 'bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200'
+                          }`}
+                          title={
+                            ex.equipment_type === 'bodyweight'
+                              ? (lang === 'en' ? 'Calculate 1RM from max reps without stopping' : 'Hitung 1RM dari repetisi maksimal tanpa henti')
+                              : (lang === 'en' ? 'Calculate 1RM from weight x reps' : 'Hitung 1RM dari beban x repetisi')
+                          }
+                        >
+                          <span className="material-symbols-outlined text-xs">calculate</span>
+                          <span>
+                            {ex.equipment_type === 'bodyweight'
+                              ? (lang === 'en' ? 'Calc Reps' : 'Hitung Reps')
+                              : (lang === 'en' ? 'Calc' : 'Hitung')}
+                          </span>
+                        </button>
+
+                        <div className="flex items-center gap-1 shrink-0">
+                          <input
+                            type="number"
+                            placeholder={ex.equipment_type === 'bodyweight' ? `~${Math.round(athleteWeight * (ex.relative_load_pct || 0.64))}` : '0'}
+                            value={currentVal}
+                            onChange={(e) => handle1RMChange(ex.exercise_slug, e.target.value)}
+                            className="w-16 sm:w-20 px-2 py-1 text-right text-xs font-bold border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#E63946] font-mono shadow-inner"
+                            min="1"
+                            max="500"
+                          />
+                          <span className="text-xs font-bold text-slate-500 font-mono">kg</span>
+                        </div>
+                      </div>
+
+                      {/* Bodyweight Load Hint */}
+                      {ex.equipment_type === 'bodyweight' && !currentVal && (
+                        <div className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
+                          <span className="material-symbols-outlined text-xs">auto_awesome</span>
+                          <span>
+                            {lang === 'en'
+                              ? `Auto %BW: ~${Math.round(athleteWeight * (ex.relative_load_pct || 0.64))} kg (${Math.round((ex.relative_load_pct || 0.64) * 100)}% of ${athleteWeight}kg)`
+                              : `Otomatis: ~${Math.round(athleteWeight * (ex.relative_load_pct || 0.64))} kg (${Math.round((ex.relative_load_pct || 0.64) * 100)}% dari ${athleteWeight}kg BB)`}
+                          </span>
+                        </div>
+                      )}
+                    </>
+                  )}
                 </div>
               );
             })}

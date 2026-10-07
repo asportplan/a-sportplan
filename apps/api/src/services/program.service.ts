@@ -162,6 +162,7 @@ export class ProgramService {
           phase_slug: dayPhase,
           available_equipment_slugs: Array.from(availableSlugs),
           user_equipment_data: eqList,
+          athlete_body_weight_kg: profile.weightKg || 70,
           training_age_level: profile.trainingAgeLevel,
           week_modifiers: weekModifiers,
           medical_modifiers: medicalResults.modifiers,

@@ -79,7 +79,7 @@ const AnalyticsPage = () => {
 
             return (
               <div key={w.week_number} className="flex-1 flex flex-col items-center gap-1 h-full justify-end group">
-                <span className="text-[10px] font-mono text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="text-[11px] font-mono text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity">
                   {vol} kg
                 </span>
                 <div 
@@ -87,7 +87,7 @@ const AnalyticsPage = () => {
                   style={{ height: `${heightPct}%` }}
                   title={`${lang === 'en' ? 'Week' : 'Minggu'} ${w.week_number}: ${vol} kg (${w.phase_name})`}
                 />
-                <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 font-mono">
+                <span className="text-[11px] font-bold text-slate-600 dark:text-slate-400 font-mono">
                   {lang === 'en' ? 'W' : 'M'}{w.week_number}
                 </span>
               </div>

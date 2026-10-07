@@ -15,5 +15,19 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+  9router:
+    image: decolua/9router:latest
+    container_name: precisetrain-9router
+    ports:
+      - '20128:20128'
+    environment:
+      - DATA_DIR=/app/data
+    volumes:
+      - 9router_data:/app/data
+    restart: unless-stopped
+
 volumes:
   postgres_data:
+  9router_data:
+

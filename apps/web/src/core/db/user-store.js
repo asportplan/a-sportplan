@@ -16,6 +16,8 @@ const STORAGE_KEYS = {
   EQUIPMENT: 'wtp_user_equipment',
   PROGRAMS: 'wtp_generated_programs',
   SCREENING: 'wtp_screening_results',
+  WORKOUT_RESULTS: 'wtp_workout_results',
+  WEEKLY_BODY_WEIGHT: 'wtp_weekly_body_weight',
 };
 
 // ============================================================
@@ -105,6 +107,27 @@ export function saveUserProfile(profileData) {
  */
 export function clearUserProfile() {
   localStorage.removeItem(STORAGE_KEYS.PROFILE);
+}
+
+/**
+ * Reset athlete profile, screening, and baseline 1RMs for a fresh new program
+ */
+export function resetForNewProgram() {
+  clearUserProfile();
+  clearScreeningResults();
+
+  try {
+    const eq = getUserEquipment();
+    if (eq && Array.isArray(eq) && eq.length > 0) {
+      const cleaned = eq.map(item => ({
+        exercise_slug: item.exercise_slug,
+        user_1rm_kg: null
+      }));
+      saveUserEquipment(cleaned);
+    }
+  } catch (e) {
+    console.warn('[UserStore] Error resetting equipment 1RMs:', e);
+  }
 }
 
 /**
@@ -400,27 +423,51 @@ export function saveProgramToLibrary(programData, customTitle) {
   }
   const title = customTitle && customTitle.trim() ? customTitle.trim() : defaultTitle;
 
-  // Mark existing as inactive
+  const progId = programData.program_id || programData.id || generateUUID();
+  const programCopy = JSON.parse(JSON.stringify(programData));
+  programCopy.program_id = progId;
+  programCopy.id = progId;
+
+  // Check if this exact program ID already exists in the library
+  const existingIdx = library.findIndex(item => item.id === progId || item.programData?.program_id === progId);
+
+  // Mark all existing as inactive
   library.forEach(item => { item.isActive = false; });
 
-  const newItem = {
-    id: generateUUID(),
-    title,
-    created_at: now,
-    duration_weeks: weeks,
-    goals: programData.metadata?.selected_goals || programData.periodization?.blocks?.map(b => b.phase_slug) || [],
-    isActive: true,
-    programData: JSON.parse(JSON.stringify(programData))
-  };
+  let targetItem = null;
+  if (existingIdx >= 0) {
+    // Update existing item
+    library[existingIdx] = {
+      ...library[existingIdx],
+      title: customTitle ? title : library[existingIdx].title,
+      updated_at: now,
+      isActive: true,
+      programData: programCopy
+    };
+    const [updated] = library.splice(existingIdx, 1);
+    library.unshift(updated);
+    targetItem = updated;
+  } else {
+    // Insert brand new program into collection
+    targetItem = {
+      id: progId,
+      title,
+      created_at: now,
+      duration_weeks: weeks,
+      goals: programData.metadata?.selected_goals || programData.periodization?.blocks?.map(b => b.phase_slug) || [],
+      isActive: true,
+      programData: programCopy
+    };
+    library.unshift(targetItem);
+  }
 
-  library.unshift(newItem);
   localStorage.setItem(LIBRARY_KEY, JSON.stringify(library));
-  
-  // Also set as active cached program
-  saveGeneratedProgram(programData);
+  saveGeneratedProgram(programCopy);
 
-  // Sync to Supabase Cloud
-  syncProgramToCloud(newItem);
+  // Sync to Supabase Cloud if configured
+  if (targetItem) {
+    syncProgramToCloud(targetItem);
+  }
 
   return library;
 }
@@ -647,5 +694,127 @@ export async function syncProgramToCloud(programItem) {
   } catch (err) {
     console.warn('[CloudSync] Failed to sync program:', err);
   }
+}
+
+// ============================================================
+// WORKOUT RESULTS
+// ============================================================
+
+/**
+ * Get all workout results
+ * @returns {Array<Object>}
+ */
+export function getAllWorkoutResults() {
+  if (typeof localStorage === 'undefined') return [];
+  try {
+    const data = localStorage.getItem(STORAGE_KEYS.WORKOUT_RESULTS);
+    return data ? JSON.parse(data) : [];
+  } catch (e) {
+    console.error('[UserStore] Failed to parse workout results:', e);
+    return [];
+  }
+}
+
+/**
+ * Get workout results for a specific session
+ * @param {string} programId
+ * @param {number} week
+ * @param {number} day
+ * @returns {Object|null}
+ */
+export function getWorkoutResults(programId) {
+  const all = getAllWorkoutResults();
+  if (!programId) return all;
+  return all.filter(r => !r.programId || r.programId === programId);
+}
+
+export function getWorkoutResultsForSession(programId, week, day) {
+  const results = getAllWorkoutResults();
+  return results.find(r => r.programId === programId && r.week === week && r.day === day) || null;
+}
+
+/**
+ * Save workout result for a session
+ * @param {Object} resultData - Results including programId, week, day, exercises array
+ */
+export function saveSessionResults(resultData) {
+  const results = getAllWorkoutResults();
+  const index = results.findIndex(r => r.programId === resultData.programId && r.week === resultData.week && r.day === resultData.day);
+  
+  const payload = {
+    ...resultData,
+    updated_at: new Date().toISOString()
+  };
+
+  if (index >= 0) {
+    results[index] = payload;
+  } else {
+    results.push(payload);
+  }
+
+  localStorage.setItem(STORAGE_KEYS.WORKOUT_RESULTS, JSON.stringify(results));
+  return payload;
+}
+
+/**
+ * Get session completion status
+ * @param {string} programId 
+ * @returns {Object} map of `week-day` to boolean
+ */
+export function getSessionCompletionStatus(programId) {
+  const results = getAllWorkoutResults().filter(r => r.programId === programId);
+  const status = {};
+  results.forEach(r => {
+    status[`${r.week}-${r.day}`] = true;
+  });
+  return status;
+}
+
+export function clearWorkoutResults() {
+  localStorage.removeItem(STORAGE_KEYS.WORKOUT_RESULTS);
+}
+
+// ============================================================
+// WEEKLY BODY WEIGHT
+// ============================================================
+
+export function getAllWeeklyBodyWeights() {
+  if (typeof localStorage === 'undefined') return [];
+  try {
+    const data = localStorage.getItem(STORAGE_KEYS.WEEKLY_BODY_WEIGHT);
+    return data ? JSON.parse(data) : [];
+  } catch (e) {
+    console.error('[UserStore] Failed to parse weekly body weights:', e);
+    return [];
+  }
+}
+
+export function getWeeklyBodyWeights(programId) {
+  return getAllWeeklyBodyWeights().filter(w => w.programId === programId);
+}
+
+export function saveWeeklyBodyWeight(programId, week, weightKg) {
+  const weights = getAllWeeklyBodyWeights();
+  const index = weights.findIndex(w => w.programId === programId && w.week === week);
+  
+  const payload = {
+    programId,
+    week,
+    weightKg,
+    updated_at: new Date().toISOString()
+  };
+
+  if (index >= 0) {
+    weights[index] = payload;
+  } else {
+    weights.push(payload);
+  }
+
+  localStorage.setItem(STORAGE_KEYS.WEEKLY_BODY_WEIGHT, JSON.stringify(weights));
+  return payload;
+}
+
+export function clearWeeklyBodyWeights() {
+  localStorage.removeItem(STORAGE_KEYS.WEEKLY_BODY_WEIGHT);
 }
 

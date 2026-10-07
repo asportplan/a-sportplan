@@ -5,6 +5,7 @@ import { toggleEquipment, saveProgramToLibrary, getUserProfile, getUserEquipment
 import { MST_EXERCISES } from '../../core/db/master-data.js';
 import { useLanguage } from '../../hooks/useLanguage.js';
 import { tMessage } from '../../core/utils/i18n.js';
+import { TRANSLATIONS } from '../../core/db/translations.js';
 
 // Format weight to clean numbers (round to nearest 0.5 kg, no ugly decimals)
 const formatWeight = (val) => {
@@ -152,7 +153,7 @@ const ProgramResult = ({ programData, isLoading, onEditParameters, onCreateNew, 
             <span className="material-symbols-outlined text-emerald-600">check_circle</span>
             <span>{toastMsg}</span>
           </div>
-          <button onClick={() => setToastMsg('')} className="text-emerald-700 dark:text-emerald-300 font-bold hover:underline">✕</button>
+          <button onClick={() => setToastMsg('')} aria-label="Close" className="text-emerald-700 dark:text-emerald-300 font-bold hover:underline min-w-11 min-h-11 inline-flex items-center justify-center rounded-lg">✕</button>
         </div>
       )}
 
@@ -215,8 +216,8 @@ const ProgramResult = ({ programData, isLoading, onEditParameters, onCreateNew, 
           <button 
             type="button"
             onClick={() => {
-              const name = programData.metadata?.athlete_name || profile?.athlete_name || '';
-              const sport = programData.metadata?.sport_branch || profile?.sport_branch || '';
+              const name = programData.metadata?.athlete_name || userProfile?.athlete_name || '';
+              const sport = programData.metadata?.sport_branch || userProfile?.sport_branch || '';
               const duration = weeks.length || 8;
               const isEn = lang === 'en';
               
@@ -278,6 +279,32 @@ const ProgramResult = ({ programData, isLoading, onEditParameters, onCreateNew, 
             <span className="material-symbols-outlined text-base shrink-0">add_circle</span>
             <span>{lang === 'en' ? 'New Program +' : 'Program Baru +'}</span>
           </button>
+
+          {/* Button Input Hasil Program */}
+          {onNavigate && (
+            <button 
+              type="button"
+              onClick={() => onNavigate('log_results')}
+              className="flex-1 sm:flex-initial px-4 py-2.5 bg-[#E63946] hover:bg-[#D62839] text-white rounded-xl font-extrabold text-xs transition-all shadow-md shadow-red-500/25 active:scale-95 cursor-pointer flex items-center justify-center gap-1.5 whitespace-nowrap"
+              title={lang === 'en' ? 'Log workout results & track progress' : 'Input hasil latihan & pantau progress'}
+            >
+              <span className="material-symbols-outlined text-base shrink-0">edit_document</span>
+              <span>{lang === 'en' ? 'Log Results' : 'Input Hasil Program'}</span>
+            </button>
+          )}
+
+          {/* Button Laporan Akhir */}
+          {onNavigate && (
+            <button 
+              type="button"
+              onClick={() => onNavigate('final_report')}
+              className="flex-1 sm:flex-initial px-3.5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-extrabold text-xs transition-all shadow-sm active:scale-95 cursor-pointer flex items-center justify-center gap-1.5 whitespace-nowrap"
+              title={lang === 'en' ? 'View final training analysis report' : 'Lihat laporan analisa akhir program'}
+            >
+              <span className="material-symbols-outlined text-base shrink-0">pie_chart</span>
+              <span>{lang === 'en' ? 'Final Report' : 'Laporan Akhir'}</span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -302,7 +329,7 @@ const ProgramResult = ({ programData, isLoading, onEditParameters, onCreateNew, 
                     <span className="material-symbols-outlined text-[#E63946]">bookmark_add</span>
                     {lang === 'en' ? 'Save Program to Collection' : 'Simpan Program ke Koleksi'}
                   </h3>
-                  <button onClick={() => { setShowSaveModal(false); setIsSavedSuccess(false); }} className="text-slate-400 hover:text-slate-600 p-1 cursor-pointer border-0 bg-transparent">✕</button>
+                  <button onClick={() => { setShowSaveModal(false); setIsSavedSuccess(false); }} aria-label="Close" className="text-slate-400 hover:text-slate-600 cursor-pointer border-0 bg-transparent min-w-11 min-h-11 inline-flex items-center justify-center rounded-lg">✕</button>
                 </div>
 
                 <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -409,6 +436,33 @@ const ProgramResult = ({ programData, isLoading, onEditParameters, onCreateNew, 
           </div>
         </div>
       )}
+
+      {/* Flow Stage Tabs on Wizard Report */}
+      <div className="flex items-center gap-1.5 sm:gap-2 p-1.5 bg-[#FAF8F7] dark:bg-slate-800/80 rounded-2xl border border-[#EBE5E2] dark:border-slate-700/80 w-full sm:w-fit shadow-2xs overflow-x-auto">
+        <button
+          type="button"
+          className="px-3.5 sm:px-4 py-2 bg-white dark:bg-slate-900 rounded-xl font-black text-xs text-[#E63946] shadow-sm flex items-center justify-center gap-1.5 border border-slate-200 dark:border-slate-700 shrink-0 cursor-default"
+        >
+          <span className="material-symbols-outlined text-base">assignment</span>
+          <span>{lang === 'en' ? '1. Prescribed Program' : '1. Jadwal Preskripsi'}</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => onNavigate && onNavigate('log_results')}
+          className="px-3.5 sm:px-4 py-2 hover:bg-white/80 dark:hover:bg-slate-700/60 rounded-xl font-extrabold text-xs text-slate-600 dark:text-slate-300 flex items-center justify-center gap-1.5 transition-all shrink-0 cursor-pointer"
+        >
+          <span className="material-symbols-outlined text-base text-[#E63946]">edit_document</span>
+          <span>{lang === 'en' ? '2. Log Results' : '2. Input Hasil Program'}</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => onNavigate && onNavigate('final_report')}
+          className="px-3.5 sm:px-4 py-2 hover:bg-white/80 dark:hover:bg-slate-700/60 rounded-xl font-extrabold text-xs text-slate-600 dark:text-slate-300 flex items-center justify-center gap-1.5 transition-all shrink-0 cursor-pointer"
+        >
+          <span className="material-symbols-outlined text-base text-purple-600">pie_chart</span>
+          <span>{lang === 'en' ? '3. Final Report' : '3. Laporan Akhir'}</span>
+        </button>
+      </div>
 
       {/* Analytics Summary Stat Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 w-full min-w-0">
@@ -601,7 +655,7 @@ const ProgramResult = ({ programData, isLoading, onEditParameters, onCreateNew, 
                       <h4 className="font-bold text-xs text-slate-900 dark:text-white break-words leading-tight">
                         {name}
                       </h4>
-                      <span className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider block break-words">
+                      <span className="text-[11px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider block break-words">
                         {category}
                       </span>
                     </div>
@@ -746,7 +800,7 @@ const ProgramResult = ({ programData, isLoading, onEditParameters, onCreateNew, 
                         
                         {/* Dynamic Volume Badge - Positioned cleanly ABOVE trendline nodes */}
                         <div className="mb-2 text-center">
-                          <span className={`inline-block text-[10px] font-mono font-black px-2 py-0.5 rounded-md shadow-xs border transition-all ${
+                          <span className={`inline-block text-[11px] font-mono font-black px-2 py-0.5 rounded-md shadow-xs border transition-all ${
                             isDeload 
                               ? 'bg-amber-100 text-amber-900 border-amber-300 dark:bg-amber-950/90 dark:text-amber-300 dark:border-amber-700' 
                               : 'bg-red-100 text-red-900 border-red-300 dark:bg-red-950/90 dark:text-red-300 dark:border-red-700'
@@ -842,22 +896,22 @@ const ProgramResult = ({ programData, isLoading, onEditParameters, onCreateNew, 
                     <td className="p-3.5 text-center">
                       {isDeload ? (
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black bg-[#F9A826] text-[#2B2B2B] shadow-xs">
-                          <span>🧘 DELOAD RECOVERY</span>
+                          <span>DELOAD RECOVERY</span>
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-[#E63946] text-white shadow-xs">
-                          <span>🔥 OVERLOAD PHASE</span>
+                          <span>OVERLOAD PHASE</span>
                         </span>
                       )}
                     </td>
                     <td className="p-3.5 text-center font-medium text-slate-700 dark:text-slate-300">
                       {isDeload ? (
                         <span className="px-2.5 py-1 rounded-lg bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 font-extrabold text-[11px] border border-amber-300">
-                          ⚡ -40% Volume Reduction (Deload)
+                          -40% Volume Reduction (Deload)
                         </span>
                       ) : (
                         <span className="px-2.5 py-1 rounded-lg bg-red-100 dark:bg-red-950/60 text-red-900 dark:text-red-300 font-extrabold text-[11px] border border-red-300">
-                          📈 100% Target Load (Progressive)
+                          100% Target Load (Progressive)
                         </span>
                       )}
                     </td>
@@ -969,8 +1023,51 @@ const ProgramResult = ({ programData, isLoading, onEditParameters, onCreateNew, 
                         </span>
                       </div>
 
-                      {/* Exercises Table */}
-                      <div className="overflow-x-auto rounded-lg border border-[#EBE5E2] dark:border-slate-700">
+                      {/* Exercises: stacked cards below lg (read at the gym on a phone), full table from lg */}
+                      <ol className="lg:hidden space-y-2">
+                        {exercises.map((ex, eIdx) => {
+                          if (!ex) return null;
+                          const exKey = `w${week.week_number}_d${session.day_number}_e${eIdx}`;
+                          const noteVal = customNotes[exKey] !== undefined ? customNotes[exKey] : (ex.notes || '');
+                          const loadMain = ex.is_bodyweight ? (lang === 'en' ? 'Bodyweight' : 'Beban Tubuh') : formatWeight(ex.load_kg);
+                          const loadSub = ex.is_bodyweight || ex.uses_rpe_flag
+                            ? `RPE ${ex.target_rpe || '8'}${ex.body_load_kg ? ` · ~${ex.body_load_kg} kg` : ''}`
+                            : ex.intensity_pct ? `${Math.round(ex.intensity_pct * 100)}% 1RM` : '';
+                          return (
+                            <li key={eIdx} className="rounded-lg border border-[#EBE5E2] dark:border-slate-700 bg-white dark:bg-slate-900 p-3 space-y-2">
+                              <div className="flex items-start justify-between gap-3">
+                                <div className="min-w-0">
+                                  <p className="font-bold text-sm text-[#2B2B2B] dark:text-white capitalize">
+                                    {eIdx + 1}. {TRANSLATIONS.exercises[ex.exercise_slug]?.[lang] || (ex.exercise_slug ? ex.exercise_slug.replace(/_/g, ' ') : '—')}
+                                  </p>
+                                  <p className="font-mono text-sm text-slate-700 dark:text-slate-300 mt-0.5">
+                                    {ex.sets || 0} × {ex.is_timed && ex.duration_sec ? `${ex.duration_sec}s` : `${ex.reps || 0} ${lang === 'en' ? 'reps' : 'rep'}`}
+                                  </p>
+                                </div>
+                                <div className="text-right shrink-0">
+                                  <p className="font-mono font-black text-sm text-[#E63946] dark:text-red-400">{loadMain}</p>
+                                  {loadSub && <p className="text-xs font-bold text-slate-600 dark:text-slate-400">{loadSub}</p>}
+                                </div>
+                              </div>
+                              <p className="text-xs text-slate-600 dark:text-slate-400 font-mono">
+                                Tempo {ex.tempo_code || '—'} · {lang === 'en' ? 'Rest' : 'Istirahat'} {ex.rest_interval_seconds || 0}s
+                                {ex.capped_by_safety_module && <span className="text-[#E63946] dark:text-red-400 font-bold"> · {lang === 'en' ? 'Load capped' : 'Beban dibatasi'}</span>}
+                                {ex.substitution_diagnostics && <span className="text-[#C2410C] dark:text-orange-400 font-bold"> · {lang === 'en' ? 'Substituted' : 'Substitusi alat'}</span>}
+                              </p>
+                              <input
+                                type="text"
+                                aria-label={lang === 'en' ? 'Exercise note' : 'Catatan latihan'}
+                                placeholder={lang === 'en' ? 'Type note here...' : 'Ketik catatan di sini...'}
+                                value={noteVal}
+                                onChange={(e) => handleNoteChange(exKey, e.target.value)}
+                                className="w-full min-h-11 text-sm px-3 py-2 border border-[#EBE5E2] dark:border-slate-700 bg-white dark:bg-slate-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E63946] text-[#2B2B2B] dark:text-white placeholder-slate-400"
+                              />
+                            </li>
+                          );
+                        })}
+                      </ol>
+
+                      <div className="hidden lg:block overflow-x-auto rounded-lg border border-[#EBE5E2] dark:border-slate-700">
                         <table className="w-full text-left border-collapse min-w-[700px] text-xs">
                           <thead>
                             <tr className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold border-b border-[#EBE5E2] dark:border-slate-700">
@@ -987,7 +1084,9 @@ const ProgramResult = ({ programData, isLoading, onEditParameters, onCreateNew, 
                             {exercises.map((ex, eIdx) => {
                               if (!ex) return null;
                               const exKey = `w${week.week_number}_d${session.day_number}_e${eIdx}`;
-                              const loadDisplay = formatWeight(ex.load_kg);
+                              const loadDisplay = ex.is_bodyweight
+                                ? (lang === 'en' ? 'Bodyweight' : 'Beban Tubuh')
+                                : formatWeight(ex.load_kg);
                               const defaultNotes = ex.notes || '';
                               const noteVal = customNotes[exKey] !== undefined ? customNotes[exKey] : defaultNotes;
 
@@ -996,20 +1095,34 @@ const ProgramResult = ({ programData, isLoading, onEditParameters, onCreateNew, 
                                   
                                   {/* Nama Latihan */}
                                   <td className="p-3 font-bold text-[#2B2B2B] dark:text-white capitalize">
-                                    {ex.exercise_slug ? ex.exercise_slug.replace(/_/g, ' ') : '—'}
+                                    <div className="flex items-center gap-1.5 flex-wrap">
+                                      <span>{TRANSLATIONS.exercises[ex.exercise_slug]?.[lang] || (ex.exercise_slug ? ex.exercise_slug.replace(/_/g, ' ') : '—')}</span>
+                                      {ex.is_bodyweight && (
+                                        <span className="px-1.5 py-0.5 text-[11px] font-black rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300">
+                                          {lang === 'en' ? 'Bodyweight' : 'Beban Tubuh'}
+                                        </span>
+                                      )}
+                                      {ex.equipment_type === 'dumbbell' && (
+                                        <span className="px-1.5 py-0.5 text-[11px] font-black rounded bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300">
+                                          Dumbbell
+                                        </span>
+                                      )}
+                                    </div>
                                   </td>
 
                                   {/* Target Set & Reps */}
                                   <td className="p-3 text-center font-mono font-semibold text-slate-700 dark:text-slate-300">{ex.sets || 0}</td>
-                                  <td className="p-3 text-center font-mono font-semibold text-slate-700 dark:text-slate-300">{ex.reps || 0}</td>
+                                  <td className="p-3 text-center font-mono font-semibold text-slate-700 dark:text-slate-300">{ex.is_timed && ex.duration_sec ? `${ex.duration_sec}s` : (ex.reps || 0)}</td>
                                   
                                   {/* Beban Target (High Contrast Red Cell with % 1RM / RPE badge) */}
                                   <td className="p-3 text-center font-mono text-[#E63946] dark:text-red-400 bg-[#FFF5F5]/60 dark:bg-red-950/30 border-x border-[#FECDD3] dark:border-red-900/50">
                                     <div className="font-black text-sm">{loadDisplay}</div>
-                                    <div className="text-[10px] font-extrabold text-[#F3722C] dark:text-orange-400 mt-0.5">
-                                      {ex.uses_rpe_flag 
-                                        ? `(RPE ${ex.target_rpe || '8'})` 
-                                        : ex.intensity_pct ? `(${Math.round(ex.intensity_pct * 100)}% 1RM)` : ''}
+                                    <div className="text-[11px] font-extrabold text-[#F3722C] dark:text-orange-400 mt-0.5">
+                                      {ex.is_bodyweight
+                                        ? `(RPE ${ex.target_rpe || '8'}${ex.body_load_kg ? ` · ~${ex.body_load_kg} kg` : ''})`
+                                        : ex.uses_rpe_flag
+                                          ? `(RPE ${ex.target_rpe || '8'})` 
+                                          : ex.intensity_pct ? `(${Math.round(ex.intensity_pct * 100)}% 1RM)` : ''}
                                     </div>
                                   </td>
 
@@ -1021,12 +1134,12 @@ const ProgramResult = ({ programData, isLoading, onEditParameters, onCreateNew, 
                                   <td className="p-2">
                                     <div className="space-y-1">
                                       {ex.capped_by_safety_module && (
-                                        <span className="text-[#E63946] dark:text-red-400 font-bold block text-[10px]">
+                                        <span className="text-[#E63946] dark:text-red-400 font-bold block text-[11px]">
                                           ✓ Load Capped
                                         </span>
                                       )}
                                       {ex.substitution_diagnostics && (
-                                        <span className="text-[#F3722C] font-bold block text-[10px]">
+                                        <span className="text-[#F3722C] font-bold block text-[11px]">
                                           ✓ {lang === 'en' ? 'Substituted' : 'Substitusi Alat'}
                                         </span>
                                       )}
@@ -1064,7 +1177,14 @@ const ProgramResult = ({ programData, isLoading, onEditParameters, onCreateNew, 
             {lang === 'en' ? 'Includes all evaluation tables, volume breakdowns, and daily exercise prescriptions.' : 'Mencakup seluruh tabel evaluasi diagnostik, ringkasan volume, dan preskripsi harian terstruktur.'}
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+          <button 
+            onClick={() => onNavigate('log_results')}
+            className="flex items-center gap-2 px-5 py-3 bg-[#2B2B2B] hover:bg-slate-700 text-white rounded-xl font-bold text-xs transition-colors shadow-md shadow-slate-500/20 cursor-pointer"
+          >
+            <span className="material-symbols-outlined text-base">edit_document</span>
+            {lang === 'en' ? 'Log Results' : 'Input Hasil'}
+          </button>
           <button 
             onClick={() => generatePDF(programData)}
             className="flex items-center gap-2 px-5 py-3 bg-[#E63946] hover:bg-[#D62839] text-white rounded-xl font-bold text-xs transition-colors shadow-md shadow-red-500/20 cursor-pointer"

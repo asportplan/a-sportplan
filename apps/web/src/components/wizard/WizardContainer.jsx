@@ -73,7 +73,7 @@ const WizardContainer = ({ currentStep, setCurrentStep, nextStep, prevStep, gene
 
           {/* Dynamic Step Label (Centered & Prominent) */}
           <div className="text-[11px] sm:text-sm font-extrabold text-slate-700 dark:text-slate-200 text-center px-1 min-w-0 flex-1 leading-snug">
-            <span className="text-slate-400 dark:text-slate-500 text-[10px] sm:text-xs font-bold block sm:inline mr-1 uppercase tracking-wider">
+            <span className="text-slate-400 dark:text-slate-500 text-[11px] sm:text-xs font-bold block sm:inline mr-1 uppercase tracking-wider">
               {lang === 'en' ? 'Step' : 'Langkah'} {currentStep} {lang === 'en' ? 'of 5' : 'dari 5'}:
             </span>
             <span className="text-[#E63946] dark:text-red-400 font-black tracking-tight block sm:inline truncate">

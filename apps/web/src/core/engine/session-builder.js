@@ -1,11 +1,11 @@
-import { RULE_INTRA_WORKOUT_PRIORITY, getPhaseBySlug, MST_MOVEMENT_PATTERNS, MST_EXERCISES } from '../db/master-data.js';
+import { getPhaseBySlug, MST_EXERCISES } from '../db/master-data.js';
 import { generateSessionId, calculateTUT } from '../utils/helpers.js';
 import { getBodyAreaForPattern } from './medical-triage.js';
 
 import { findBestExercise } from './equipment-substitution.js';
 import { calculateExerciseIntensity } from './intensity-calculator.js';
 import { applyLoadSafetyCap } from './load-safety.js';
-import { applyVolumeModifier, applyRestModifier } from './training-age-modifier.js';
+import { applyRestModifier } from './training-age-modifier.js';
 
 const LAYER_ORDER = {
   'main_compound': 1,
@@ -13,6 +13,20 @@ const LAYER_ORDER = {
   'isolation': 3,
   'core': 4
 };
+
+const LEVEL_RANK = { BEGINNER: 1, INTERMEDIATE: 2, ADVANCED: 3 };
+
+/**
+ * Maps a %1RM target to an RPE target for exercises that cannot be loaded in kg (bodyweight).
+ * @param {number} intensityPct
+ * @returns {number}
+ */
+function intensityToRpe(intensityPct) {
+  if (intensityPct >= 0.85) return 9;
+  if (intensityPct >= 0.75) return 8;
+  if (intensityPct >= 0.65) return 7;
+  return 6;
+}
 
 /**
  * Builds a single workout session by running through all NSCA/ACSM rules.
@@ -24,6 +38,7 @@ export function buildSession(config) {
     day_number, week_number, phase_slug, 
     available_equipment_slugs,
     user_equipment_data,
+    athlete_body_weight_kg = 70,
     training_age_level,
     week_modifiers,
     medical_modifiers,
@@ -31,14 +46,23 @@ export function buildSession(config) {
     used_exercises
   } = config;
 
-  const availSlugs = Array.isArray(available_equipment_slugs)
+  const normLevel = (training_age_level || 'BEGINNER').toUpperCase();
+
+  // Rule: Skill Gate - exercises above the athlete's training level (e.g. handstand push-up) are never prescribed
+  const athleteLevelRank = LEVEL_RANK[normLevel] || 1;
+  const availSlugs = (Array.isArray(available_equipment_slugs)
     ? available_equipment_slugs
-    : (available_equipment_slugs ? Array.from(available_equipment_slugs) : []);
+    : (available_equipment_slugs ? Array.from(available_equipment_slugs) : [])
+  ).filter(slug => {
+    // Rule: Medical contraindications - exercise-level blocks from screening (e.g. sit-up with low-back injury)
+    if (medical_modifiers?.blocked_exercise_slugs?.includes(slug)) return false;
+    const meta = MST_EXERCISES.find(e => e.exercise_slug === slug);
+    return !meta?.min_training_level || (LEVEL_RANK[meta.min_training_level] || 1) <= athleteLevelRank;
+  });
 
   const sessionId = generateSessionId();
   const phase = getPhaseBySlug(phase_slug) || getPhaseBySlug('strength_endurance_aa');
-  
-  const normLevel = (training_age_level || 'BEGINNER').toUpperCase();
+
   let splitType = 'full';
   if (normLevel === 'INTERMEDIATE') splitType = 'upper_lower';
   if (normLevel === 'ADVANCED') splitType = 'ppl';
@@ -110,7 +134,16 @@ export function buildSession(config) {
     let baseIntensityPct = intensityResult ? (intensityResult.intensity_pct || 0.7) : 0.7;
     let baseReps = Math.round(((phase.target_reps_min || 8) + (phase.target_reps_max || 12)) / 2);
 
-    const safetyCapResult = applyLoadSafetyCap(exercise, baseIntensityPct, user1rm, phase_slug, baseReps);
+    // Rule: Medical & Age Intensity Ceilings - injured area capped (65%), pediatric/masters/geriatric age caps
+    const bodyArea = getBodyAreaForPattern(patternSlug);
+    const intensityCeiling = Math.min(
+      exercise.max_allowed_intensity_pct || 1.0,
+      medical_modifiers?.max_intensity_override_areas?.[bodyArea] || 1.0,
+      age_group_modifiers?.max_intensity_override || 1.0
+    );
+    const cappedExercise = { ...exercise, max_allowed_intensity_pct: intensityCeiling };
+
+    const safetyCapResult = applyLoadSafetyCap(cappedExercise, baseIntensityPct, user1rm, phase_slug, baseReps);
 
     let baseSets = Math.round(((phase.target_sets_min || 3) + (phase.target_sets_max || 4)) / 2);
     
@@ -155,7 +188,21 @@ export function buildSession(config) {
     targetRest = applyRestModifier(targetRest, medical_modifiers?.rest_multiplier || 1, age_group_modifiers?.rest_multiplier_override);
 
     const timeUnderTension = calculateTUT(phase.tempo_code || '2-0-2-0') * targetReps;
-    const finalLoadKg = safetyCapResult.final_load_kg || (user1rm ? Math.round(user1rm * safetyCapResult.final_intensity_pct) : null);
+
+    // Rule: Bodyweight exercises have a fixed load (a % of body weight) that cannot be dialled to a %1RM,
+    // so they are prescribed by RPE (effort) instead of kg. Isometric holds are prescribed in seconds.
+    const isBodyweightExercise = exercise.equipment_type === 'bodyweight';
+    const bodyweightPct = exercise.relative_load_pct || null;
+    const usesRpe = isBodyweightExercise || (intensityResult ? intensityResult.uses_rpe : false);
+    const finalLoadKg = isBodyweightExercise
+      ? null
+      : (safetyCapResult.final_load_kg || (user1rm ? Math.round(user1rm * safetyCapResult.final_intensity_pct) : null));
+    const bodyLoadKg = isBodyweightExercise && athlete_body_weight_kg > 0
+      ? Math.round(athlete_body_weight_kg * (bodyweightPct || 0.64))
+      : null;
+    const targetRpe = intensityResult?.target_rpe
+      || (isBodyweightExercise ? intensityToRpe(safetyCapResult.final_intensity_pct || 0.70) : null);
+    const durationSec = exercise.is_timed ? Math.min(60, Math.max(20, targetReps * 4)) : null;
 
     const item = {
       execution_order: executionOrder++,
@@ -164,11 +211,17 @@ export function buildSession(config) {
       substitution_diagnostics: (exerciseInfo.diagnostics && exerciseInfo.diagnostics.fallback_status !== 'NONE') ? exerciseInfo.diagnostics : null,
       safety_category: exercise.safety_category_level,
       max_intensity_cap: safetyCapResult.max_intensity_cap,
-      uses_rpe_flag: intensityResult ? intensityResult.uses_rpe : false,
+      uses_rpe_flag: usesRpe,
       intensity_pct: safetyCapResult.final_intensity_pct,
       load_kg: finalLoadKg,
-      missing_1rm: (!user1rm && !(intensityResult ? intensityResult.uses_rpe : false)),
-      target_rpe: intensityResult ? intensityResult.target_rpe : null,
+      missing_1rm: (!user1rm && !usesRpe),
+      is_bodyweight: isBodyweightExercise,
+      relative_load_pct: bodyweightPct,
+      body_load_kg: bodyLoadKg,
+      is_timed: !!exercise.is_timed,
+      duration_sec: durationSec,
+      equipment_type: exercise.equipment_type || 'barbell',
+      target_rpe: targetRpe,
       time_under_tension_sec: timeUnderTension,
       sets: targetSets,
       reps: targetReps,
@@ -229,7 +282,10 @@ export function buildSession(config) {
   if (prescribedExercises.length === 0) {
     const fallbackPatterns = ['horizontal_push', 'horizontal_pull', 'vertical_pull', 'vertical_push', 'elbow_flexion', 'elbow_extension', 'core_trunk_flexion'];
     for (const patternSlug of fallbackPatterns) {
-      const exerciseInfo = findBestExercise(patternSlug, availSlugs, [], used_exercises);
+      // Fallback must still honour medical blocks (injured area / blocked patterns)
+      if (medical_modifiers.blocked_patterns && medical_modifiers.blocked_patterns.includes(patternSlug)) continue;
+      const blockedCategories = medical_modifiers.blocked_safety_categories_per_area?.[getBodyAreaForPattern(patternSlug)] || [];
+      const exerciseInfo = findBestExercise(patternSlug, availSlugs, blockedCategories, used_exercises);
       if (exerciseInfo && exerciseInfo.exercise) {
         helperAddExercise(exerciseInfo, patternSlug);
         if (prescribedExercises.length >= 4) break;

@@ -12,19 +12,19 @@ export function getPhaseRecommendation(phaseSlug, durationWeeks, trainingAgeLeve
   if (slug.includes('hypertrophy')) {
     if (dur >= 4 && dur <= 6) {
       return {
-        badge: lang === 'en' ? '🟢 Optimal Duration' : '🟢 Rekomendasi Optimal',
+        badge: lang === 'en' ? 'Optimal Duration' : 'Rekomendasi Optimal',
         text: lang === 'en' ? 'Duration of 4-6 weeks is ideal for muscle cell hypertrophy and protein synthesis.' : 'Durasi 4-6 minggu ideal untuk merangsang pertumbuhan massa otot tanpa kelelahan berlebih.',
         color: 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800'
       };
     } else if (dur < 4) {
       return {
-        badge: lang === 'en' ? '🟡 Short Duration' : '🟡 Durasi Singkat',
+        badge: lang === 'en' ? 'Short Duration' : 'Durasi Singkat',
         text: lang === 'en' ? 'Duration <4 weeks provides initial hypertrophy response. 4 weeks is recommended.' : 'Durasi <4 minggu memberikan hasil awal. Disarankan 4 minggu untuk hasil otot lebih terlihat.',
         color: 'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800'
       };
     } else {
       return {
-        badge: lang === 'en' ? '🟡 Plateau Risk' : '🟡 Disarankan Istirahat',
+        badge: lang === 'en' ? 'Plateau Risk' : 'Disarankan Istirahat',
         text: lang === 'en' ? 'Duration >6 weeks in hypertrophy phase may reach a growth plateau.' : 'Durasi >6 minggu tanpa jeda berisiko membuat pertumbuhan otot melambat.',
         color: 'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800'
       };
@@ -504,7 +504,7 @@ const GoalsStep = ({ onNext, onPrev }) => {
           <div className="space-y-4 pt-2">
             <div className="p-4 bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-600 dark:text-slate-400 font-medium leading-relaxed flex items-center justify-between flex-wrap gap-2">
               <div>
-                📦 <strong>{lang === 'en' ? 'Custom Mesocycle Sequence & Duration:' : 'Kustomisasi Urutan & Durasi Blok Mesosiklus:'}</strong> {lang === 'en' ? 'Define phases and week counts for each block.' : 'Tentukan fase dan jumlah minggu untuk tiap blok.'} {lang === 'en' ? 'Total Duration:' : 'Total Durasi:'} <strong className="text-[#E63946] font-mono text-sm">{activeDuration} {lang === 'en' ? 'Weeks' : 'Minggu'}</strong>.
+                <strong>{lang === 'en' ? 'Custom Mesocycle Sequence & Duration:' : 'Kustomisasi Urutan & Durasi Blok Mesosiklus:'}</strong> {lang === 'en' ? 'Define phases and week counts for each block.' : 'Tentukan fase dan jumlah minggu untuk tiap blok.'} {lang === 'en' ? 'Total Duration:' : 'Total Durasi:'} <strong className="text-[#E63946] font-mono text-sm">{activeDuration} {lang === 'en' ? 'Weeks' : 'Minggu'}</strong>.
               </div>
               <button
                 type="button"
@@ -536,14 +536,14 @@ const GoalsStep = ({ onNext, onPrev }) => {
                   if (prevPhaseSlug && prevPhaseSlug !== currentPhaseSlug) {
                     if (compatStatus === 'SYNERGISTIC') {
                       compatBadge = (
-                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300">
+                        <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300">
                           {lang === 'en' ? '✓ Synergistic Transition' : '✓ Transisi Blok Serasi'}
                         </span>
                       );
                     } else if (compatStatus === 'CONFLICTING') {
                       compatBadge = (
-                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-300">
-                          {lang === 'en' ? '⚠ Conflicting Transition (AMPK-mTOR)' : '⚠ Transisi Konflik (AMPK-mTOR)'}
+                        <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-300">
+                          {lang === 'en' ? 'Conflicting Transition (AMPK-mTOR)' : 'Transisi Konflik (AMPK-mTOR)'}
                         </span>
                       );
                     }
@@ -644,7 +644,7 @@ const GoalsStep = ({ onNext, onPrev }) => {
         {goalsMode === 'custom_weekly' && (
           <div className="space-y-4 pt-2">
             <div className="p-4 bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
-              🎯 <strong>{lang === 'en' ? `Custom Weekly Details (${activeDuration} Weeks):` : `Kustomisasi Detail per Minggu (${activeDuration} Minggu):`}</strong> {lang === 'en' ? 'Set specific phase focus for each week individually.' : 'Atur fokus fase spesifik untuk setiap minggu satu per satu.'}
+              <strong>{lang === 'en' ? `Custom Weekly Details (${activeDuration} Weeks):` : `Kustomisasi Detail per Minggu (${activeDuration} Minggu):`}</strong> {lang === 'en' ? 'Set specific phase focus for each week individually.' : 'Atur fokus fase spesifik untuk setiap minggu satu per satu.'}
             </div>
 
             <div className="space-y-3 max-h-[480px] overflow-y-auto pr-1">
@@ -664,7 +664,7 @@ const GoalsStep = ({ onNext, onPrev }) => {
                         {lang === 'en' ? `Week ${w}` : `Minggu Ke-${w}`}
                       </span>
                       {prevPhaseSlug && prevPhaseSlug !== currentPhaseSlug && (
-                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
+                        <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
                           {compatStatus}
                         </span>
                       )}
@@ -718,14 +718,14 @@ const GoalsStep = ({ onNext, onPrev }) => {
           let icon = 'task_alt';
 
           if (status === 'UNREALISTIC') {
-            label = lang === 'en' ? `🔴 Unrealistic / Overtraining Risk (${levelName} Athlete)` : `🔴 Tidak Realistis / Berisiko Overtraining & Cedera (Atlet ${levelName})`;
+            label = lang === 'en' ? `Unrealistic / Overtraining Risk (${levelName} Athlete)` : `Tidak Realistis / Berisiko Overtraining & Cedera (Atlet ${levelName})`;
             badgeColor = 'bg-rose-50 text-rose-800 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800';
             desc = lang === 'en'
               ? `Increase of (+${weeklyIncrement.toFixed(1)}%/week) exceeds physiological adaptation limits for a ${levelName.toLowerCase()} athlete. High risk of overtraining & injury. Consider lowering the % target or extending duration.`
               : `Kenaikan (+${weeklyIncrement.toFixed(1)}%/minggu) melampaui batas fisiologis adaptasi seluler untuk atlet ${levelName}. Berisiko tinggi overtraining & cedera. Disarankan menurunkan target % atau memperpanjang durasi minggu.`;
             icon = 'warning';
           } else if (status === 'AMBITIOUS') {
-            label = lang === 'en' ? `🟡 Ambitious (Requires Strict Nutrition & Recovery)` : `🟡 Ambisius (Membutuhkan Disiplin Nutrisi & Pemulihan Ekstra)`;
+            label = lang === 'en' ? `Ambitious (Requires Strict Nutrition & Recovery)` : `Ambisius (Membutuhkan Disiplin Nutrisi & Pemulihan Ekstra)`;
             badgeColor = 'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800';
             desc = lang === 'en'
               ? `High progression (+${weeklyIncrement.toFixed(1)}%/week) for a ${levelName.toLowerCase()} athlete. Requires very strict discipline in nutrition, sleep, and recovery.`
