@@ -17,7 +17,7 @@ const HeroSection = ({ onStart, user }) => {
           {/* Floating Pill Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-semibold border border-white/30 shadow-xs">
             <span className="material-symbols-outlined text-sm">
-              {user ? 'verified_user' : 'auto_awesome'}
+              {user ? 'verified_user' : 'fitness_center'}
             </span>
             <span>
               {user 
@@ -38,8 +38,8 @@ const HeroSection = ({ onStart, user }) => {
           {/* Readable Normal Subtitle */}
           <p className="text-sm sm:text-base font-normal text-white/95 max-w-2xl mx-auto leading-relaxed">
             {lang === 'en'
-              ? 'Set your weekly schedule, calculate target weights automatically, and pick the best exercises for the equipment you physically have.'
-              : 'Atur jadwal latihan mingguan, hitung target beban otomatis, dan dapatkan urutan latihan terbaik sesuai alat gym yang Anda miliki.'
+              ? 'Set your weekly schedule, calculate target weights automatically, pick the best exercises for your equipment, and ask the AI Coach about your program anytime.'
+              : 'Atur jadwal latihan mingguan, hitung target beban otomatis, dapatkan latihan terbaik sesuai alat gym Anda, dan tanyakan apa pun tentang program Anda ke Coach AI.'
             }
           </p>
 

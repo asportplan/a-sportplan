@@ -17,6 +17,7 @@ import GuidePage from './components/pages/GuidePage';
 import CalculatorPage from './components/pages/CalculatorPage';
 import LogResultsPage from './components/pages/LogResultsPage';
 import FinalReportPage from './components/pages/FinalReportPage';
+import AiCoachSection from './components/home/AiCoachSection';
 import AuthModal from './components/auth/AuthModal';
 import NotificationModal from './components/common/NotificationModal';
 import ErrorBoundary from './components/common/ErrorBoundary';
@@ -48,6 +49,7 @@ function App() {
   const auth = useAuth();
   const { lang } = useLanguage();
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [openCoachOnLoad, setOpenCoachOnLoad] = useState(false);
 
   return (
     <>
@@ -85,6 +87,14 @@ function App() {
           {activeTab === 'home' && (
             <>
               <HeroSection onStart={createNewProgram} user={auth.user} />
+              <AiCoachSection
+                user={auth.user}
+                hasProgram={!!programData}
+                onAskCoach={() => { setOpenCoachOnLoad(true); setActiveTab('program'); }}
+                onOpenReport={() => setActiveTab('final_report')}
+                onStart={createNewProgram}
+                onLogin={() => setShowAuthModal(true)}
+              />
               <FeaturesGrid />
             </>
           )}
@@ -117,6 +127,8 @@ function App() {
                   onEditParameters={startWizard}
                   onCreateNew={createNewProgram}
                   onNavigate={setActiveTab}
+                  openCoach={openCoachOnLoad}
+                  onCoachOpened={() => setOpenCoachOnLoad(false)}
                 />
               </ErrorBoundary>
             </div>

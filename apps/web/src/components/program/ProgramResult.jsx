@@ -59,7 +59,7 @@ const formatSystemWarning = (warn, lang) => {
   }
 };
 
-const ProgramResult = ({ programData, isLoading, onEditParameters, onCreateNew, onNavigate }) => {
+const ProgramResult = ({ programData, isLoading, onEditParameters, onCreateNew, onNavigate, openCoach, onCoachOpened }) => {
   const { lang } = useLanguage();
   const [actualLogs, setActualLogs] = useState({});
   const [customNotes, setCustomNotes] = useState({});
@@ -1193,7 +1193,7 @@ const ProgramResult = ({ programData, isLoading, onEditParameters, onCreateNew, 
         })}
       </div>
 
-      <CoachChat program={programData} lang={lang} />
+      <CoachChat program={programData} lang={lang} autoOpen={openCoach} onAutoOpened={onCoachOpened} />
 
       {/* Bottom Action Footer */}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#FAF8F7] dark:bg-slate-800/60 p-6 rounded-2xl border border-[#EBE5E2] dark:border-slate-700/80 shadow-2xs mt-8">

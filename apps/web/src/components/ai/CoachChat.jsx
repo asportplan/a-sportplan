@@ -10,9 +10,10 @@ const SUGGESTIONS = {
 /**
  * "Tanya Coach" - Q&A about the athlete's own program. Conversation lives only in this view.
  */
-const CoachChat = ({ program, lang }) => {
+const CoachChat = ({ program, lang, autoOpen, onAutoOpened }) => {
   const en = lang === 'en';
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(!!autoOpen);
+  const sectionRef = useRef(null);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,6 +21,14 @@ const CoachChat = ({ program, lang }) => {
   const endRef = useRef(null);
 
   useEffect(() => { endRef.current?.scrollIntoView({ block: 'nearest' }); }, [messages, loading]);
+
+  // Opened from the home page: bring the chat into view once, then clear the request
+  useEffect(() => {
+    if (!autoOpen) return;
+    setOpen(true);
+    sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    onAutoOpened?.();
+  }, [autoOpen, onAutoOpened]);
 
   const send = async (text) => {
     const q = (text ?? input).trim();
@@ -42,7 +51,7 @@ const CoachChat = ({ program, lang }) => {
   };
 
   return (
-    <section className="rounded-2xl border border-[#EBE5E2] dark:border-slate-700 bg-white dark:bg-slate-900">
+    <section ref={sectionRef} className="rounded-2xl border border-[#EBE5E2] dark:border-slate-700 bg-white dark:bg-slate-900">
       <button
         type="button"
         onClick={() => setOpen(o => !o)}
